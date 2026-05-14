@@ -1,3 +1,4 @@
+mod fs_ops;
 mod sidecar;
 
 use sidecar::{sidecar_port, start_sidecar, SidecarState};
@@ -14,7 +15,11 @@ pub fn run() {
         .add_migrations("sqlite:app.sqlite", migrations())
         .build(),
     )
-    .invoke_handler(tauri::generate_handler![sidecar_port])
+    .invoke_handler(tauri::generate_handler![
+      sidecar_port,
+      crate::fs_ops::walk_image_dir,
+      crate::fs_ops::hash_file
+    ])
     .setup(|app| {
       if cfg!(debug_assertions) {
         app.handle().plugin(
