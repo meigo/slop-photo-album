@@ -1,4 +1,5 @@
 import Fastify, { type FastifyInstance } from 'fastify';
+import { pathToFileURL } from 'node:url';
 
 export async function buildServer(): Promise<FastifyInstance> {
   const app = Fastify({ logger: false });
@@ -47,8 +48,10 @@ export async function startServer(): Promise<{ port: number; app: FastifyInstanc
   return { port, app };
 }
 
-// Auto-start when invoked directly.
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Auto-start when invoked directly. Use `pathToFileURL` so the comparison
+// handles Windows backslash paths correctly (raw string concat produces
+// `file://D:\…` while `import.meta.url` is `file:///D:/…`).
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   startServer().catch((err) => {
     console.error('SIDECAR_FAIL', err);
     process.exit(1);
