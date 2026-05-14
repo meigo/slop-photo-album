@@ -1,16 +1,25 @@
 <script lang="ts">
   import PageHeader from '$lib/components/PageHeader.svelte';
   import { indexProject } from '$lib/indexing/scanner';
-  import { createProgressStore } from '$lib/indexing/progress';
+  import { indexProgress, type IndexProgress } from '$lib/indexing/progress';
   import { invalidateAll } from '$app/navigation';
+  import { onMount } from 'svelte';
 
   let { data } = $props();
-  const progress = createProgressStore();
-  let pStateLocal = $state({ phase: 'idle', scanned: 0, total: 0, current: '', errors: [] as string[] });
-  progress.subscribe((v) => (pStateLocal = v));
+
+  // Mirror the module-level progress store into a local $state so the
+  // template re-renders on each update. The store survives navigation, so
+  // returning to this page mid-index resumes the live counter.
+  let pStateLocal = $state<IndexProgress>({
+    phase: 'idle', scanned: 0, total: 0, current: '', errors: [], projectId: null,
+  });
+  onMount(() => indexProgress.subscribe((v) => (pStateLocal = v)));
+
+  // Only treat progress as ours if it's for this project (or hasn't started).
+  let mine = $derived(pStateLocal.projectId === null || pStateLocal.projectId === data.project.id);
 
   async function runIndex() {
-    await indexProject(data.project.id, progress);
+    await indexProject(data.project.id);
     await invalidateAll();
   }
 </script>
@@ -27,21 +36,21 @@
     </p>
     <p class="mt-3">Indexed: <strong>{data.count}</strong> photos</p>
     <div class="flex gap-2 mt-3">
-      <button type="button" class="btn-primary" onclick={runIndex} disabled={pStateLocal.phase === 'walking' || pStateLocal.phase === 'indexing'}>
-        {pStateLocal.phase === 'idle' || pStateLocal.phase === 'done' ? 'Index now' : 'Indexing…'}
+      <button type="button" class="btn-primary" onclick={runIndex} disabled={mine && (pStateLocal.phase === 'walking' || pStateLocal.phase === 'indexing')}>
+        {(!mine || pStateLocal.phase === 'idle' || pStateLocal.phase === 'done') ? 'Index now' : 'Indexing…'}
       </button>
       <a class="btn-secondary" href={`/projects/${data.project.id}/library`}>Open library</a>
     </div>
-    {#if pStateLocal.phase === 'walking'}
+    {#if mine && pStateLocal.phase === 'walking'}
       <p class="mt-3 text-sm" style="color: var(--color-muted)">Walking folder…</p>
-    {:else if pStateLocal.phase === 'indexing'}
+    {:else if mine && pStateLocal.phase === 'indexing'}
       <p class="mt-3 text-sm" style="color: var(--color-muted)">
         {pStateLocal.scanned} / {pStateLocal.total} — {pStateLocal.current}
       </p>
-    {:else if pStateLocal.phase === 'done'}
+    {:else if mine && pStateLocal.phase === 'done'}
       <p class="mt-3 text-sm" style="color: var(--color-success)">Done.</p>
     {/if}
-    {#if pStateLocal.errors.length > 0}
+    {#if mine && pStateLocal.errors.length > 0}
       <details class="mt-3">
         <summary class="text-sm" style="color: var(--color-danger)">{pStateLocal.errors.length} errors</summary>
         <ul class="text-xs mt-1">

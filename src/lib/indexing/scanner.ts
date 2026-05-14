@@ -2,27 +2,26 @@ import { invoke } from '@tauri-apps/api/core';
 import { appDataDir, join } from '@tauri-apps/api/path';
 import { upsertPhoto, getProject } from '$lib/db';
 import { readExifViaSidecar, makeThumbViaSidecar } from '$lib/sidecar/client';
-import type { Writable } from 'svelte/store';
-import type { IndexProgress } from './progress';
+import { indexProgress } from './progress';
 
 interface ScannedFile { path: string; size: number; modified: number; }
 
-export async function indexProject(projectId: number, progress: Writable<IndexProgress>): Promise<void> {
+export async function indexProject(projectId: number): Promise<void> {
   const project = await getProject(projectId);
   if (!project) throw new Error(`Project ${projectId} not found`);
 
-  progress.set({ phase: 'walking', scanned: 0, total: 0, current: project.source_dir, errors: [] });
+  indexProgress.set({ phase: 'walking', scanned: 0, total: 0, current: project.source_dir, errors: [], projectId });
   const files = await invoke<ScannedFile[]>('walk_image_dir', { dir: project.source_dir });
   const total = files.length;
 
   const appDir = await appDataDir();
   const thumbDir = await join(appDir, 'projects', String(projectId), 'thumbs');
 
-  progress.update((p) => ({ ...p, phase: 'indexing', total }));
+  indexProgress.update((p) => ({ ...p, phase: 'indexing', total }));
 
   for (let i = 0; i < files.length; i++) {
     const f = files[i];
-    progress.update((p) => ({ ...p, scanned: i, current: f.path }));
+    indexProgress.update((p) => ({ ...p, scanned: i, current: f.path }));
     try {
       const sha256 = await invoke<string>('hash_file', { path: f.path });
       const exif = await readExifViaSidecar(f.path);
@@ -42,9 +41,9 @@ export async function indexProject(projectId: number, progress: Writable<IndexPr
         indexed_at: Date.now(),
       });
     } catch (err) {
-      progress.update((p) => ({ ...p, errors: [...p.errors, `${f.path}: ${err}`] }));
+      indexProgress.update((p) => ({ ...p, errors: [...p.errors, `${f.path}: ${err}`] }));
     }
   }
 
-  progress.update((p) => ({ ...p, phase: 'done', scanned: total }));
+  indexProgress.update((p) => ({ ...p, phase: 'done', scanned: total }));
 }
