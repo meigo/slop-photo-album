@@ -26,3 +26,12 @@ vite.config.ts.timestamp-*
 /test-results
 /playwright-report
 /playwright/.cache
+
+# Sidecar
+sidecar/coverage/
+
+# Rust / Tauri
+src-tauri/target/
+
+# Misc build output
+dist/

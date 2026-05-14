@@ -1,42 +1,45 @@
-# sv
+# slop-family-album
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Local-first desktop app for building printed family photo albums and seasonal-memory wall calendars from a year of family photos.
 
-## Creating a project
+## Status
 
-If you're seeing this, you've probably already done this step. Congrats!
+**Phase 1 (Foundation) — complete.** App scaffolds, indexes a folder into SQLite with thumbnails + EXIF, and shows the library as a grid.
 
-```sh
-# create a new project
-npx sv create my-app
+Phases 2–4 (CV scoring, selection + layout, PDF export + LLM captions) are planned but not yet implemented.
+
+See `docs/superpowers/specs/2026-05-14-family-album-builder-design.md` for the design.
+
+## Development
+
+Requires: Node ≥ 20, Rust toolchain (for Tauri v2), `libheif` if you want HEIC support (`brew install libheif` on macOS).
+
+```bash
+npm install
+cd sidecar && npm install && cd ..
+npm run tauri dev
 ```
 
-To recreate this project with the same configuration:
+Run sidecar tests:
 
-```sh
-# recreate this project
-npx sv@0.15.3 create --template minimal --types ts --install npm slop-family-album
+```bash
+cd sidecar && npm test
 ```
 
-## Developing
+Run Rust tests:
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+```bash
+cd src-tauri && cargo test
 ```
 
-## Building
+UI smoke (non-Tauri):
 
-To create a production version of your app:
-
-```sh
-npm run build
+```bash
+npx playwright test
 ```
 
-You can preview the production build with `npm run preview`.
+## Architecture
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+See `docs/superpowers/specs/2026-05-14-family-album-builder-design.md`.
+
+Short version: Tauri v2 shell + SvelteKit renderer + SQLite + Node sidecar (Sharp + ExifTool). All data stays local.
