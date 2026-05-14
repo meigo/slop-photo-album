@@ -15,6 +15,7 @@ pub fn run() {
         .add_migrations("sqlite:app.sqlite", migrations())
         .build(),
     )
+    .plugin(tauri_plugin_dialog::init())
     .invoke_handler(tauri::generate_handler![
       sidecar_port,
       crate::fs_ops::walk_image_dir,
