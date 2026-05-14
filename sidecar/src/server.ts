@@ -3,6 +3,22 @@ import Fastify, { type FastifyInstance } from 'fastify';
 export async function buildServer(): Promise<FastifyInstance> {
   const app = Fastify({ logger: false });
   app.get('/health', async () => ({ ok: true }));
+
+  app.post<{ Body: { path: string } }>('/exif', async (req, reply) => {
+    const { path } = req.body ?? { path: '' };
+    if (!path || typeof path !== 'string') {
+      reply.code(400);
+      return { error: 'path required' };
+    }
+    const { readExif } = await import('./exif.js');
+    try {
+      return await readExif(path);
+    } catch (err) {
+      reply.code(500);
+      return { error: String(err) };
+    }
+  });
+
   return app;
 }
 
