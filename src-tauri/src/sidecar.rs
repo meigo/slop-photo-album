@@ -1,8 +1,24 @@
+use std::path::PathBuf;
 use std::process::Stdio;
 use std::sync::Mutex;
 use tauri::{AppHandle, Manager};
 use tokio::io::{AsyncBufReadExt, BufReader};
 use tokio::process::{Child, Command};
+
+#[cfg(windows)]
+fn strip_unc_prefix(p: PathBuf) -> PathBuf {
+  let s = p.to_string_lossy();
+  if let Some(rest) = s.strip_prefix(r"\\?\") {
+    PathBuf::from(rest)
+  } else {
+    p
+  }
+}
+
+#[cfg(not(windows))]
+fn strip_unc_prefix(p: PathBuf) -> PathBuf {
+  p
+}
 
 pub struct SidecarState {
   pub port: Mutex<Option<u16>>,
@@ -16,8 +32,18 @@ pub async fn start_sidecar(app: &AppHandle) -> Result<u16, String> {
     .map_err(|e| format!("resource_dir: {e}"))?;
   // In dev mode, sidecar/ lives next to src-tauri; in prod it's bundled in resources.
   // v1 ships dev-mode only — production bundling is Phase 2+.
+  // Canonicalize the dev path so the `..` segments are resolved before we pass
+  // anything to Node — `realpathSync` on Windows walks each segment and trips
+  // on `D:` (no trailing backslash) when the path still contains `..`.
   let sidecar_dir = if cfg!(debug_assertions) {
-    resource_dir.join("../../../sidecar")
+    let raw = resource_dir.join("../../../sidecar");
+    let canon = raw
+      .canonicalize()
+      .map_err(|e| format!("canonicalize sidecar dir {}: {e}", raw.display()))?;
+    // On Windows, `canonicalize` returns a verbatim `\\?\D:\…` UNC path that
+    // some tools (including older Node/tsx code paths) don't like. Strip the
+    // `\\?\` prefix so the path is a plain `D:\…\sidecar`.
+    strip_unc_prefix(canon)
   } else {
     resource_dir.join("sidecar")
   };
