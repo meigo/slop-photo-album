@@ -1,8 +1,13 @@
 import Fastify, { type FastifyInstance } from 'fastify';
+import cors from '@fastify/cors';
 import { pathToFileURL } from 'node:url';
 
 export async function buildServer(): Promise<FastifyInstance> {
   const app = Fastify({ logger: false });
+  // Allow the Tauri renderer (origin http://localhost:1420 in dev, tauri:// in
+  // prod) to call us. Safe because we bind to 127.0.0.1 only — nothing
+  // external can reach us regardless of origin.
+  await app.register(cors, { origin: true });
   app.get('/health', async () => ({ ok: true }));
 
   app.post<{ Body: { path: string } }>('/exif', async (req, reply) => {
