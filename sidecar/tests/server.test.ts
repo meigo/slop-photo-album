@@ -36,3 +36,23 @@ describe('POST /exif', () => {
     await app.close();
   });
 });
+
+import { mkdtempSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join as joinPath } from 'node:path';
+
+describe('POST /thumb', () => {
+  it('produces a thumbnail at the requested longest edge', async () => {
+    const app = await buildServer();
+    const outDir = mkdtempSync(joinPath(tmpdir(), 'thumb-'));
+    const out = joinPath(outDir, 't.jpg');
+    const res = await app.inject({
+      method: 'POST', url: '/thumb',
+      payload: { source: SAMPLE, outPath: out, longestEdge: 128 }
+    });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(Math.max(body.width, body.height)).toBe(128);
+    await app.close();
+  });
+});

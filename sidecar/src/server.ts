@@ -19,6 +19,21 @@ export async function buildServer(): Promise<FastifyInstance> {
     }
   });
 
+  app.post<{ Body: { source: string; outPath: string; longestEdge?: number } }>('/thumb', async (req, reply) => {
+    const { source, outPath, longestEdge } = req.body ?? ({} as { source?: string; outPath?: string; longestEdge?: number });
+    if (!source || !outPath) {
+      reply.code(400);
+      return { error: 'source and outPath required' };
+    }
+    const { makeThumbnail } = await import('./thumb.js');
+    try {
+      return await makeThumbnail(source, outPath, longestEdge ?? 256);
+    } catch (err) {
+      reply.code(500);
+      return { error: String(err) };
+    }
+  });
+
   return app;
 }
 
