@@ -1,10 +1,12 @@
 import {
   listFacesByProject, setFaceCluster, clearPersonClusters, insertPersonCluster,
+  listPersonClusters, deletePersonCluster, resetFaceClustersForProject,
 } from '$lib/db';
 
-const INITIAL_THRESHOLD = 0.30;   // pass 1 face-to-centroid join
-const MERGE_THRESHOLD = 0.25;     // pass 2 cluster centroid pairwise merge
-const LINKAGE_THRESHOLD = 0.55;   // pass 3 single-linkage (max face-pair) merge
+const INITIAL_THRESHOLD = 0.30;
+const MERGE_THRESHOLD = 0.25;
+const LINKAGE_THRESHOLD = 0.55;
+const CLUSTER_MATCH_THRESHOLD = 0.50;   // for matching new clusters to preserved-name/pin existing clusters
 const SEED_QUALITY_FLOOR = 0.1;
 
 function decodeEmbedding(b64: string): Float32Array {
@@ -61,14 +63,53 @@ function maxFacePairCosine(a: InMemoryCluster, b: InMemoryCluster): number {
   return best;
 }
 
+function meanCentroid(vecs: Float32Array[]): Float32Array | null {
+  if (vecs.length === 0 || vecs[0].length === 0) return null;
+  const out = new Float32Array(vecs[0].length);
+  for (const v of vecs) {
+    for (let k = 0; k < out.length; k++) out[k] += v[k];
+  }
+  for (let k = 0; k < out.length; k++) out[k] /= vecs.length;
+  normalize(out);
+  return out;
+}
+
 export async function clusterFaces(projectId: number): Promise<void> {
   const faces = await listFacesByProject(projectId);
   if (faces.length === 0) {
+    // No faces — clear all clusters since none have members.
     await clearPersonClusters(projectId);
     return;
   }
 
   const decoded = faces.map((f) => ({ face: f, vec: decodeEmbedding(f.embedding) }));
+
+  // ---- Compute centroids of existing-preserved clusters (name OR pinned) ----
+  const existingClusters = await listPersonClusters(projectId);
+  const facesByCluster = new Map<number, Float32Array[]>();
+  for (const { face, vec } of decoded) {
+    if (face.cluster_id != null && vec.length > 0) {
+      const arr = facesByCluster.get(face.cluster_id) ?? [];
+      arr.push(vec);
+      facesByCluster.set(face.cluster_id, arr);
+    }
+  }
+  interface Preserved {
+    id: number;
+    centroid: Float32Array;
+    name: string | null;
+    is_pinned: number;
+  }
+  const preserved: Preserved[] = [];
+  for (const ec of existingClusters) {
+    if (ec.name == null && !ec.is_pinned) continue;  // no user investment → don't preserve
+    const vecs = facesByCluster.get(ec.id);
+    if (!vecs || vecs.length === 0) continue;
+    const centroid = meanCentroid(vecs);
+    if (!centroid) continue;
+    preserved.push({ id: ec.id, centroid, name: ec.name, is_pinned: ec.is_pinned });
+  }
+  console.log(`[face-clustering] preserving ${preserved.length} named/pinned cluster(s)`);
 
   // ---- Diagnostic: embedding sanity ----
   for (let i = 0; i < Math.min(3, decoded.length); i++) {
@@ -84,7 +125,7 @@ export async function clusterFaces(projectId: number): Promise<void> {
   // ---- Pass 1: greedy assignment ----
   const clusters: InMemoryCluster[] = [];
   for (const { face, vec } of decoded) {
-    if (vec.length === 0) continue;  // skip empty/broken embeddings
+    if (vec.length === 0) continue;
     let joined: InMemoryCluster | null = null;
     for (const c of clusters) {
       if (cosine(vec, c.centroid) >= INITIAL_THRESHOLD) { joined = c; break; }
@@ -109,29 +150,6 @@ export async function clusterFaces(projectId: number): Promise<void> {
 
   console.log(`[face-clustering] total faces: ${faces.length}`);
   console.log(`[face-clustering] clusters after pass 1: ${clusters.length}`);
-  {
-    const sizes = clusters.map((c) => c.memberFaceIds.length).sort((a, b) => b - a);
-    const histogram = new Map<number, number>();
-    for (const s of sizes) histogram.set(s, (histogram.get(s) ?? 0) + 1);
-    const sortedHist = [...histogram.entries()].sort((a, b) => a[0] - b[0]);
-    console.log(`[face-clustering] size histogram (size: count): ${sortedHist.map(([s, c]) => `${s}:${c}`).join(' ')}`);
-    console.log(`[face-clustering] largest cluster: ${sizes[0] ?? 0} faces; total in clusters: ${sizes.reduce((a, b) => a + b, 0)}`);
-  }
-  {
-    interface Pair { i: number; j: number; sim: number; }
-    const pairs: Pair[] = [];
-    for (let i = 0; i < clusters.length; i++) {
-      for (let j = i + 1; j < clusters.length; j++) {
-        pairs.push({ i, j, sim: cosine(clusters[i].centroid, clusters[j].centroid) });
-      }
-    }
-    pairs.sort((a, b) => b.sim - a.sim);
-    console.log(`[face-clustering] top-5 most similar cluster pairs (centroid):`);
-    for (const p of pairs.slice(0, 5)) {
-      console.log(`  pair (sizes ${clusters[p.i].memberFaceIds.length}, ${clusters[p.j].memberFaceIds.length}): cosine = ${p.sim.toFixed(4)}`);
-    }
-    console.log(`[face-clustering] MERGE_THRESHOLD = ${MERGE_THRESHOLD}, LINKAGE_THRESHOLD = ${LINKAGE_THRESHOLD}`);
-  }
 
   // ---- Pass 2: centroid merge ----
   let merged = true;
@@ -153,9 +171,6 @@ export async function clusterFaces(projectId: number): Promise<void> {
   console.log(`[face-clustering] clusters after pass 2 (centroid merge): ${clusters.length}`);
 
   // ---- Pass 3: single-linkage merge ----
-  // For each pair of clusters, find MAX face-pair cosine. If any pair has
-  // a face-to-face similarity above LINKAGE_THRESHOLD, merge them. Catches
-  // same-person clusters whose centroids drifted apart due to mode diversity.
   merged = true;
   while (merged && clusters.length > 1) {
     merged = false;
@@ -174,12 +189,52 @@ export async function clusterFaces(projectId: number): Promise<void> {
   }
   console.log(`[face-clustering] clusters after pass 3 (linkage merge): ${clusters.length}`);
 
-  // ---- Pass 4: persist ----
-  await clearPersonClusters(projectId);
-  for (const c of clusters) {
-    const dbId = await insertPersonCluster(projectId);
-    for (const fid of c.memberFaceIds) {
-      await setFaceCluster(fid, dbId);
+  // ---- Match new clusters to preserved existing clusters ----
+  // Greedy: sort new clusters by size descending; for each, pick the best
+  // available preserved match with centroid cosine >= CLUSTER_MATCH_THRESHOLD.
+  const newToExistingId = new Map<number, number>();  // index in clusters → existing.id
+  const claimedExistingIds = new Set<number>();
+  const sortedIdx = clusters.map((_, i) => i).sort((a, b) => clusters[b].memberFaceIds.length - clusters[a].memberFaceIds.length);
+  for (const idx of sortedIdx) {
+    const nc = clusters[idx];
+    let bestId = -1, bestSim = CLUSTER_MATCH_THRESHOLD;
+    for (const p of preserved) {
+      if (claimedExistingIds.has(p.id)) continue;
+      const sim = cosine(nc.centroid, p.centroid);
+      if (sim > bestSim) { bestSim = sim; bestId = p.id; }
+    }
+    if (bestId >= 0) {
+      newToExistingId.set(idx, bestId);
+      claimedExistingIds.add(bestId);
+    }
+  }
+  console.log(`[face-clustering] matched ${newToExistingId.size} new cluster(s) to preserved existing`);
+
+  // ---- Persist ----
+  // 1. Reset all face.cluster_id for the project (clean slate).
+  await resetFaceClustersForProject(projectId);
+  // 2. Delete all existing clusters that weren't claimed by the new match.
+  //    Unclaimed unnamed/unpinned clusters: silently dropped. Unclaimed
+  //    named/pinned clusters: deleted too (the user's named person no
+  //    longer matches any cluster — could happen if they removed all
+  //    photos of that person; deleting is the right behavior).
+  for (const ec of existingClusters) {
+    if (!claimedExistingIds.has(ec.id)) {
+      await deletePersonCluster(ec.id);
+    }
+  }
+  // 3. For each new cluster: use the matched id if available, otherwise
+  //    insert a fresh one. Then set all member faces.
+  for (let i = 0; i < clusters.length; i++) {
+    let clusterId: number;
+    const matched = newToExistingId.get(i);
+    if (matched !== undefined) {
+      clusterId = matched;
+    } else {
+      clusterId = await insertPersonCluster(projectId);
+    }
+    for (const fid of clusters[i].memberFaceIds) {
+      await setFaceCluster(fid, clusterId);
     }
   }
 }

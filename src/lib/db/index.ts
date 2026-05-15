@@ -298,3 +298,26 @@ export async function updatePersonCluster(id: number, args: { name?: string | nu
     );
   }
 }
+
+export async function deletePhotoByPath(projectId: number, path: string): Promise<void> {
+  const d = await db();
+  await d.execute(
+    'DELETE FROM photo WHERE project_id = ? AND path = ?',
+    [projectId, path]
+  );
+}
+
+export async function deletePersonCluster(id: number): Promise<void> {
+  const d = await db();
+  // ON DELETE SET NULL on face.cluster_id nullifies references.
+  await d.execute('DELETE FROM person_cluster WHERE id = ?', [id]);
+}
+
+export async function resetFaceClustersForProject(projectId: number): Promise<void> {
+  const d = await db();
+  await d.execute(
+    `UPDATE face SET cluster_id = NULL
+     WHERE photo_id IN (SELECT id FROM photo WHERE project_id = ?)`,
+    [projectId]
+  );
+}

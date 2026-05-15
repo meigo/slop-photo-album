@@ -5,6 +5,7 @@ import {
   upsertCvScore, listCvComputedAtByPhotoId, listPhotos,
   clearCvScores, clearFacesForPhoto, insertFace,
   upsertImageEmbedding, listImageEmbeddingsComputedAt, replacePhotoTags,
+  deletePhotoByPath,
   db,
 } from '$lib/db';
 import { readExifViaSidecar, makeThumbViaSidecar } from '$lib/sidecar/client';
@@ -55,6 +56,21 @@ export async function indexProject(
       });
     } catch (err) {
       indexProgress.update((p) => ({ ...p, errors: [...p.errors, `${f.path}: ${err}`] }));
+    }
+  }
+
+  // ---- ORPHAN CLEANUP ----
+  // Delete photo rows whose path no longer exists on disk. Renamed files
+  // were handled by the ON CONFLICT (project_id, sha256) UPDATE during the
+  // indexing loop — their rows' paths are now the new paths and thus appear
+  // in walkedPaths. Truly-removed files retain their old path in the DB
+  // and will be deleted here.
+  {
+    const walkedPaths = new Set(files.map((f) => f.path));
+    for (const oldPath of lastIndexedByPath.keys()) {
+      if (!walkedPaths.has(oldPath)) {
+        await deletePhotoByPath(projectId, oldPath);
+      }
     }
   }
 
