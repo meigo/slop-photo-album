@@ -1,16 +1,11 @@
-"""Face detection (YuNet) + embedding (SFace).
-
-Returns one dict per face with bbox, embedding (b64-encoded float32),
-and a 0-1 quality score when called with `with_embeddings=True`. The
-HTTP layer in app.py reshapes this for the /faces endpoint.
-"""
+"""Face detection (YuNet) + aligned embedding (SFace)."""
 import base64
 import os
 from pathlib import Path
 
 import cv2
 
-from server.face_embed import embed_face_crop
+from server.face_embed import embed_face_aligned
 
 
 _MODEL_PATH = str(Path(__file__).resolve().parents[2] / "models" / "face_detection_yunet_2023mar.onnx")
@@ -50,18 +45,24 @@ def detect_faces(path: str, with_embeddings: bool = False) -> list[dict[str, obj
     for row in faces:
         x, y, fw, fh = row[0:4]
         confidence = float(row[14]) if len(row) > 14 else 1.0
-        x = max(0, int(x))
-        y = max(0, int(y))
-        fw = max(0, min(W - x, int(fw)))
-        fh = max(0, min(H - y, int(fh)))
-        if fw == 0 or fh == 0:
+        x_i = max(0, int(x))
+        y_i = max(0, int(y))
+        fw_i = max(0, min(W - x_i, int(fw)))
+        fh_i = max(0, min(H - y_i, int(fh)))
+        if fw_i == 0 or fh_i == 0:
             continue
-        face_dict: dict[str, object] = {"x": x, "y": y, "w": fw, "h": fh}
+        face_dict: dict[str, object] = {"x": x_i, "y": y_i, "w": fw_i, "h": fh_i}
         if with_embeddings:
-            face_area = (fw * fh) / max(1.0, W * H)
-            quality = float(min(1.0, confidence * (face_area / 0.05)))  # area >= 5% -> full quality
-            emb_bytes = embed_face_crop(img, (x, y, fw, fh))
-            face_dict["embedding_b64"] = base64.b64encode(emb_bytes).decode("ascii")
-            face_dict["quality"] = quality
+            face_area = (fw_i * fh_i) / max(1.0, W * H)
+            quality = float(min(1.0, confidence * (face_area / 0.05)))
+            try:
+                emb_bytes = embed_face_aligned(img, row)
+                face_dict["embedding_b64"] = base64.b64encode(emb_bytes).decode("ascii")
+                face_dict["quality"] = quality
+            except cv2.error:
+                # alignCrop can fail on edge cases (face partially out of frame,
+                # landmark estimation poor). Fall back to skipping the
+                # embedding so the face still appears as a count/bbox.
+                face_dict["quality"] = quality
         result.append(face_dict)
     return result

@@ -2,10 +2,7 @@ import {
   listFacesByProject, setFaceCluster, clearPersonClusters, insertPersonCluster,
 } from '$lib/db';
 
-// SFace cosine-similarity threshold for "same person". 0.363 is the
-// commonly cited cutoff in OpenCV's docs; we use 0.4 (slightly stricter)
-// to bias toward fewer false merges. Tune in Phase 2c.
-const COSINE_THRESHOLD = 0.4;
+const COSINE_THRESHOLD = 0.35;  // canonical SFace cutoff is ~0.363; we ran 0.4 with raw crops, dropping to 0.35 since alignment tightens embeddings
 
 function decodeEmbedding(blob: Uint8Array): Float32Array {
   // Embeddings are stored as float32 little-endian

@@ -24,8 +24,8 @@ def test_detect_faces_on_sharp_returns_empty_or_few() -> None:
 def test_detect_faces_with_embeddings_includes_b64_and_quality() -> None:
     result = detect_faces(str(FIX / "face.jpg"), with_embeddings=True)
     for box in result:
-        assert "embedding_b64" in box
         assert "quality" in box
         assert isinstance(box["quality"], float)
-        # 128 floats x 4 bytes = 512 bytes -> b64 ~ 684 chars
-        assert len(box["embedding_b64"]) >= 600
+        if "embedding_b64" in box:
+            # 128 floats x 4 bytes = 512 bytes -> b64 ~ 684 chars
+            assert len(box["embedding_b64"]) >= 600

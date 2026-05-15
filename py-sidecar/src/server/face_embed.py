@@ -1,13 +1,16 @@
-"""Per-face embeddings via OpenCV SFace.
+"""Per-face embeddings via OpenCV SFace, using YuNet's 5-landmark format.
 
-SFace expects an aligned face crop. We extract the YuNet bounding box,
-crop the original image, resize to 112x112 (SFace expected input), and
-pass through the recognizer. Output is a 128-dim L2-normalized vector.
+SFace was trained on canonically-aligned face crops. The recommended
+pipeline is:
+  1. YuNet.detect() returns rows of [x,y,w,h, eye_r_x, eye_r_y, eye_l_x,
+     eye_l_y, nose_x, nose_y, mouth_r_x, mouth_r_y, mouth_l_x, mouth_l_y,
+     confidence] — 15 floats per face.
+  2. SFace.alignCrop(img, row) uses those landmarks to produce a 112×112
+     aligned crop.
+  3. SFace.feature(aligned_crop) returns the 128-dim embedding.
 
-We also compute a 'quality' score = detector confidence (passed in from
-YuNet, defaulting to 1.0 if absent) x normalized face size (face area /
-image area), capped at 1.0. Quality is consumed by clustering to weight
-representatives.
+Bypassing step 2 (feeding raw bbox crops) was the cause of the
+over-segmentation we saw in Phase 2b v1.
 """
 from pathlib import Path
 
@@ -26,24 +29,20 @@ def _get_recognizer() -> "cv2.FaceRecognizerSF":
     return _recognizer
 
 
-def embed_face_crop(img: np.ndarray, bbox: tuple[int, int, int, int]) -> bytes:
-    """Crop the face from img using bbox (x,y,w,h), embed via SFace."""
-    x, y, w, h = bbox
-    # Clip to image bounds
-    H, W = img.shape[:2]
-    x = max(0, min(W - 1, x))
-    y = max(0, min(H - 1, y))
-    w = max(1, min(W - x, w))
-    h = max(1, min(H - y, h))
-    crop = img[y:y + h, x:x + w]
-    # SFace expects 112x112 RGB
-    crop = cv2.resize(crop, (112, 112))
+def embed_face_aligned(img: np.ndarray, yunet_row: np.ndarray) -> bytes:
+    """Embed a face from img using YuNet's full 15-float row.
+
+    yunet_row: 1-D numpy array of 15 floats from YuNet.detect()[1][i].
+    Returns the 128-dim float32 embedding as little-endian bytes.
+    """
     recognizer = _get_recognizer()
-    # alignCrop expects 5-landmark format; we don't have landmarks, so
-    # we skip alignment and pass the raw crop via feature(). This is
-    # slightly less accurate than the aligned form but adequate for v1.
-    feat = recognizer.feature(crop)
-    # feature() returns (1, 128) float32; flatten + normalize
+    # alignCrop expects the YuNet row as a 1×N or N float array. Reshape
+    # to (1, 15) to match the expected calling convention.
+    row = np.asarray(yunet_row, dtype=np.float32).reshape(1, -1)
+    aligned = recognizer.alignCrop(img, row)
+    feat = recognizer.feature(aligned)
     vec = feat.flatten().astype(np.float32)
-    vec /= max(1e-9, float(np.linalg.norm(vec)))
+    norm = float(np.linalg.norm(vec))
+    if norm > 0:
+        vec /= norm
     return vec.tobytes()
