@@ -1,9 +1,12 @@
 """FastAPI app builder. Routes registered here so tests can import buildServer-equivalent via app fixture."""
+import base64
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from server.blur import laplacian_variance
+from server.embed import embed_image, model_key
 from server.faces import detect_faces
 from server.phash import perceptual_hash
 
@@ -17,6 +20,10 @@ class PhashRequest(BaseModel):
 
 
 class FacesRequest(BaseModel):
+    path: str
+
+
+class EmbedRequest(BaseModel):
     path: str
 
 
@@ -62,5 +69,16 @@ def build_app() -> FastAPI:
             raise HTTPException(status_code=404, detail=str(e))
         except ValueError as e:
             raise HTTPException(status_code=400, detail=str(e))
+
+    @app.post("/embed")
+    async def embed(req: EmbedRequest) -> dict[str, str]:
+        try:
+            raw, mk = embed_image(req.path)
+            return {
+                "model": mk,
+                "vector_b64": base64.b64encode(raw).decode("ascii"),
+            }
+        except FileNotFoundError as e:
+            raise HTTPException(status_code=404, detail=str(e))
 
     return app
