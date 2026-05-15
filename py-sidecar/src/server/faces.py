@@ -1,35 +1,68 @@
-"""Face detection via OpenCV's bundled Haar cascade.
+"""Face detection via OpenCV's YuNet (ONNX) detector.
 
-Haar is not state-of-the-art (Phase 2b may swap to YuNet or InsightFace),
-but it ships free with opencv-python and produces useful face counts for
-the scoring pipeline. False positive / false negative rates are
-acceptable for v1 since the downstream consumer is a soft scoring
-signal, not a hard filter.
+YuNet is a small, modern DNN-based face detector bundled with the model
+file in `py-sidecar/models/`. Compared to Haar cascades it has
+substantially fewer false positives on textured backgrounds and
+substantially better recall on tilted / partial / non-frontal faces.
+
+Returned boxes are clipped to image bounds and represented as
+{x, y, w, h} dicts of ints, matching the previous Haar interface so the
+sidecar HTTP contract is unchanged.
 """
 import os
+from pathlib import Path
 
 import cv2
 
 
-_CASCADE_PATH = os.path.join(cv2.data.haarcascades, "haarcascade_frontalface_default.xml")
+_MODEL_PATH = str(Path(__file__).resolve().parents[2] / "models" / "face_detection_yunet_2023mar.onnx")
+
+# YuNet detector is stateful around input size. We lazy-init one per
+# input shape so we don't pay graph-rebuild cost between calls of the
+# same size. In practice photos cluster at a small set of sizes (camera
+# defaults), so a small LRU is enough.
+_DETECTORS: dict[tuple[int, int], "cv2.FaceDetectorYN"] = {}
+
+
+def _get_detector(width: int, height: int) -> "cv2.FaceDetectorYN":
+    key = (width, height)
+    det = _DETECTORS.get(key)
+    if det is None:
+        det = cv2.FaceDetectorYN.create(
+            model=_MODEL_PATH,
+            config="",
+            input_size=(width, height),
+            score_threshold=0.6,   # higher = stricter; tune in 2b if needed
+            nms_threshold=0.3,
+            top_k=200,
+        )
+        _DETECTORS[key] = det
+    return det
 
 
 def detect_faces(path: str) -> list[dict[str, int]]:
     if not os.path.isfile(path):
         raise FileNotFoundError(path)
-    img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+    img = cv2.imread(path, cv2.IMREAD_COLOR)
     if img is None:
         raise ValueError(f"could not decode image: {path}")
-    detector = cv2.CascadeClassifier(_CASCADE_PATH)
-    if detector.empty():
-        raise RuntimeError(f"could not load cascade at {_CASCADE_PATH}")
-    # detectMultiScale returns numpy array of (x, y, w, h) tuples; if no
-    # faces, it can return an empty tuple (not an ndarray) depending on
-    # opencv version — guard with `len`.
-    boxes = detector.detectMultiScale(
-        img, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30)
-    )
+
+    h, w = img.shape[:2]
+    detector = _get_detector(w, h)
+    _, faces = detector.detect(img)
+    if faces is None:
+        return []
+
     result: list[dict[str, int]] = []
-    for (x, y, w, h) in boxes:
-        result.append({"x": int(x), "y": int(y), "w": int(w), "h": int(h)})
+    for row in faces:
+        # YuNet rows: x, y, w, h, [5 landmark coords...], confidence
+        x, y, fw, fh = row[0:4]
+        # Clip to image bounds (YuNet sometimes returns slightly off-edge boxes).
+        x = max(0, int(x))
+        y = max(0, int(y))
+        fw = max(0, min(w - x, int(fw)))
+        fh = max(0, min(h - y, int(fh)))
+        if fw == 0 or fh == 0:
+            continue
+        result.append({"x": x, "y": y, "w": fw, "h": fh})
     return result

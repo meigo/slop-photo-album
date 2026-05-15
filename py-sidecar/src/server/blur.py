@@ -5,7 +5,9 @@ Laplacian kernel (second derivative) and take variance. Sharp edges
 contribute large positive and negative responses; blur smooths the
 response, lowering variance.
 
-We normalize by image area so the score is comparable across resolutions.
+We return the raw variance without size normalization. Phone photos
+generally cluster at 200-3000 sharp / <100 blurry; pyimagesearch's
+classic threshold of 100 is a reasonable v1 default.
 """
 import os
 
@@ -17,11 +19,6 @@ def laplacian_variance(path: str) -> float:
         raise FileNotFoundError(path)
     img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
     if img is None:
-        # imread returns None on decode failure (e.g. corrupt JPEG)
         raise ValueError(f"could not decode image: {path}")
     lap = cv2.Laplacian(img, cv2.CV_64F)
-    var = float(lap.var())
-    # Normalize per million pixels so scores compare across sizes.
-    h, w = img.shape[:2]
-    mpx = (h * w) / 1_000_000.0
-    return var / max(mpx, 0.01)
+    return float(lap.var())

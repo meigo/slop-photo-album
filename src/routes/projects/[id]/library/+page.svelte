@@ -14,7 +14,7 @@
   function blurBadge(blur: number | null): string {
     if (blur === null) return '';
     if (blur < 100) return 'blurry';
-    if (blur < 300) return 'soft';
+    if (blur < 500) return 'soft';
     return '';  // sharp — no badge
   }
 </script>
