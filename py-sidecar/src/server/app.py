@@ -3,9 +3,14 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 from server.blur import laplacian_variance
+from server.phash import perceptual_hash
 
 
 class BlurRequest(BaseModel):
+    path: str
+
+
+class PhashRequest(BaseModel):
     path: str
 
 
@@ -24,5 +29,12 @@ def build_app() -> FastAPI:
             raise HTTPException(status_code=404, detail=str(e))
         except ValueError as e:
             raise HTTPException(status_code=400, detail=str(e))
+
+    @app.post("/phash")
+    async def phash(req: PhashRequest) -> dict[str, str]:
+        try:
+            return {"phash": perceptual_hash(req.path)}
+        except FileNotFoundError as e:
+            raise HTTPException(status_code=404, detail=str(e))
 
     return app
