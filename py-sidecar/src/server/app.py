@@ -22,6 +22,7 @@ class PhashRequest(BaseModel):
 
 class FacesRequest(BaseModel):
     path: str
+    with_embeddings: bool = False
 
 
 class EmbedRequest(BaseModel):
@@ -69,8 +70,8 @@ def build_app() -> FastAPI:
     @app.post("/faces")
     async def faces(req: FacesRequest) -> dict[str, object]:
         try:
-            boxes = detect_faces(req.path)
-            return {"count": len(boxes), "boxes": boxes}
+            entries = detect_faces(req.path, with_embeddings=req.with_embeddings)
+            return {"count": len(entries), "faces": entries}
         except FileNotFoundError as e:
             raise HTTPException(status_code=404, detail=str(e))
         except ValueError as e:

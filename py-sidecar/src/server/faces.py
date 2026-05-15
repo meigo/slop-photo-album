@@ -1,26 +1,19 @@
-"""Face detection via OpenCV's YuNet (ONNX) detector.
+"""Face detection (YuNet) + embedding (SFace).
 
-YuNet is a small, modern DNN-based face detector bundled with the model
-file in `py-sidecar/models/`. Compared to Haar cascades it has
-substantially fewer false positives on textured backgrounds and
-substantially better recall on tilted / partial / non-frontal faces.
-
-Returned boxes are clipped to image bounds and represented as
-{x, y, w, h} dicts of ints, matching the previous Haar interface so the
-sidecar HTTP contract is unchanged.
+Returns one dict per face with bbox, embedding (b64-encoded float32),
+and a 0-1 quality score when called with `with_embeddings=True`. The
+HTTP layer in app.py reshapes this for the /faces endpoint.
 """
+import base64
 import os
 from pathlib import Path
 
 import cv2
 
+from server.face_embed import embed_face_crop
+
 
 _MODEL_PATH = str(Path(__file__).resolve().parents[2] / "models" / "face_detection_yunet_2023mar.onnx")
-
-# YuNet detector is stateful around input size. We lazy-init one per
-# input shape so we don't pay graph-rebuild cost between calls of the
-# same size. In practice photos cluster at a small set of sizes (camera
-# defaults), so a small LRU is enough.
 _DETECTORS: dict[tuple[int, int], "cv2.FaceDetectorYN"] = {}
 
 
@@ -32,7 +25,7 @@ def _get_detector(width: int, height: int) -> "cv2.FaceDetectorYN":
             model=_MODEL_PATH,
             config="",
             input_size=(width, height),
-            score_threshold=0.6,   # higher = stricter; tune in 2b if needed
+            score_threshold=0.6,
             nms_threshold=0.3,
             top_k=200,
         )
@@ -40,29 +33,35 @@ def _get_detector(width: int, height: int) -> "cv2.FaceDetectorYN":
     return det
 
 
-def detect_faces(path: str) -> list[dict[str, int]]:
+def detect_faces(path: str, with_embeddings: bool = False) -> list[dict[str, object]]:
     if not os.path.isfile(path):
         raise FileNotFoundError(path)
     img = cv2.imread(path, cv2.IMREAD_COLOR)
     if img is None:
         raise ValueError(f"could not decode image: {path}")
 
-    h, w = img.shape[:2]
-    detector = _get_detector(w, h)
+    H, W = img.shape[:2]
+    detector = _get_detector(W, H)
     _, faces = detector.detect(img)
     if faces is None:
         return []
 
-    result: list[dict[str, int]] = []
+    result: list[dict[str, object]] = []
     for row in faces:
-        # YuNet rows: x, y, w, h, [5 landmark coords...], confidence
         x, y, fw, fh = row[0:4]
-        # Clip to image bounds (YuNet sometimes returns slightly off-edge boxes).
+        confidence = float(row[14]) if len(row) > 14 else 1.0
         x = max(0, int(x))
         y = max(0, int(y))
-        fw = max(0, min(w - x, int(fw)))
-        fh = max(0, min(h - y, int(fh)))
+        fw = max(0, min(W - x, int(fw)))
+        fh = max(0, min(H - y, int(fh)))
         if fw == 0 or fh == 0:
             continue
-        result.append({"x": x, "y": y, "w": fw, "h": fh})
+        face_dict: dict[str, object] = {"x": x, "y": y, "w": fw, "h": fh}
+        if with_embeddings:
+            face_area = (fw * fh) / max(1.0, W * H)
+            quality = float(min(1.0, confidence * (face_area / 0.05)))  # area >= 5% -> full quality
+            emb_bytes = embed_face_crop(img, (x, y, fw, fh))
+            face_dict["embedding_b64"] = base64.b64encode(emb_bytes).decode("ascii")
+            face_dict["quality"] = quality
+        result.append(face_dict)
     return result
