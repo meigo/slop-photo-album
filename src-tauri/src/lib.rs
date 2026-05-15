@@ -74,5 +74,11 @@ fn migrations() -> Vec<tauri_plugin_sql::Migration> {
       sql: include_str!("../migrations/003_semantic_cv.sql"),
       kind: tauri_plugin_sql::MigrationKind::Up,
     },
+    tauri_plugin_sql::Migration {
+      version: 4,
+      description: "selection_album_calendar",
+      sql: include_str!("../migrations/004_selection.sql"),
+      kind: tauri_plugin_sql::MigrationKind::Up,
+    },
   ]
 }
