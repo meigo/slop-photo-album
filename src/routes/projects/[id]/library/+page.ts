@@ -1,4 +1,4 @@
-import { getProject, listPhotos } from '$lib/db';
+import { getProject, listPhotos, listCvScoresByProject, listDuplicateMembersByPhoto } from '$lib/db';
 import { error } from '@sveltejs/kit';
 
 export const ssr = false;
@@ -9,5 +9,8 @@ export async function load({ params }) {
   const project = await getProject(id);
   if (!project) throw error(404, 'Project not found');
   const photos = await listPhotos(id);
-  return { project, photos };
+  const cvs = await listCvScoresByProject(id);
+  const dupGroupByPhoto = await listDuplicateMembersByPhoto(id);
+  const cvById = new Map(cvs.map((c) => [c.photo_id, c]));
+  return { project, photos, cvById, dupGroupByPhoto };
 }
