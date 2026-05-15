@@ -94,7 +94,9 @@ def build_app() -> FastAPI:
             raise HTTPException(status_code=404, detail=str(e))
 
     @app.post("/tags")
-    async def tags(req: TagsRequest) -> dict[str, list[dict[str, float]]]:
+    async def tags(req: TagsRequest) -> dict[str, list[dict[str, object]]]:
+        # Inner dicts are mixed {tag: str, score: float}; declare as object
+        # so Pydantic doesn't try to coerce both fields to float.
         try:
             return {"tags": score_tags(req.path, top_k=req.top_k)}
         except FileNotFoundError as e:
