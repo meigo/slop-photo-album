@@ -50,9 +50,9 @@ export async function facesViaPy(
   );
 }
 
-export async function embedViaPy(path: string): Promise<{ model: string; vector: Uint8Array }> {
+export async function embedViaPy(path: string): Promise<{ model: string; vector: string }> {
   const r = await pyFetch<{ model: string; vector_b64: string }>('/embed', { path });
-  return { model: r.model, vector: base64ToBytes(r.vector_b64) };
+  return { model: r.model, vector: r.vector_b64 };
 }
 
 export async function tagsViaPy(path: string, topK = 5): Promise<Array<{ tag: string; score: number }>> {

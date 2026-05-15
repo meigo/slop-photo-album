@@ -62,7 +62,7 @@ export interface DuplicateGroupRow {
 export interface ImageEmbeddingRow {
   photo_id: number;
   model: string;
-  vector: Uint8Array;
+  vector: string;          // base64-encoded float32 little-endian
   computed_at: number;
 }
 
@@ -79,7 +79,7 @@ export interface FaceRow {
   bbox_y: number;
   bbox_w: number;
   bbox_h: number;
-  embedding: Uint8Array;
+  embedding: string;       // base64-encoded float32 little-endian
   quality: number | null;
   cluster_id: number | null;
   computed_at: number;
@@ -91,7 +91,7 @@ export interface FaceInsert {
   bbox_y: number;
   bbox_w: number;
   bbox_h: number;
-  embedding: Uint8Array;
+  embedding: string;
   quality: number | null;
   computed_at: number;
 }

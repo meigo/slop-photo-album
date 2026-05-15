@@ -14,8 +14,15 @@ const MERGE_THRESHOLD = 0.36;
 // existing clusters but won't create new ones.
 const SEED_QUALITY_FLOOR = 0.1;
 
-function decodeEmbedding(blob: Uint8Array): Float32Array {
-  return new Float32Array(blob.buffer, blob.byteOffset, blob.byteLength / 4);
+function decodeEmbedding(b64: string): Float32Array {
+  // Base64 → Uint8Array → Float32Array view.
+  // tauri-plugin-sql doesn't bind raw bytes through JSON, so embeddings
+  // are stored as base64 TEXT in the (nominally BLOB) column.
+  if (!b64 || b64.length === 0) return new Float32Array(0);
+  const binary = atob(b64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return new Float32Array(bytes.buffer, bytes.byteOffset, bytes.byteLength / 4);
 }
 
 function cosine(a: Float32Array, b: Float32Array): number {
@@ -56,7 +63,7 @@ export async function clusterFaces(projectId: number): Promise<void> {
 
   const decoded = faces.map((f) => ({
     face: f,
-    vec: decodeEmbedding(new Uint8Array(f.embedding)),
+    vec: decodeEmbedding(f.embedding),
   }));
 
   // ---- Diagnostic: embedding sanity ----

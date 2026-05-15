@@ -10,7 +10,7 @@ import {
 import { readExifViaSidecar, makeThumbViaSidecar } from '$lib/sidecar/client';
 import {
   blurViaPy, phashViaPy, facesViaPy, embedViaPy, tagsViaPy, exposureViaPy,
-  base64ToBytes, type PyFaceWithEmbed,
+  type PyFaceWithEmbed,
 } from '$lib/sidecar/py-client';
 import { indexProgress } from './progress';
 import { detectDuplicates } from './dedup';
@@ -93,7 +93,7 @@ export async function indexProject(
         await insertFace({
           photo_id: ph.id,
           bbox_x: fb.x, bbox_y: fb.y, bbox_w: fb.w, bbox_h: fb.h,
-          embedding: base64ToBytes(fb.embedding_b64),
+          embedding: fb.embedding_b64,
           quality: fb.quality,
           computed_at: Date.now(),
         });
