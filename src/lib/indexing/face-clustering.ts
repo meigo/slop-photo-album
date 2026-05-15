@@ -90,6 +90,35 @@ export async function clusterFaces(projectId: number): Promise<void> {
     }
   }
 
+  // ---- Diagnostic: pass 1 results ----
+  console.log(`[face-clustering] total faces: ${faces.length}`);
+  console.log(`[face-clustering] clusters after pass 1: ${clusters.length}`);
+  {
+    const sizes = clusters.map((c) => c.memberFaceIds.length).sort((a, b) => b - a);
+    const histogram = new Map<number, number>();
+    for (const s of sizes) histogram.set(s, (histogram.get(s) ?? 0) + 1);
+    const sortedHist = [...histogram.entries()].sort((a, b) => a[0] - b[0]);
+    console.log(`[face-clustering] size histogram (size: count): ${sortedHist.map(([s, c]) => `${s}:${c}`).join(' ')}`);
+    console.log(`[face-clustering] largest cluster: ${sizes[0] ?? 0} faces; total in clusters: ${sizes.reduce((a, b) => a + b, 0)}`);
+  }
+  // Compute top-5 most similar cluster pairs (full O(N²) once for diagnostics)
+  {
+    interface Pair { i: number; j: number; sim: number; }
+    const pairs: Pair[] = [];
+    for (let i = 0; i < clusters.length; i++) {
+      for (let j = i + 1; j < clusters.length; j++) {
+        pairs.push({ i, j, sim: cosine(clusters[i].centroid, clusters[j].centroid) });
+      }
+    }
+    pairs.sort((a, b) => b.sim - a.sim);
+    const top = pairs.slice(0, 5);
+    console.log(`[face-clustering] top-5 most similar cluster pairs:`);
+    for (const p of top) {
+      console.log(`  pair (sizes ${clusters[p.i].memberFaceIds.length}, ${clusters[p.j].memberFaceIds.length}): cosine = ${p.sim.toFixed(4)}`);
+    }
+    console.log(`[face-clustering] MERGE_THRESHOLD = ${MERGE_THRESHOLD} — pairs >= this will be merged`);
+  }
+
   // ---- Pass 2: centroid merge ----
   // Repeatedly find the most similar pair of clusters; if their centroid
   // similarity is at least MERGE_THRESHOLD, merge them. Stop when the best
@@ -116,6 +145,8 @@ export async function clusterFaces(projectId: number): Promise<void> {
       merged = true;
     }
   }
+
+  console.log(`[face-clustering] clusters after pass 2 (merge): ${clusters.length}`);
 
   // ---- Pass 3: persist ----
   await clearPersonClusters(projectId);
