@@ -1,5 +1,12 @@
 """FastAPI app builder. Routes registered here so tests can import buildServer-equivalent via app fixture."""
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+
+from server.blur import laplacian_variance
+
+
+class BlurRequest(BaseModel):
+    path: str
 
 
 def build_app() -> FastAPI:
@@ -8,5 +15,14 @@ def build_app() -> FastAPI:
     @app.get("/health")
     async def health() -> dict[str, bool]:
         return {"ok": True}
+
+    @app.post("/blur")
+    async def blur(req: BlurRequest) -> dict[str, float]:
+        try:
+            return {"blur": laplacian_variance(req.path)}
+        except FileNotFoundError as e:
+            raise HTTPException(status_code=404, detail=str(e))
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=str(e))
 
     return app
