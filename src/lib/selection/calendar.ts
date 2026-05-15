@@ -79,23 +79,17 @@ export async function generateCalendarSelection(projectId: number): Promise<numb
 
   const selectionId = await startSelection(projectId, 'calendar');
 
+  // Track which photos have already been written to this selection so a
+  // photo can never be inserted twice (would violate selection_id +
+  // photo_id PRIMARY KEY) and which months got filled in pass 1 (so
+  // pass 2 only runs for genuinely empty months).
+  const usedPhotoIds = new Set<number>();
+  const filledMonths = new Set<number>();
+
+  // ---- Pass 1: canonical source month ----
   for (let month = 1; month <= 12; month++) {
-    let monthPhotos = byMonth.get(month) ?? [];
-    let fallbackNote: string | null = null;
-
-    // Adjacent-month fallback: if empty, try M-1, then M+1.
-    if (monthPhotos.length === 0 && CALENDAR_DEFAULTS.empty_month_fallback === 'adjacent') {
-      const tryOrder = [month - 1, month + 1].filter((m) => m >= 1 && m <= 12);
-      for (const m of tryOrder) {
-        const candidate = byMonth.get(m) ?? [];
-        if (candidate.length > 0) {
-          monthPhotos = candidate;
-          fallbackNote = `Fallback from ${monthName(m)} ${sourceYear}`;
-          break;
-        }
-      }
-    }
-
+    const monthPhotos = byMonth.get(month) ?? [];
+    if (monthPhotos.length === 0) continue;
     const scored = monthPhotos.map((p) => ({ photo: p, score: scoreOf(p) }));
     scored.sort((a, b) => b.score - a.score || a.photo.id - b.photo.id);
     const bucketKey = `${targetYear}-${month.toString().padStart(2, '0')}`;
@@ -107,8 +101,40 @@ export async function generateCalendarSelection(projectId: number): Promise<numb
         bucket_key: bucketKey,
         rank: i,
         score: scored[i].score,
-        notes: fallbackNote,
       });
+      usedPhotoIds.add(scored[i].photo.id);
+    }
+    filledMonths.add(month);
+  }
+
+  // ---- Pass 2: adjacent-month fallback for empty months ----
+  // Exclude already-used photos so a December canonical photo doesn't
+  // ALSO get placed as a January fallback.
+  if (CALENDAR_DEFAULTS.empty_month_fallback === 'adjacent') {
+    for (let month = 1; month <= 12; month++) {
+      if (filledMonths.has(month)) continue;
+      const tryOrder = [month - 1, month + 1].filter((m) => m >= 1 && m <= 12);
+      for (const sourceMonth of tryOrder) {
+        const candidates = (byMonth.get(sourceMonth) ?? []).filter((p) => !usedPhotoIds.has(p.id));
+        if (candidates.length === 0) continue;
+        const scored = candidates.map((p) => ({ photo: p, score: scoreOf(p) }));
+        scored.sort((a, b) => b.score - a.score || a.photo.id - b.photo.id);
+        const bucketKey = `${targetYear}-${month.toString().padStart(2, '0')}`;
+        const note = `Fallback from ${monthName(sourceMonth)} ${sourceYear}`;
+        const take = Math.min(CALENDAR_DEFAULTS.photos_per_month, scored.length);
+        for (let i = 0; i < take; i++) {
+          await insertSelectedPhoto({
+            selection_id: selectionId,
+            photo_id: scored[i].photo.id,
+            bucket_key: bucketKey,
+            rank: i,
+            score: scored[i].score,
+            notes: note,
+          });
+          usedPhotoIds.add(scored[i].photo.id);
+        }
+        break;
+      }
     }
   }
 
