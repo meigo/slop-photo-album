@@ -53,6 +53,7 @@
       >
         Re-run CV
       </button>
+      <a class="btn-secondary" href={`/projects/${data.project.id}/people`}>People</a>
       <a class="btn-secondary" href={`/projects/${data.project.id}/library`}>Open library</a>
     </div>
     {#if mine && pStateLocal.phase === 'walking'}
