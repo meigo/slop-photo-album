@@ -1,5 +1,6 @@
 """FastAPI app builder. Routes registered here so tests can import buildServer-equivalent via app fixture."""
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from server.blur import laplacian_variance
@@ -21,6 +22,16 @@ class FacesRequest(BaseModel):
 
 def build_app() -> FastAPI:
     app = FastAPI(title="slop-family-album-py-sidecar")
+
+    # Allow the Tauri renderer (origin http://localhost:1420 in dev,
+    # tauri:// in prod) to call us. Safe because we bind to 127.0.0.1
+    # only — nothing external can reach us regardless of origin.
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
     @app.get("/health")
     async def health() -> dict[str, bool]:
