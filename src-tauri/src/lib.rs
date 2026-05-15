@@ -80,5 +80,11 @@ fn migrations() -> Vec<tauri_plugin_sql::Migration> {
       sql: include_str!("../migrations/004_selection.sql"),
       kind: tauri_plugin_sql::MigrationKind::Up,
     },
+    tauri_plugin_sql::Migration {
+      version: 5,
+      description: "selected_photo_notes",
+      sql: include_str!("../migrations/005_selection_notes.sql"),
+      kind: tauri_plugin_sql::MigrationKind::Up,
+    },
   ]
 }

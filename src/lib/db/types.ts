@@ -120,6 +120,7 @@ export interface SelectedPhotoRow {
   rank: number;
   score: number | null;
   user_state: string;
+  notes: string | null;
 }
 
 export interface SelectedPhotoInsert {
@@ -129,4 +130,5 @@ export interface SelectedPhotoInsert {
   rank: number;
   score: number | null;
   user_state?: string;
+  notes?: string | null;
 }

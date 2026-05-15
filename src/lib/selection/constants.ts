@@ -17,16 +17,20 @@ export const SCORE_WEIGHTS = {
 };
 
 export const ALBUM_DEFAULTS = {
-  // Per-day cap: at most this many photos per day taken (a day-bucket).
-  // Soft — over-budget days drop lowest-scoring beyond this cap.
+  // Per-day cap: at most this many photos per day taken.
   per_day_cap: 3,
+  // After per-day capping, if a month still has more than this many
+  // photos, drop the lowest-scoring entries until at or below the cap.
+  // Prevents one vacation month from dominating the album.
+  per_month_cap: 12,
 };
 
 export const CALENDAR_DEFAULTS = {
-  // How many photos to put in each calendar month.
   photos_per_month: 1,
-  // 'seasonal-memory' is the only mode in 3a. 'best-of' is deferred.
   mode: 'seasonal-memory' as const,
+  // When source-year has no photos for a month, try adjacent months
+  // (M-1 then M+1, same year) before leaving the slot empty.
+  empty_month_fallback: 'adjacent' as const,  // 'adjacent' | 'none'
 };
 
 /**

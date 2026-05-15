@@ -344,11 +344,11 @@ export async function startSelection(projectId: number, kind: 'album' | 'calenda
 export async function insertSelectedPhoto(args: SelectedPhotoInsert): Promise<void> {
   const d = await db();
   await d.execute(
-    `INSERT INTO selected_photo (selection_id, photo_id, bucket_key, rank, score, user_state)
-     VALUES (?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO selected_photo (selection_id, photo_id, bucket_key, rank, score, user_state, notes)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`,
     [
       args.selection_id, args.photo_id, args.bucket_key, args.rank,
-      args.score, args.user_state ?? 'auto',
+      args.score, args.user_state ?? 'auto', args.notes ?? null,
     ]
   );
 }

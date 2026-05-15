@@ -14,8 +14,16 @@
     return d.toLocaleDateString(undefined, { year: 'numeric', month: 'long' });
   }
 
+  function monthShort(key: string): string {
+    const d = new Date(key + '-15T12:00:00');
+    return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short' });
+  }
+
   let totalPhotos = $derived(
     [...data.photosByBucket.values()].reduce((a, b) => a + b.length, 0)
+  );
+  let maxBarValue = $derived(
+    Math.max(1, ...data.histogram.map((h) => h.available))
   );
 </script>
 
@@ -39,6 +47,33 @@
       · generated {new Date(data.selection.generated_at).toLocaleString()}
     </p>
 
+    {#if data.histogram.length > 0}
+      <section class="surface-card mt-4">
+        <h2 class="text-sm font-medium mb-2" style="color: var(--color-muted)">
+          Distribution ({data.kind === 'album' ? data.project.album_year : data.project.calendar_year - 1})
+        </h2>
+        <div class="flex flex-col gap-1">
+          {#each data.histogram as h}
+            {@const availPct = (h.available / maxBarValue) * 100}
+            {@const selPct = (h.selected / maxBarValue) * 100}
+            <div class="flex items-center gap-2 text-xs">
+              <span class="w-20 shrink-0" style="color: var(--color-muted)">{monthShort(h.monthKey)}</span>
+              <div class="flex-1 relative" style="height: 14px; background: var(--color-bg);">
+                <div class="absolute inset-y-0 left-0" style="background: var(--color-line); width: {availPct}%"></div>
+                <div class="absolute inset-y-0 left-0" style="background: var(--color-fg); width: {selPct}%"></div>
+              </div>
+              <span class="text-right" style="width: 9rem; color: var(--color-muted)">
+                {h.selected} / {h.available}
+              </span>
+            </div>
+          {/each}
+        </div>
+        <p class="text-xs mt-2" style="color: var(--color-muted)">
+          Bar: photos available in source. Filled: photos selected.
+        </p>
+      </section>
+    {/if}
+
     <div class="flex flex-col gap-6 mt-4">
       {#each [...data.photosByBucket.entries()] as [bucket, photos]}
         <section>
@@ -54,6 +89,11 @@
                 <figcaption class="text-xs mt-1" style="color: var(--color-muted)">
                   rank {photo.rank} · score {photo.score?.toFixed(2) ?? '—'}
                 </figcaption>
+                {#if photo.notes}
+                  <p class="text-xs mt-0.5" style="color: var(--color-warning)" title={photo.notes}>
+                    ⚠ {photo.notes}
+                  </p>
+                {/if}
               </figure>
             {/each}
           </div>

@@ -1,6 +1,7 @@
 import {
   listPhotos, listCvScoresByProject, listFacesByProject, listPersonClusters,
-  listDuplicateMembersByPhoto, startSelection, insertSelectedPhoto, db,
+  listDuplicateMembersByPhoto, getProject,
+  startSelection, insertSelectedPhoto, db,
 } from '$lib/db';
 import type { PhotoRow, FaceRow, PhotoTagRow } from '$lib/db/types';
 import { aggregateScore } from './scoring';
@@ -11,18 +12,30 @@ import { ALBUM_DEFAULTS } from './constants';
  *
  * Algorithm:
  * 1. Load every photo + its CV / face / tag / dup-group context.
- * 2. Compute aggregate score per photo.
- * 3. Bucket by YYYY-MM-DD of taken_at. Photos without taken_at land in a
- *    'no-date' bucket at the end.
- * 4. Within each day-bucket, keep the top N (per_day_cap) by score.
- * 5. Materialize: write rows to selected_photo with rank within bucket.
+ * 2. Filter to project.album_year (photos without taken_at excluded).
+ * 3. Compute aggregate score per photo.
+ * 4. Bucket by YYYY-MM-DD of taken_at.
+ * 5. Within each day-bucket, keep the top N (per_day_cap) by score.
+ * 6. Within each month, keep the top N (per_month_cap) by score.
+ * 7. Materialize: write rows to selected_photo with rank within bucket.
  *
  * Returns the new selection.id.
  */
 export async function generateAlbumSelection(projectId: number): Promise<number> {
+  const project = await getProject(projectId);
+  if (!project) throw new Error(`Project ${projectId} not found`);
+  const albumYear = project.album_year;
+
   // Materialize all the per-photo context up front so we can compute
   // scores without round-tripping the DB per photo.
-  const photos = await listPhotos(projectId);
+  const allPhotos = await listPhotos(projectId);
+  // Filter to album_year only. Photos without taken_at are excluded —
+  // we can't verify they belong to this year.
+  const photos = allPhotos.filter((p) => {
+    if (p.taken_at === null) return false;
+    return new Date(p.taken_at).getFullYear() === albumYear;
+  });
+
   const cvScores = await listCvScoresByProject(projectId);
   const cvById = new Map(cvScores.map((c) => [c.photo_id, c]));
   const faces = await listFacesByProject(projectId);
@@ -45,7 +58,6 @@ export async function generateAlbumSelection(projectId: number): Promise<number>
     return dupReps.get(g) !== photoId;
   };
 
-  // Score every photo.
   interface Scored {
     photo: PhotoRow;
     score: number;
@@ -61,28 +73,43 @@ export async function generateAlbumSelection(projectId: number): Promise<number>
     }),
   }));
 
-  // Bucket by day.
+  // ---- Per-day cap ----
   const byDay = new Map<string, Scored[]>();
   for (const s of scored) {
-    const key = s.photo.taken_at !== null ? dayKey(s.photo.taken_at) : 'no-date';
+    const key = dayKey(s.photo.taken_at!);  // taken_at non-null after filter
     const arr = byDay.get(key) ?? [];
     arr.push(s);
     byDay.set(key, arr);
   }
-  // Per-day: sort by score desc, keep top per_day_cap.
   const perDayKept: Scored[] = [];
   for (const [, items] of byDay) {
     items.sort((a, b) => b.score - a.score || a.photo.id - b.photo.id);
     for (let i = 0; i < Math.min(ALBUM_DEFAULTS.per_day_cap, items.length); i++) {
-      perDayKept.push({ photo: items[i].photo, score: items[i].score });
+      perDayKept.push(items[i]);
     }
   }
 
-  // Materialize. Group again by day, sort by score desc, write with rank.
+  // ---- Per-month cap ----
+  const byMonth = new Map<string, Scored[]>();
+  for (const s of perDayKept) {
+    const key = monthKey(s.photo.taken_at!);
+    const arr = byMonth.get(key) ?? [];
+    arr.push(s);
+    byMonth.set(key, arr);
+  }
+  const finalKept: Scored[] = [];
+  for (const [, items] of byMonth) {
+    items.sort((a, b) => b.score - a.score || a.photo.id - b.photo.id);
+    for (let i = 0; i < Math.min(ALBUM_DEFAULTS.per_month_cap, items.length); i++) {
+      finalKept.push(items[i]);
+    }
+  }
+
+  // ---- Materialize ----
   const selectionId = await startSelection(projectId, 'album');
   const byBucket = new Map<string, Scored[]>();
-  for (const s of perDayKept) {
-    const key = s.photo.taken_at !== null ? dayKey(s.photo.taken_at) : 'no-date';
+  for (const s of finalKept) {
+    const key = dayKey(s.photo.taken_at!);
     const arr = byBucket.get(key) ?? [];
     arr.push(s);
     byBucket.set(key, arr);
@@ -109,6 +136,13 @@ function dayKey(epochMs: number): string {
   const m = (d.getMonth() + 1).toString().padStart(2, '0');
   const dd = d.getDate().toString().padStart(2, '0');
   return `${y}-${m}-${dd}`;
+}
+
+function monthKey(epochMs: number): string {
+  const d = new Date(epochMs);
+  const y = d.getFullYear().toString().padStart(4, '0');
+  const m = (d.getMonth() + 1).toString().padStart(2, '0');
+  return `${y}-${m}`;
 }
 
 async function loadAllTagsAlbum(projectId: number): Promise<Map<number, PhotoTagRow[]>> {

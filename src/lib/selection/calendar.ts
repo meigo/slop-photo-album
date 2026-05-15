@@ -13,11 +13,12 @@ import { CALENDAR_DEFAULTS } from './constants';
  * For each calendar month M of project.calendar_year:
  *   1. Pull photos with taken_at.year == calendar_year - 1 AND
  *      taken_at.month == M.
- *   2. Score them via aggregateScore.
- *   3. Take top photos_per_month by score.
- *   4. Materialize as selected_photo rows with bucket_key = 'YYYY-MM'.
- *
- * If a month has no photos in the source year, its bucket is empty.
+ *   2. If empty and empty_month_fallback === 'adjacent', try M-1
+ *      then M+1 (same source year). Photos from a fallback month
+ *      get a notes annotation.
+ *   3. Score them via aggregateScore.
+ *   4. Take top photos_per_month by score.
+ *   5. Materialize as selected_photo rows with bucket_key = 'YYYY-MM'.
  *
  * Returns the new selection.id.
  */
@@ -50,7 +51,7 @@ export async function generateCalendarSelection(projectId: number): Promise<numb
     return dupReps.get(g) !== photoId;
   };
 
-  // Bucket source-year photos by their month (1-12).
+  // Bucket source-year photos by month.
   const byMonth = new Map<number, PhotoRow[]>();
   for (const p of photos) {
     if (p.taken_at === null) continue;
@@ -62,20 +63,40 @@ export async function generateCalendarSelection(projectId: number): Promise<numb
     byMonth.set(month, arr);
   }
 
+  function scoreOf(p: PhotoRow): number {
+    return aggregateScore({
+      cv: cvById.get(p.id),
+      facesForPhoto: facesByPhoto.get(p.id) ?? [],
+      pinnedClusterIds,
+      tagsForPhoto: tags.get(p.id) ?? [],
+      isDuplicateNonRep: isNonRep(p.id),
+    });
+  }
+
+  function monthName(m: number): string {
+    return ['January','February','March','April','May','June','July','August','September','October','November','December'][m - 1];
+  }
+
   const selectionId = await startSelection(projectId, 'calendar');
 
   for (let month = 1; month <= 12; month++) {
-    const monthPhotos = byMonth.get(month) ?? [];
-    const scored = monthPhotos.map((p) => ({
-      photo: p,
-      score: aggregateScore({
-        cv: cvById.get(p.id),
-        facesForPhoto: facesByPhoto.get(p.id) ?? [],
-        pinnedClusterIds,
-        tagsForPhoto: tags.get(p.id) ?? [],
-        isDuplicateNonRep: isNonRep(p.id),
-      }),
-    }));
+    let monthPhotos = byMonth.get(month) ?? [];
+    let fallbackNote: string | null = null;
+
+    // Adjacent-month fallback: if empty, try M-1, then M+1.
+    if (monthPhotos.length === 0 && CALENDAR_DEFAULTS.empty_month_fallback === 'adjacent') {
+      const tryOrder = [month - 1, month + 1].filter((m) => m >= 1 && m <= 12);
+      for (const m of tryOrder) {
+        const candidate = byMonth.get(m) ?? [];
+        if (candidate.length > 0) {
+          monthPhotos = candidate;
+          fallbackNote = `Fallback from ${monthName(m)} ${sourceYear}`;
+          break;
+        }
+      }
+    }
+
+    const scored = monthPhotos.map((p) => ({ photo: p, score: scoreOf(p) }));
     scored.sort((a, b) => b.score - a.score || a.photo.id - b.photo.id);
     const bucketKey = `${targetYear}-${month.toString().padStart(2, '0')}`;
     const take = Math.min(CALENDAR_DEFAULTS.photos_per_month, scored.length);
@@ -86,6 +107,7 @@ export async function generateCalendarSelection(projectId: number): Promise<numb
         bucket_key: bucketKey,
         rank: i,
         score: scored[i].score,
+        notes: fallbackNote,
       });
     }
   }
