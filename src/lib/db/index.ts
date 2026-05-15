@@ -182,6 +182,10 @@ export async function upsertImageEmbedding(args: {
   computed_at: number;
 }): Promise<void> {
   const d = await db();
+  // Convert Uint8Array → number[] for BLOB binding; tauri-plugin-sql
+  // JSON-serializes parameters and Uint8Array stringifies to `{}` (not
+  // an array of bytes), so passing it directly stores an empty BLOB.
+  const vectorBytes = Array.from(args.vector);
   await d.execute(
     `INSERT INTO image_embedding (photo_id, model, vector, computed_at)
      VALUES (?, ?, ?, ?)
@@ -189,7 +193,7 @@ export async function upsertImageEmbedding(args: {
        model = excluded.model,
        vector = excluded.vector,
        computed_at = excluded.computed_at`,
-    [args.photo_id, args.model, args.vector, args.computed_at]
+    [args.photo_id, args.model, vectorBytes, args.computed_at]
   );
 }
 
@@ -238,10 +242,14 @@ export async function clearFacesForPhoto(photoId: number): Promise<void> {
 
 export async function insertFace(f: FaceInsert): Promise<number> {
   const d = await db();
+  // Convert Uint8Array → number[] for BLOB binding; tauri-plugin-sql
+  // JSON-serializes parameters and Uint8Array stringifies to `{}` (not
+  // an array of bytes), so passing it directly stores an empty BLOB.
+  const embeddingBytes = Array.from(f.embedding);
   const r = await d.execute(
     `INSERT INTO face (photo_id, bbox_x, bbox_y, bbox_w, bbox_h, embedding, quality, computed_at)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-    [f.photo_id, f.bbox_x, f.bbox_y, f.bbox_w, f.bbox_h, f.embedding, f.quality, f.computed_at]
+    [f.photo_id, f.bbox_x, f.bbox_y, f.bbox_w, f.bbox_h, embeddingBytes, f.quality, f.computed_at]
   );
   return r.lastInsertId as number;
 }

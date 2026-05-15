@@ -59,6 +59,15 @@ export async function clusterFaces(projectId: number): Promise<void> {
     vec: decodeEmbedding(new Uint8Array(f.embedding)),
   }));
 
+  // ---- Diagnostic: embedding sanity ----
+  for (let i = 0; i < Math.min(3, decoded.length); i++) {
+    const v = decoded[i].vec;
+    const firstFive = Array.from(v.slice(0, 5)).map((x) => x.toFixed(4)).join(', ');
+    let norm = 0;
+    for (let k = 0; k < v.length; k++) norm += v[k] * v[k];
+    console.log(`[face-clustering] embedding ${i}: length=${v.length}, norm=${Math.sqrt(norm).toFixed(4)}, first 5 values: [${firstFive}]`);
+  }
+
   // Sort by descending quality so high-quality faces seed clusters first.
   decoded.sort((a, b) => (b.face.quality ?? 0) - (a.face.quality ?? 0));
 
