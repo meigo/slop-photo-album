@@ -14,7 +14,7 @@ import torch
 from PIL import Image
 
 
-MODEL_NAME = "ViT-B-32"
+MODEL_NAME = "ViT-B-32-quickgelu"
 PRETRAINED = "openai"
 MODEL_KEY = f"{MODEL_NAME}/{PRETRAINED}"
 

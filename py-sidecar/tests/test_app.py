@@ -37,5 +37,5 @@ def test_embed_endpoint_returns_b64() -> None:
     r = client.post("/embed", json={"path": str(FIX / "sharp.jpg")})
     assert r.status_code == 200
     body = r.json()
-    assert body["model"] == "ViT-B-32/openai"
+    assert body["model"] == "ViT-B-32-quickgelu/openai"
     assert len(body["vector_b64"]) > 1000  # 512 * 4 bytes b64 ≈ 2730 chars

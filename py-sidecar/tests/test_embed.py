@@ -10,7 +10,7 @@ FIX = Path(__file__).parent.parent / "fixtures"
 
 def test_embed_returns_512_dim_float32() -> None:
     raw, key = embed_image(str(FIX / "sharp.jpg"))
-    assert key == "ViT-B-32/openai"
+    assert key == "ViT-B-32-quickgelu/openai"
     arr = np.frombuffer(raw, dtype=np.float32)
     assert arr.shape == (512,)
     # L2-normalized
