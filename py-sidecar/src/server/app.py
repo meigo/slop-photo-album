@@ -9,6 +9,7 @@ from server.blur import laplacian_variance
 from server.embed import embed_image, model_key
 from server.faces import detect_faces
 from server.phash import perceptual_hash
+from server.tags import score_tags
 
 
 class BlurRequest(BaseModel):
@@ -25,6 +26,11 @@ class FacesRequest(BaseModel):
 
 class EmbedRequest(BaseModel):
     path: str
+
+
+class TagsRequest(BaseModel):
+    path: str
+    top_k: int = 5
 
 
 def build_app() -> FastAPI:
@@ -78,6 +84,13 @@ def build_app() -> FastAPI:
                 "model": mk,
                 "vector_b64": base64.b64encode(raw).decode("ascii"),
             }
+        except FileNotFoundError as e:
+            raise HTTPException(status_code=404, detail=str(e))
+
+    @app.post("/tags")
+    async def tags(req: TagsRequest) -> dict[str, list[dict[str, float]]]:
+        try:
+            return {"tags": score_tags(req.path, top_k=req.top_k)}
         except FileNotFoundError as e:
             raise HTTPException(status_code=404, detail=str(e))
 
