@@ -33,3 +33,28 @@ export interface PhotoInsert {
   thumb_path: string | null;
   indexed_at: number;
 }
+
+export interface CvScoreRow {
+  photo_id: number;
+  blur: number | null;
+  faces_count: number | null;
+  faces_json: string | null;
+  phash: string | null;
+  computed_at: number;
+}
+
+export interface CvScoreInsert {
+  photo_id: number;
+  blur: number | null;
+  faces_count: number | null;
+  faces_json: string | null;
+  phash: string | null;
+  computed_at: number;
+}
+
+export interface DuplicateGroupRow {
+  id: number;
+  project_id: number;
+  representative_photo_id: number;
+  created_at: number;
+}

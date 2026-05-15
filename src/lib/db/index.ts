@@ -1,5 +1,5 @@
 import Database from '@tauri-apps/plugin-sql';
-import type { ProjectRow, PhotoRow, PhotoInsert } from './types';
+import type { ProjectRow, PhotoRow, PhotoInsert, CvScoreRow, CvScoreInsert } from './types';
 
 let _db: Database | null = null;
 
@@ -77,4 +77,91 @@ export async function listIndexedAtByPath(projectId: number): Promise<Map<string
     [projectId]
   );
   return new Map(rows.map((r) => [r.path, r.indexed_at]));
+}
+
+export async function upsertCvScore(s: CvScoreInsert): Promise<void> {
+  const d = await db();
+  await d.execute(
+    `INSERT INTO cv_score (photo_id, blur, faces_count, faces_json, phash, computed_at)
+     VALUES (?, ?, ?, ?, ?, ?)
+     ON CONFLICT (photo_id) DO UPDATE SET
+       blur = excluded.blur,
+       faces_count = excluded.faces_count,
+       faces_json = excluded.faces_json,
+       phash = excluded.phash,
+       computed_at = excluded.computed_at`,
+    [s.photo_id, s.blur, s.faces_count, s.faces_json, s.phash, s.computed_at]
+  );
+}
+
+export async function getCvScore(photoId: number): Promise<CvScoreRow | null> {
+  const d = await db();
+  const rows = await d.select<CvScoreRow[]>(
+    'SELECT * FROM cv_score WHERE photo_id = ?', [photoId]
+  );
+  return rows[0] ?? null;
+}
+
+export async function listCvScoresByProject(projectId: number): Promise<Array<CvScoreRow & { path: string }>> {
+  const d = await db();
+  return d.select<Array<CvScoreRow & { path: string }>>(
+    `SELECT cv_score.*, photo.path
+     FROM cv_score
+     INNER JOIN photo ON photo.id = cv_score.photo_id
+     WHERE photo.project_id = ?`,
+    [projectId]
+  );
+}
+
+// Used by the scanner to skip CV work on photos already CV-scored after
+// they were last indexed.
+export async function listCvComputedAtByPhotoId(projectId: number): Promise<Map<number, number>> {
+  const d = await db();
+  const rows = await d.select<{ photo_id: number; computed_at: number }[]>(
+    `SELECT cv_score.photo_id, cv_score.computed_at
+     FROM cv_score
+     INNER JOIN photo ON photo.id = cv_score.photo_id
+     WHERE photo.project_id = ?`,
+    [projectId]
+  );
+  return new Map(rows.map((r) => [r.photo_id, r.computed_at]));
+}
+
+export async function clearDuplicateGroups(projectId: number): Promise<void> {
+  const d = await db();
+  await d.execute('DELETE FROM duplicate_group WHERE project_id = ?', [projectId]);
+}
+
+export async function insertDuplicateGroup(args: {
+  project_id: number;
+  representative_photo_id: number;
+  member_photo_ids: number[];
+}): Promise<number> {
+  const d = await db();
+  const now = Date.now();
+  const res = await d.execute(
+    'INSERT INTO duplicate_group (project_id, representative_photo_id, created_at) VALUES (?, ?, ?)',
+    [args.project_id, args.representative_photo_id, now]
+  );
+  const gid = res.lastInsertId as number;
+  for (const pid of args.member_photo_ids) {
+    await d.execute(
+      'INSERT INTO duplicate_group_member (group_id, photo_id) VALUES (?, ?)',
+      [gid, pid]
+    );
+  }
+  return gid;
+}
+
+export async function listDuplicateMembersByPhoto(projectId: number): Promise<Map<number, number>> {
+  // photo_id → group_id (which dup group, if any, each photo belongs to)
+  const d = await db();
+  const rows = await d.select<{ photo_id: number; group_id: number }[]>(
+    `SELECT duplicate_group_member.photo_id, duplicate_group_member.group_id
+     FROM duplicate_group_member
+     INNER JOIN duplicate_group ON duplicate_group.id = duplicate_group_member.group_id
+     WHERE duplicate_group.project_id = ?`,
+    [projectId]
+  );
+  return new Map(rows.map((r) => [r.photo_id, r.group_id]));
 }
