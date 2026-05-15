@@ -7,6 +7,7 @@ from pydantic import BaseModel
 
 from server.blur import laplacian_variance
 from server.embed import embed_image, model_key
+from server.exposure import exposure_score
 from server.faces import detect_faces
 from server.phash import perceptual_hash
 from server.tags import score_tags
@@ -32,6 +33,10 @@ class EmbedRequest(BaseModel):
 class TagsRequest(BaseModel):
     path: str
     top_k: int = 5
+
+
+class ExposureRequest(BaseModel):
+    path: str
 
 
 def build_app() -> FastAPI:
@@ -94,5 +99,14 @@ def build_app() -> FastAPI:
             return {"tags": score_tags(req.path, top_k=req.top_k)}
         except FileNotFoundError as e:
             raise HTTPException(status_code=404, detail=str(e))
+
+    @app.post("/exposure")
+    async def exposure(req: ExposureRequest) -> dict[str, float]:
+        try:
+            return {"exposure": exposure_score(req.path)}
+        except FileNotFoundError as e:
+            raise HTTPException(status_code=404, detail=str(e))
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=str(e))
 
     return app
