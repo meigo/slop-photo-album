@@ -35,3 +35,10 @@ src-tauri/target/
 
 # Misc build output
 dist/
+
+# Python sidecar
+py-sidecar/.venv/
+py-sidecar/.pytest_cache/
+py-sidecar/__pycache__/
+py-sidecar/src/**/__pycache__/
+py-sidecar/tests/**/__pycache__/
