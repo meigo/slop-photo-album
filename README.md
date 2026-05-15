@@ -6,9 +6,11 @@ Local-first desktop app for building printed family photo albums and seasonal-me
 
 **Phase 1 (Foundation) — complete.** App indexes a folder into SQLite with thumbnails + EXIF and shows the library as a grid.
 
-**Phase 2a (CV pipeline) — complete.** Python sidecar runs blur + face detection + perceptual hash on every indexed photo. Duplicate groups are detected via pHash Hamming distance. Library grid shows blur, face count, and dup-group indicators per thumbnail.
+**Phase 2a (CV pipeline) — complete.** Python sidecar runs blur + face detection + perceptual hash on every indexed photo. Duplicate groups are detected via pHash Hamming distance.
 
-Phase 2b (embeddings + scene tags + face clustering), Phase 3 (selection + layout), and Phase 4 (PDF export + LLM captions) are planned but not yet implemented.
+**Phase 2b (Semantic CV) — complete.** Image embeddings (OpenCLIP ViT-B/32 quickgelu), zero-shot scene tags, per-face SFace embeddings, face clustering, and exposure scoring. People page lets you name face clusters and pin "must-include" ones. Library grid shows the top scene tag per photo.
+
+Phase 3 (selection + layout) and Phase 4 (PDF export + LLM captions) are planned but not yet implemented.
 
 See `docs/superpowers/specs/2026-05-14-family-album-builder-design.md` for the design.
 
@@ -22,6 +24,8 @@ cd sidecar && npm install && cd ..
 cd py-sidecar && uv sync && cd ..
 npm run tauri dev
 ```
+
+**First run note:** The first time Tauri spawns the Python sidecar after `uv sync`, OpenCLIP downloads the ViT-B/32 weights (~150 MB) to `~/.cache/torch/hub/checkpoints/`. Allow a couple of minutes for the first `/embed` or `/tags` call to complete; subsequent runs are fast.
 
 Run sidecar tests:
 
