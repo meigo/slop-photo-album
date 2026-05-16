@@ -104,10 +104,17 @@
     style="object-position: {css.objectPosition}; transform: {css.transform}; transform-origin: {css.transformOrigin}; pointer-events: none;"
     draggable="false"
   />
-  <!-- Floating toolbar pinned to the slot's bottom-left, inside the slot -->
+  <!-- Floating toolbar pinned to the slot's bottom-left, inside the slot.
+       Stop pointer events from bubbling to the drag surface — otherwise
+       the surface captures the pointer on pointerdown and the button's
+       click event never fires. -->
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div
     class="absolute bottom-1 left-1 flex gap-1 items-center"
     style="z-index: 3; background: rgba(0,0,0,0.7); padding: 4px 6px; border-radius: 6px;"
+    onpointerdown={(e) => e.stopPropagation()}
+    onpointerup={(e) => e.stopPropagation()}
+    onwheel={(e) => e.stopPropagation()}
   >
     <button type="button" class="text-xs" style="color: white; background: none; border: none; cursor: pointer; padding: 2px 4px;" onclick={save} title="Save crop">save</button>
     <button type="button" class="text-xs" style="color: white; background: none; border: none; cursor: pointer; padding: 2px 4px;" onclick={reset} title="Reset to auto">reset</button>
