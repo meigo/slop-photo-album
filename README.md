@@ -26,7 +26,9 @@ Local-first desktop app for building printed family photo albums and seasonal-me
 
 **Phase 4b (Text layers + Google Fonts) — complete.** Place text overlays anywhere on any page (album or calendar). Drag to reposition, drag the corner to resize, in-place edit content + style (font family, size, weight, italic, color, alignment). Curated catalog of ~20 Google Fonts loaded on-demand via a `<link>` tag.
 
-Phase 4c (slot polish), Phase 4d (PDF export) — planned but not yet implemented.
+**Phase 4c (Slot polish) — complete.** Hover a photo slot to swap (🖼), adjust (✥), or remove the photo entirely (🗑). The crop editor exposes brightness, contrast, and saturation sliders that render via CSS `filter` for live preview.
+
+Phase 4d (PDF export) and LLM-generated captions — planned but not yet implemented.
 
 See `docs/superpowers/specs/2026-05-14-family-album-builder-design.md` for the design.
 
