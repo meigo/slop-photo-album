@@ -21,17 +21,16 @@
   const SNAP_THRESHOLD = 0.02; // fractional — ~12px on a 600px-wide page
 
   // Intentionally snapshot the prop's initial values into local $state — this
-  // component edits a local copy and only writes back on save(). The
-  // state_referenced_locally warnings here are false positives.
+  // component edits a local copy and only writes back on save().
   // svelte-ignore state_referenced_locally
-  let pos = $state({ x: text.position_x, y: text.position_y, w: text.width, h: text.height });
+  let pos = $state({ x: text.position_x, y: text.position_y });
   // svelte-ignore state_referenced_locally
   let style = $state<TextStyle>(parseStyle(text.style_json) ?? DEFAULT_TEXT_STYLE);
   // svelte-ignore state_referenced_locally
   let content = $state(text.content);
 
-  let dragging = $state<'move' | 'resize' | null>(null);
-  let dragStart: { mouseX: number; mouseY: number; pos: { x: number; y: number; w: number; h: number }; parentRect: DOMRect } | null = null;
+  let dragging = $state(false);
+  let dragStart: { mouseX: number; mouseY: number; pos: { x: number; y: number }; parentRect: DOMRect } | null = null;
 
   $effect(() => {
     loadGoogleFont(style.fontFamily, findFont(style.fontFamily)?.weights ?? [style.fontWeight]);
@@ -39,13 +38,9 @@
 
   function clamp01(v: number) { return Math.max(0, Math.min(1, v)); }
 
-  // Active snap targets — null = no snap active. Used to render guide lines.
   let activeSnapX = $state<number | null>(null);
   let activeSnapY = $state<number | null>(null);
 
-  /** Find the closest snap target to any of the given candidate values.
-   *  Returns the target value and the delta (target - winning candidate),
-   *  or null if no candidate is within threshold. */
   function nearestSnap(targets: number[], candidates: number[]): { target: number; delta: number } | null {
     let best: { target: number; delta: number } | null = null;
     for (const t of targets) {
@@ -59,70 +54,50 @@
     return best;
   }
 
-  function onPointerDownMove(e: PointerEvent) {
-    const tgt = e.target as HTMLElement;
-    // Ignore drags that originate on the toolbar, resize handle, or contentEditable area
-    if (tgt.closest('[data-toolbar]')) return;
-    if (tgt.closest('[data-resize-handle]')) return;
-    if (tgt.closest('[data-text-content]')) return;
-    dragging = 'move';
-    const parentRect = (e.currentTarget as HTMLElement).parentElement!.getBoundingClientRect();
-    dragStart = { mouseX: e.clientX, mouseY: e.clientY, pos: { ...pos }, parentRect };
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-  }
+  // Refs for the outer wrapper and the contentEditable. We use the outer
+  // wrapper's parent to compute the page rect; we use the contentEditable's
+  // own rect to know the text's currently-rendered size (for snap edges).
+  let wrapperEl: HTMLDivElement | undefined = $state(undefined);
+  let editorEl: HTMLDivElement | undefined = $state(undefined);
 
-  function onPointerDownResize(e: PointerEvent) {
+  function onDragHandleDown(e: PointerEvent) {
     e.stopPropagation();
-    dragging = 'resize';
-    const parentRect = (e.currentTarget as HTMLElement).parentElement!.parentElement!.getBoundingClientRect();
+    if (!wrapperEl) return;
+    dragging = true;
+    const parentRect = wrapperEl.parentElement!.getBoundingClientRect();
     dragStart = { mouseX: e.clientX, mouseY: e.clientY, pos: { ...pos }, parentRect };
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   }
 
   function onPointerMove(e: PointerEvent) {
-    if (!dragging || !dragStart) return;
+    if (!dragging || !dragStart || !editorEl) return;
     const dx = (e.clientX - dragStart.mouseX) / dragStart.parentRect.width;
     const dy = (e.clientY - dragStart.mouseY) / dragStart.parentRect.height;
 
-    if (dragging === 'move') {
-      let nx = clamp01(dragStart.pos.x + dx);
-      let ny = clamp01(dragStart.pos.y + dy);
+    let nx = clamp01(dragStart.pos.x + dx);
+    let ny = clamp01(dragStart.pos.y + dy);
 
-      if (e.shiftKey) {
-        // Bypass snap entirely.
-        activeSnapX = null;
-        activeSnapY = null;
-      } else {
-        // Snap candidates for X: text left, center, right.
-        const sx = nearestSnap(snapTargetsX, [nx, nx + pos.w / 2, nx + pos.w]);
-        if (sx) { nx = clamp01(nx + sx.delta); activeSnapX = sx.target; } else { activeSnapX = null; }
-        // Snap candidates for Y: text top, center, bottom.
-        const sy = nearestSnap(snapTargetsY, [ny, ny + pos.h / 2, ny + pos.h]);
-        if (sy) { ny = clamp01(ny + sy.delta); activeSnapY = sy.target; } else { activeSnapY = null; }
-      }
-
-      pos = { x: nx, y: ny, w: pos.w, h: pos.h };
+    if (e.shiftKey) {
+      activeSnapX = null;
+      activeSnapY = null;
     } else {
-      // Resize from bottom-right corner: only right and bottom edges move.
-      let nw = clamp01(Math.max(0.05, dragStart.pos.w + dx));
-      let nh = clamp01(Math.max(0.05, dragStart.pos.h + dy));
+      // Measure the currently-rendered text size in page fractions so the
+      // right and bottom edges (plus the center) participate in snap.
+      const textRect = editorEl.getBoundingClientRect();
+      const wFrac = textRect.width / dragStart.parentRect.width;
+      const hFrac = textRect.height / dragStart.parentRect.height;
 
-      if (e.shiftKey) {
-        activeSnapX = null;
-        activeSnapY = null;
-      } else {
-        const sx = nearestSnap(snapTargetsX, [pos.x + nw]);
-        if (sx) { nw = clamp01(Math.max(0.05, nw + sx.delta)); activeSnapX = sx.target; } else { activeSnapX = null; }
-        const sy = nearestSnap(snapTargetsY, [pos.y + nh]);
-        if (sy) { nh = clamp01(Math.max(0.05, nh + sy.delta)); activeSnapY = sy.target; } else { activeSnapY = null; }
-      }
-
-      pos = { x: pos.x, y: pos.y, w: nw, h: nh };
+      const sx = nearestSnap(snapTargetsX, [nx, nx + wFrac / 2, nx + wFrac]);
+      if (sx) { nx = clamp01(nx + sx.delta); activeSnapX = sx.target; } else { activeSnapX = null; }
+      const sy = nearestSnap(snapTargetsY, [ny, ny + hFrac / 2, ny + hFrac]);
+      if (sy) { ny = clamp01(ny + sy.delta); activeSnapY = sy.target; } else { activeSnapY = null; }
     }
+
+    pos = { x: nx, y: ny };
   }
 
   function onPointerUp(e: PointerEvent) {
-    dragging = null;
+    dragging = false;
     dragStart = null;
     activeSnapX = null;
     activeSnapY = null;
@@ -135,8 +110,10 @@
     await updatePageText(text.id, {
       position_x: pos.x,
       position_y: pos.y,
-      width: pos.w,
-      height: pos.h,
+      // Width/height are no longer manually controlled — text auto-sizes.
+      // We still write them for storage compat; readers can ignore.
+      width: 0,
+      height: 0,
       content,
       style_json: serializeStyle(style),
     });
@@ -153,12 +130,9 @@
 
   let availableWeights = $derived(findFont(style.fontFamily)?.weights ?? [400]);
 
-  // Sync initial content into the contentEditable element on mount so the
-  // caret doesn't reset on every reactive update. Also focus the editor
-  // and select all so typing replaces the placeholder content immediately.
-  // We use innerText (not textContent) so multi-line content round-trips
-  // correctly — textContent strips \n into spaces, innerText preserves them.
-  let editorEl: HTMLDivElement | undefined = $state(undefined);
+  // Sync initial content into the contentEditable element on mount and
+  // focus + select-all so typing replaces the placeholder immediately.
+  // innerText (not textContent) preserves multi-line round-trips.
   onMount(() => {
     if (!editorEl) return;
     editorEl.innerText = content;
@@ -178,8 +152,7 @@
 <svelte:window onkeydown={(e) => { if (e.key === 'Escape') onClose(); }} />
 
 <!-- Snap guide lines, positioned relative to the parent (the page wrapper).
-     Rendered as a sibling of the editor box so the lines span the full page,
-     not just the editor's bounds. -->
+     Rendered as siblings of the editor box so the lines span the full page. -->
 {#if activeSnapX !== null}
   <div
     style="
@@ -209,93 +182,43 @@
   ></div>
 {/if}
 
-
-<!-- svelte-ignore a11y_no_static_element_interactions -->
+<!-- The editor anchor: positioned at (pos.x, pos.y), sized by content.
+     No outline, no resize handle, no drag bar — the text itself is the box.
+     The toolbar floats above and carries the drag handle on its left. -->
 <div
+  bind:this={wrapperEl}
   class="absolute"
   style="
     left: calc({pagePaddingPx}px + {pos.x} * (100% - {2 * pagePaddingPx}px));
     top: calc({pagePaddingPx}px + {pos.y} * (100% - {2 * pagePaddingPx}px));
-    width: calc({pos.w} * (100% - {2 * pagePaddingPx}px));
-    height: calc({pos.h} * (100% - {2 * pagePaddingPx}px));
+    max-width: calc({1 - pos.x} * (100% - {2 * pagePaddingPx}px));
+    width: max-content;
+    min-width: 30px;
     z-index: 5;
-    outline: 1px dashed var(--color-fg);
-    touch-action: none;
   "
-  onpointerdown={onPointerDownMove}
-  onpointermove={onPointerMove}
-  onpointerup={onPointerUp}
-  onpointercancel={onPointerUp}
-  role="presentation"
 >
-  <!-- Drag bar: the dedicated grab area, sits inside the top edge of the
-       box like a window title bar. Clicking inside the text content
-       focuses for editing; clicking this bar starts a position drag. -->
+  <!-- ContentEditable text. This is also the element whose rendered size
+       drives snap-edge calculations. -->
   <div
-    style="
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 16px;
-      padding: 0 6px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 10px;
-      background: rgba(0,0,0,0.75);
-      color: white;
-      cursor: {dragging === 'move' ? 'grabbing' : 'grab'};
-      user-select: none;
-      z-index: 4;
-    "
-    title="Drag to move (hold Shift to bypass snap)"
-  >
-    <span>⠿</span>
-    <span style="opacity: 0.8;">drag to move</span>
-  </div>
-
-  <div
-    data-text-content
     bind:this={editorEl}
     contenteditable="true"
     oninput={onInput}
     style="
-      position: absolute;
-      top: 16px; left: 0; right: 0; bottom: 0;
       {cssForStyle(style)};
       outline: none;
-      overflow: hidden;
       cursor: text;
+      min-height: 1em;
     "
   ></div>
 
-  <!-- Resize handle, bottom-right -->
-  <div
-    data-resize-handle
-    onpointerdown={onPointerDownResize}
-    onpointermove={onPointerMove}
-    onpointerup={onPointerUp}
-    style="
-      position: absolute;
-      right: -6px; bottom: -6px;
-      width: 12px; height: 12px;
-      background: var(--color-fg);
-      border-radius: 50%;
-      cursor: nwse-resize;
-      z-index: 6;
-    "
-  ></div>
-
-  <!-- Floating toolbar -->
+  <!-- Floating toolbar above the text. Drag handle on the left. -->
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div
-    data-toolbar
-    onpointerdown={(e) => e.stopPropagation()}
     style="
       position: absolute;
-      top: -36px;
+      bottom: 100%;
       left: 0;
+      margin-bottom: 4px;
       display: flex;
       gap: 4px;
       align-items: center;
@@ -307,7 +230,26 @@
       z-index: 7;
       white-space: nowrap;
     "
+    onpointerdown={(e) => e.stopPropagation()}
   >
+    <!-- Drag handle -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div
+      onpointerdown={onDragHandleDown}
+      onpointermove={onPointerMove}
+      onpointerup={onPointerUp}
+      onpointercancel={onPointerUp}
+      title="Drag to move (hold Shift to bypass snap)"
+      style="
+        padding: 2px 4px;
+        cursor: {dragging ? 'grabbing' : 'grab'};
+        font-size: 14px;
+        line-height: 1;
+        user-select: none;
+        touch-action: none;
+      "
+    >⠿</div>
+
     <select title="Font family" bind:value={style.fontFamily} style="color: black; background: white; padding: 1px 2px; border: 1px solid #999; border-radius: 3px;">
       {#each FONT_CATALOG as f}
         <option value={f.family} style="font-family: '{f.family}', sans-serif;">{f.family}</option>
@@ -319,6 +261,7 @@
         <option value={w}>{w}</option>
       {/each}
     </select>
+    <input title="Line height" type="number" min="0.8" max="3" step="0.1" bind:value={style.lineHeight} style="width: 56px; color: black; background: white; padding: 1px 4px; border: 1px solid #999; border-radius: 3px;" />
     <button type="button" title="Italic" onclick={() => style.italic = !style.italic} style="padding: 2px 6px; background: {style.italic ? 'rgba(255,255,255,0.3)' : 'transparent'}; color: white; border: 1px solid white; border-radius: 3px;"><em>I</em></button>
     <input title="Text color" type="color" bind:value={style.color} style="width: 28px; height: 24px; border: none; background: transparent;" />
     <span title="Text alignment inside the box" style="opacity: 0.7; margin-left: 4px;">align</span>
