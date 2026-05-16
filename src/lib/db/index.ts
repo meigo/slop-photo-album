@@ -38,6 +38,12 @@ export async function getProject(id: number): Promise<ProjectRow | null> {
   return rows[0] ?? null;
 }
 
+export async function updateProjectSlotGap(id: number, slotGapPx: number): Promise<void> {
+  const d = await db();
+  const clamped = Math.max(0, Math.min(20, Math.round(slotGapPx)));
+  await d.execute('UPDATE project SET slot_gap_px = ? WHERE id = ?', [clamped, id]);
+}
+
 export async function upsertPhoto(p: PhotoInsert): Promise<void> {
   const d = await db();
   await d.execute(

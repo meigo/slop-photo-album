@@ -178,7 +178,7 @@
             title={c.path}
           >
             {#if c.thumb_path}
-              <img src={convertFileSrc(c.thumb_path)} alt="" class="w-full aspect-square object-cover rounded" />
+              <img src={convertFileSrc(c.thumb_path)} alt="" class="w-full aspect-square object-cover rounded" draggable="false" />
             {:else}
               <div class="w-full aspect-square" style="background: var(--color-line)"></div>
             {/if}

@@ -5,6 +5,7 @@ export interface ProjectRow {
   album_year: number;
   calendar_year: number;
   created_at: number;
+  slot_gap_px: number;
 }
 
 export interface PhotoRow {

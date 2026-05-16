@@ -24,8 +24,11 @@
     onSwapPhoto?: (slotIndex: number) => void;
     onAdjustCrop?: (slotIndex: number) => void;
     editingSlotIndex?: number | null;
+    /** Padding (px) around each slot — controls the visible gap between
+     *  adjacent images. 0 = no gap, default 2. */
+    slotGapPx?: number;
   }
-  let { templateId, slots, onSlotClick, onSwapPhoto, onAdjustCrop, editingSlotIndex = null }: Props = $props();
+  let { templateId, slots, onSlotClick, onSwapPhoto, onAdjustCrop, editingSlotIndex = null, slotGapPx = 2 }: Props = $props();
 
   let tpl = $derived<Template>(getTemplate(templateId));
   let aspectRatio = $derived(tpl.aspect === 'square' ? '1 / 1' : '4 / 3');
@@ -63,7 +66,7 @@
         top: {slotLayout.y * 100}%;
         width: {slotLayout.w * 100}%;
         height: {slotLayout.h * 100}%;
-        padding: 2px;
+        padding: {slotGapPx}px;
       "
     >
       <div class="relative w-full h-full overflow-hidden">

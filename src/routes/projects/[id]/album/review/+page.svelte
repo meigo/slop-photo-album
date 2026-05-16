@@ -6,9 +6,21 @@
   import SlotEditor from '$lib/components/SlotEditor.svelte';
   import { getTemplate } from '$lib/layout/templates';
   import { invalidateAll } from '$app/navigation';
-  import { updateSlotPhoto, insertBlankPage } from '$lib/db';
+  import { updateSlotPhoto, insertBlankPage, updateProjectSlotGap } from '$lib/db';
 
   let { data } = $props();
+
+  // svelte-ignore state_referenced_locally
+  let slotGapPx = $state(data.project.slot_gap_px);
+  let gapSavingTimer: ReturnType<typeof setTimeout> | null = null;
+  function onGapChange(e: Event) {
+    const v = Number((e.currentTarget as HTMLInputElement).value);
+    slotGapPx = v;
+    if (gapSavingTimer) clearTimeout(gapSavingTimer);
+    gapSavingTimer = setTimeout(async () => {
+      await updateProjectSlotGap(data.project.id, v);
+    }, 250);
+  }
 
   let inserting = $state(false);
 
@@ -72,6 +84,11 @@
     <p class="text-sm mt-1">
       <a class="btn-ghost" href={`/projects/${data.project.id}/album/sorter`}>open sorter view →</a>
     </p>
+    <label class="text-sm mt-2 flex items-center gap-2" style="color: var(--color-muted)">
+      gap between images:
+      <input type="range" min="0" max="20" step="1" value={slotGapPx} oninput={onGapChange} style="width: 160px;" />
+      <span style="font-variant-numeric: tabular-nums; min-width: 3ch;">{slotGapPx}px</span>
+    </label>
 
     <div class="flex flex-col gap-6 mt-4">
       <button
@@ -106,6 +123,7 @@
               onSwapPhoto={(i) => openPicker(page.id, i)}
               onAdjustCrop={(i) => openEditor(page.id, i)}
               editingSlotIndex={editorOpen?.pageId === page.id ? editorOpen!.slotIndex : null}
+              {slotGapPx}
             />
             {#if editorOpen && editorOpen.pageId === page.id}
               {@const editorSlots = data.slotsByPage.get(page.id) ?? []}
@@ -120,7 +138,7 @@
                     top: {editorLayout.y * 100}%;
                     width: {editorLayout.w * 100}%;
                     height: {editorLayout.h * 100}%;
-                    padding: 2px;
+                    padding: {slotGapPx}px;
                     z-index: 4;
                   "
                 >
