@@ -177,8 +177,7 @@
       <Italic size={14} />
     </button>
     <input class="toolbar-field-color" title="Text color" type="color" bind:value={style.color} />
-    <span class="toolbar-label" title="Text alignment inside the box" style="margin-left: 4px;">align</span>
-    <button type="button" class="toolbar-btn" class:active={style.align === 'left'} title="Align text left" onclick={() => style.align = 'left'}>
+    <button type="button" class="toolbar-btn" class:active={style.align === 'left'} title="Align text left" onclick={() => style.align = 'left'} style="margin-left: 4px;">
       <AlignLeft size={14} />
     </button>
     <button type="button" class="toolbar-btn" class:active={style.align === 'center'} title="Center text" onclick={() => style.align = 'center'}>
