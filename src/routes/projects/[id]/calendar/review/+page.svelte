@@ -3,12 +3,28 @@
   import PageView from '$lib/components/PageView.svelte';
   import PhotoPicker from '$lib/components/PhotoPicker.svelte';
   import PageControls from '$lib/components/PageControls.svelte';
+  import SlotEditor from '$lib/components/SlotEditor.svelte';
+  import { getTemplate } from '$lib/layout/templates';
   import { invalidateAll } from '$app/navigation';
   import { updateSlotPhoto } from '$lib/db';
 
   let { data } = $props();
 
   let pickerOpen = $state<null | { pageId: number; slotIndex: number; bucketKey: string; currentPhotoId: number | null }>(null);
+  let editorOpen = $state<null | {
+    pageId: number;
+    slotIndex: number;
+    photoPath: string;
+    photoWidth: number;
+    photoHeight: number;
+    initialTransformJson: string | null;
+    slotLayoutW: number;
+    slotLayoutH: number;
+    slotLayoutX: number;
+    slotLayoutY: number;
+    faces: Array<{ bbox_x: number; bbox_y: number; bbox_w: number; bbox_h: number }>;
+    topTag: string | null;
+  }>(null);
 
   function monthLabel(bucketKey: string | null): string {
     if (!bucketKey) return '';
@@ -22,6 +38,32 @@
     pickerOpen = {
       pageId, slotIndex, bucketKey,
       currentPhotoId: slot?.photo_id ?? null,
+    };
+  }
+
+  function openEditor(pageId: number, slotIndex: number) {
+    const page = data.pages.find((p) => p.id === pageId);
+    if (!page) return;
+    const slots = data.slotsByPage.get(pageId) ?? [];
+    const slot = slots.find((s) => s.slot_index === slotIndex);
+    if (!slot || !slot.path || slot.photo_width === null || slot.photo_height === null) return;
+    const tpl = getTemplate(page.template_id);
+    const slotLayout = tpl.slots[slotIndex];
+    if (!slotLayout) return;
+    // close picker if it was open
+    pickerOpen = null;
+    editorOpen = {
+      pageId, slotIndex,
+      photoPath: slot.path,
+      photoWidth: slot.photo_width,
+      photoHeight: slot.photo_height,
+      initialTransformJson: slot.transform_json,
+      slotLayoutX: slotLayout.x,
+      slotLayoutY: slotLayout.y,
+      slotLayoutW: slotLayout.w,
+      slotLayoutH: slotLayout.h,
+      faces: slot.faces,
+      topTag: slot.top_tag,
     };
   }
 
@@ -86,6 +128,22 @@
       currentPhotoId={pickerOpen.currentPhotoId}
       onPick={pickPhoto}
       onClose={() => pickerOpen = null}
+    />
+  {/if}
+
+  {#if editorOpen}
+    <SlotEditor
+      pageId={editorOpen.pageId}
+      slotIndex={editorOpen.slotIndex}
+      photoPath={editorOpen.photoPath}
+      photoWidth={editorOpen.photoWidth}
+      photoHeight={editorOpen.photoHeight}
+      initialTransformJson={editorOpen.initialTransformJson}
+      slotLayout={{ x: editorOpen.slotLayoutX, y: editorOpen.slotLayoutY, w: editorOpen.slotLayoutW, h: editorOpen.slotLayoutH }}
+      pageAspect="landscape"
+      faces={editorOpen.faces}
+      topTag={editorOpen.topTag}
+      onClose={() => editorOpen = null}
     />
   {/if}
 </div>
