@@ -1,12 +1,28 @@
 <script lang="ts">
   import { getTemplate, type Template } from '$lib/layout/templates';
+  import type { SlotLayout } from '$lib/layout/templates';
   import { convertFileSrc } from '@tauri-apps/api/core';
+  import {
+    parseTransform,
+    cssForTransform,
+    IDENTITY_TRANSFORM,
+    type SlotTransform,
+  } from '$lib/layout/transform';
+  import { autoPositionTransform } from '$lib/layout/autoposition';
 
   interface Slot {
     slot_index: number;
     photo_id: number | null;
     path: string | null;
     thumb_path: string | null;
+    transform_json: string | null;
+    /** Photo's natural pixel dimensions, used by auto-position. May be null
+     *  when the slot is empty or photo metadata is missing. */
+    photo_width: number | null;
+    photo_height: number | null;
+    /** Face bboxes for this photo (used by auto-position). */
+    faces: Array<{ bbox_x: number; bbox_y: number; bbox_w: number; bbox_h: number }>;
+    top_tag: string | null;
   }
 
   interface Props {
@@ -21,6 +37,21 @@
 
   // Order slots by slot_index ascending so they match tpl.slots index.
   let orderedSlots = $derived([...slots].sort((a, b) => a.slot_index - b.slot_index));
+
+  function effectiveTransform(slot: Slot, slotLayout: SlotLayout): SlotTransform {
+    const manual = parseTransform(slot.transform_json);
+    if (manual) return manual;
+    if (slot.photo_width !== null && slot.photo_height !== null) {
+      return autoPositionTransform({
+        photoWidth: slot.photo_width,
+        photoHeight: slot.photo_height,
+        faces: slot.faces,
+        topTag: slot.top_tag,
+        slot: slotLayout,
+      });
+    }
+    return IDENTITY_TRANSFORM;
+  }
 </script>
 
 <div
@@ -29,6 +60,8 @@
 >
   {#each tpl.slots as slotLayout, i}
     {@const slot = orderedSlots[i]}
+    {@const t = slot ? effectiveTransform(slot, slotLayout) : IDENTITY_TRANSFORM}
+    {@const css = cssForTransform(t)}
     <button
       type="button"
       class="absolute"
@@ -53,6 +86,7 @@
             src={convertFileSrc(slot.path)}
             alt=""
             class="w-full h-full object-cover"
+            style="transform: {css.transform}; transform-origin: {css.transformOrigin};"
             draggable="false"
             loading="lazy"
           />
