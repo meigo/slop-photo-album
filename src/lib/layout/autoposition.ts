@@ -3,32 +3,26 @@ import { IDENTITY_TRANSFORM, type SlotTransform } from './transform';
 
 const HORIZON_TAGS = new Set(['landscape', 'beach', 'forest', 'snow', 'city', 'outdoor']);
 
+function clampPct(v: number): number {
+  if (!Number.isFinite(v)) return 50;
+  return Math.max(0, Math.min(100, v));
+}
+
 /**
- * Compute a default crop transform for a photo placed in a slot.
+ * Compute a default object-position for a photo placed in a slot, using
+ * face-bbox data + scene tags. Output values are percentages (0..100)
+ * suitable for CSS `object-position`.
  *
- * Inputs:
- *   - photoWidth/photoHeight: natural pixel dimensions of the photo
- *   - faces: detected face bounding boxes in photo pixel coordinates
- *     (from `face` table; may be empty)
- *   - topTag: top scene tag from `photo_tag` table (or null)
- *   - slot: slot's normalized layout (x, y, w, h in 0-1 of page)
+ * Rules:
+ *   1. If faces exist: place the union-face center at the slot's center.
+ *      Pixel coordinates from the `face` table are converted to [0..1]
+ *      photo-relative, then to a 0..100 percent that maps photo-coord
+ *      to slot-center.
+ *   2. Else if topTag is a horizon-biased scene: place photo-y = 0.5
+ *      (assumed horizon line) at slot-y = 1/3.
+ *   3. Else: identity (50%, 50%, scale 1).
  *
- * Output: a SlotTransform that, applied to the photo-in-slot, makes the
- * subject visible. The slot already uses `object-fit: cover`, which scales
- * the photo to fill the slot's aspect ratio (cropping the longer dimension).
- * This function then translates the photo so the subject stays in frame.
- *
- * Rule order:
- *   1. If faces exist: compute bounding box around all faces; translate so
- *      that bbox's center sits at the slot's center.
- *   2. Else if topTag suggests a horizon-biased scene (landscape, beach,
- *      forest, snow, city, outdoor): shift down ~17% so the horizon sits
- *      at the upper third (rule-of-thirds).
- *   3. Else: identity (object-fit: cover center crop).
- *
- * This is deterministic and inexpensive (no model inference). It produces
- * the default; if the user manually adjusts via SlotEditor, that override
- * is stored in `page_slot.transform_json` and beats this function.
+ * Scale is always 1 — auto-position never zooms; that's manual-only.
  */
 export function autoPositionTransform(args: {
   photoWidth: number;
@@ -46,12 +40,17 @@ export function autoPositionTransform(args: {
   const slotAspect = slot.w / slot.h;
   const photoAspect = photoWidth / photoHeight;
 
-  // After object-fit: cover, the photo is scaled so the slot is fully covered.
-  // We compute how much of the photo (in its own [0..1] space) is visible
-  // along each axis after that cover-fit, then translate the photo so the
-  // subject lands at the slot's center.
+  let vfX: number;
+  let vfY: number;
+  if (photoAspect > slotAspect) {
+    vfY = 1;
+    vfX = slotAspect / photoAspect;
+  } else {
+    vfX = 1;
+    vfY = photoAspect / slotAspect;
+  }
 
-  // --- Pass 1: faces ---
+  // Pass 1: faces — center the union bbox at slot center.
   if (faces.length > 0) {
     let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
     for (const f of faces) {
@@ -60,42 +59,27 @@ export function autoPositionTransform(args: {
       maxX = Math.max(maxX, f.bbox_x + f.bbox_w);
       maxY = Math.max(maxY, f.bbox_y + f.bbox_h);
     }
-    const cx = ((minX + maxX) / 2) / photoWidth;   // 0..1
-    const cy = ((minY + maxY) / 2) / photoHeight;  // 0..1
+    const cx = ((minX + maxX) / 2) / photoWidth;
+    const cy = ((minY + maxY) / 2) / photoHeight;
 
-    let visibleFractionX: number;
-    let visibleFractionY: number;
-    if (photoAspect > slotAspect) {
-      visibleFractionY = 1;
-      visibleFractionX = slotAspect / photoAspect;
-    } else {
-      visibleFractionX = 1;
-      visibleFractionY = photoAspect / slotAspect;
-    }
-
-    const offsetX = ((0.5 - cx) / visibleFractionX);
-    const offsetY = ((0.5 - cy) / visibleFractionY);
-
-    const maxOffsetX = (1 - visibleFractionX) / (2 * visibleFractionX);
-    const maxOffsetY = (1 - visibleFractionY) / (2 * visibleFractionY);
-    const clampedX = Math.max(-maxOffsetX, Math.min(maxOffsetX, offsetX));
-    const clampedY = Math.max(-maxOffsetY, Math.min(maxOffsetY, offsetY));
-
-    return { offsetX: clampedX, offsetY: clampedY, scale: 1 };
+    const px = vfX < 1 ? clampPct((cx - vfX / 2) / (1 - vfX) * 100) : 50;
+    const py = vfY < 1 ? clampPct((cy - vfY / 2) / (1 - vfY) * 100) : 50;
+    return { objectPositionX: px, objectPositionY: py, scale: 1 };
   }
 
-  // --- Pass 2: horizon-biased tags ---
+  // Pass 2: horizon-biased — put photo-y = 0.5 at slot-y = 1/3.
+  // Window center: (1-vf)*P/100 + vf/2 = target.
+  // Solving for the slot-y position of photo-y=0.5: we want the slot's
+  // upper-third to see photo-y=0.5, i.e. window position such that
+  // photo-y=0.5 maps to slot-y=1/3.
+  // window covers photo-y from (1-vf)*P/100 to (1-vf)*P/100 + vf.
+  // photo-y=0.5 sits at slot-y = (0.5 - (1-vf)*P/100) / vf = 1/3
+  // → (1-vf)*P/100 = 0.5 - vf/3 → P = (0.5 - vf/3) / (1 - vf) * 100.
   if (topTag && HORIZON_TAGS.has(topTag)) {
-    let visibleFractionY = 1;
-    if (photoAspect <= slotAspect) {
-      visibleFractionY = photoAspect / slotAspect;
-    }
-    const desiredOffsetY = -0.17;
-    const maxOffsetY = (1 - visibleFractionY) / (2 * visibleFractionY);
-    const clampedY = Math.max(-maxOffsetY, Math.min(maxOffsetY, desiredOffsetY));
-    return { offsetX: 0, offsetY: clampedY, scale: 1 };
+    const py = vfY < 1 ? clampPct((0.5 - vfY / 3) / (1 - vfY) * 100) : 50;
+    return { objectPositionX: 50, objectPositionY: py, scale: 1 };
   }
 
-  // --- Pass 3: identity ---
+  // Pass 3: identity.
   return { ...IDENTITY_TRANSFORM };
 }
