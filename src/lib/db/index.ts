@@ -629,3 +629,59 @@ export async function setPageOrder(selectionId: number, orderedPageIds: number[]
   }
   await d.execute('UPDATE selection SET updated_at = ? WHERE id = ?', [Date.now(), selectionId]);
 }
+
+export async function updateSlotTransform(pageId: number, slotIndex: number, transformJson: string | null): Promise<void> {
+  const d = await db();
+  // UPSERT so a slot row exists even if the user hasn't picked a photo for
+  // it yet (rare but possible if they jump straight to crop adjustment).
+  await d.execute(
+    `INSERT INTO page_slot (page_id, slot_index, photo_id, transform_json) VALUES (?, ?, NULL, ?)
+     ON CONFLICT (page_id, slot_index) DO UPDATE SET transform_json = excluded.transform_json`,
+    [pageId, slotIndex, transformJson]
+  );
+  // Bump selection.updated_at (transforms count as edits).
+  await d.execute(
+    `UPDATE selection SET updated_at = ?
+     WHERE id = (SELECT selection_id FROM page WHERE id = ?)`,
+    [Date.now(), pageId]
+  );
+}
+
+/** Insert a blank page at the given index_in_book, shifting later pages
+ *  down by 1. Returns the new page's id. */
+export async function insertBlankPage(args: {
+  selection_id: number;
+  insert_at: number;
+  template_id: string;
+}): Promise<number> {
+  const d = await db();
+  await d.execute(
+    'UPDATE page SET index_in_book = index_in_book + 1 WHERE selection_id = ? AND index_in_book >= ?',
+    [args.selection_id, args.insert_at]
+  );
+  const r = await d.execute(
+    'INSERT INTO page (selection_id, index_in_book, template_id) VALUES (?, ?, ?)',
+    [args.selection_id, args.insert_at, args.template_id]
+  );
+  await d.execute('UPDATE selection SET updated_at = ? WHERE id = ?', [Date.now(), args.selection_id]);
+  return r.lastInsertId as number;
+}
+
+/** Photo's natural dimensions + the face boxes for that photo, used by
+ *  auto-position. Returns null if the photo isn't found or has no
+ *  dimensions. */
+export async function getPhotoLayoutContext(photoId: number): Promise<{ width: number; height: number; faces: Array<{ bbox_x: number; bbox_y: number; bbox_w: number; bbox_h: number }>; topTag: string | null } | null> {
+  const d = await db();
+  const photos = await d.select<{ width: number | null; height: number | null }[]>(
+    'SELECT width, height FROM photo WHERE id = ?', [photoId]
+  );
+  const p = photos[0];
+  if (!p || p.width === null || p.height === null) return null;
+  const faces = await d.select<{ bbox_x: number; bbox_y: number; bbox_w: number; bbox_h: number }[]>(
+    'SELECT bbox_x, bbox_y, bbox_w, bbox_h FROM face WHERE photo_id = ?', [photoId]
+  );
+  const tagRows = await d.select<{ tag: string }[]>(
+    'SELECT tag FROM photo_tag WHERE photo_id = ? ORDER BY score DESC LIMIT 1', [photoId]
+  );
+  return { width: p.width, height: p.height, faces, topTag: tagRows[0]?.tag ?? null };
+}
