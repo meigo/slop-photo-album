@@ -64,7 +64,7 @@ export function autoPositionTransform(args: {
 
     const px = vfX < 1 ? clampPct((cx - vfX / 2) / (1 - vfX) * 100) : 50;
     const py = vfY < 1 ? clampPct((cy - vfY / 2) / (1 - vfY) * 100) : 50;
-    return { objectPositionX: px, objectPositionY: py, scale: 1 };
+    return { ...IDENTITY_TRANSFORM, objectPositionX: px, objectPositionY: py };
   }
 
   // Pass 2: horizon-biased — put photo-y = 0.5 at slot-y = 1/3.
@@ -77,7 +77,7 @@ export function autoPositionTransform(args: {
   // → (1-vf)*P/100 = 0.5 - vf/3 → P = (0.5 - vf/3) / (1 - vf) * 100.
   if (topTag && HORIZON_TAGS.has(topTag)) {
     const py = vfY < 1 ? clampPct((0.5 - vfY / 3) / (1 - vfY) * 100) : 50;
-    return { objectPositionX: 50, objectPositionY: py, scale: 1 };
+    return { ...IDENTITY_TRANSFORM, objectPositionY: py };
   }
 
   // Pass 3: identity.
