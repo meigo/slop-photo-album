@@ -153,25 +153,19 @@
 
   let availableWeights = $derived(findFont(style.fontFamily)?.weights ?? [400]);
 
-  // 9-anchor snap. col/row are 0..2 for left/center/right and top/middle/bottom.
-  function snapTo(col: 0 | 1 | 2, row: 0 | 1 | 2) {
-    const x = col === 0 ? 0 : col === 2 ? 1 - pos.w : (1 - pos.w) / 2;
-    const y = row === 0 ? 0 : row === 2 ? 1 - pos.h : (1 - pos.h) / 2;
-    pos = { x: clamp01(x), y: clamp01(y), w: pos.w, h: pos.h };
-  }
-
-  function fullWidth() {
-    pos = { x: 0, y: pos.y, w: 1, h: pos.h };
-  }
-  function fullHeight() {
-    pos = { x: pos.x, y: 0, w: pos.w, h: 1 };
-  }
-
   // Sync initial content into the contentEditable element on mount so the
-  // caret doesn't reset on every reactive update.
+  // caret doesn't reset on every reactive update. Also focus the editor
+  // and select all so typing replaces the placeholder content immediately.
   let editorEl: HTMLDivElement | undefined = $state(undefined);
   onMount(() => {
-    if (editorEl) editorEl.textContent = content;
+    if (!editorEl) return;
+    editorEl.textContent = content;
+    editorEl.focus();
+    const range = document.createRange();
+    range.selectNodeContents(editorEl);
+    const sel = window.getSelection();
+    sel?.removeAllRanges();
+    sel?.addRange(range);
   });
 
   function onInput(e: Event) {
@@ -213,24 +207,6 @@
   ></div>
 {/if}
 
-<!-- Always-on debug indicator: shows the live drag state. If you see this
-     ever change from "—" to numbers while dragging, snap logic is firing. -->
-<div
-  style="
-    position: absolute;
-    top: -56px; right: 0;
-    font-size: 10px;
-    background: rgba(255,0,255,0.9);
-    color: white;
-    padding: 2px 4px;
-    border-radius: 3px;
-    z-index: 9;
-    pointer-events: none;
-    font-family: monospace;
-  "
->
-  snap x: {activeSnapX === null ? '—' : activeSnapX.toFixed(2)} · y: {activeSnapY === null ? '—' : activeSnapY.toFixed(2)}
-</div>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
@@ -298,39 +274,26 @@
       white-space: nowrap;
     "
   >
-    <select bind:value={style.fontFamily} style="color: black; background: white; padding: 1px 2px; border: 1px solid #999; border-radius: 3px;">
+    <select title="Font family" bind:value={style.fontFamily} style="color: black; background: white; padding: 1px 2px; border: 1px solid #999; border-radius: 3px;">
       {#each FONT_CATALOG as f}
         <option value={f.family} style="font-family: '{f.family}', sans-serif;">{f.family}</option>
       {/each}
     </select>
-    <input type="number" min="8" max="200" bind:value={style.fontSize} style="width: 60px; color: black; background: white; padding: 1px 4px; border: 1px solid #999; border-radius: 3px;" />
-    <select bind:value={style.fontWeight} style="color: black; background: white; padding: 1px 2px; border: 1px solid #999; border-radius: 3px;">
+    <input title="Font size (px)" type="number" min="8" max="200" bind:value={style.fontSize} style="width: 60px; color: black; background: white; padding: 1px 4px; border: 1px solid #999; border-radius: 3px;" />
+    <select title="Font weight (thickness)" bind:value={style.fontWeight} style="color: black; background: white; padding: 1px 2px; border: 1px solid #999; border-radius: 3px;">
       {#each availableWeights as w}
         <option value={w}>{w}</option>
       {/each}
     </select>
-    <button type="button" onclick={() => style.italic = !style.italic} style="padding: 2px 6px; background: {style.italic ? 'rgba(255,255,255,0.3)' : 'transparent'}; color: white; border: 1px solid white; border-radius: 3px;"><em>I</em></button>
-    <input type="color" bind:value={style.color} style="width: 28px; height: 24px; border: none; background: transparent;" />
-    <button type="button" onclick={() => style.align = 'left'} style="padding: 2px 6px; background: {style.align === 'left' ? 'rgba(255,255,255,0.3)' : 'transparent'}; color: white; border: 1px solid white; border-radius: 3px;">L</button>
-    <button type="button" onclick={() => style.align = 'center'} style="padding: 2px 6px; background: {style.align === 'center' ? 'rgba(255,255,255,0.3)' : 'transparent'}; color: white; border: 1px solid white; border-radius: 3px;">C</button>
-    <button type="button" onclick={() => style.align = 'right'} style="padding: 2px 6px; background: {style.align === 'right' ? 'rgba(255,255,255,0.3)' : 'transparent'}; color: white; border: 1px solid white; border-radius: 3px;">R</button>
+    <button type="button" title="Italic" onclick={() => style.italic = !style.italic} style="padding: 2px 6px; background: {style.italic ? 'rgba(255,255,255,0.3)' : 'transparent'}; color: white; border: 1px solid white; border-radius: 3px;"><em>I</em></button>
+    <input title="Text color" type="color" bind:value={style.color} style="width: 28px; height: 24px; border: none; background: transparent;" />
+    <span title="Text alignment inside the box" style="opacity: 0.7; margin-left: 4px;">align</span>
+    <button type="button" title="Align text left" onclick={() => style.align = 'left'} style="padding: 2px 6px; background: {style.align === 'left' ? 'rgba(255,255,255,0.3)' : 'transparent'}; color: white; border: 1px solid white; border-radius: 3px;">L</button>
+    <button type="button" title="Center text" onclick={() => style.align = 'center'} style="padding: 2px 6px; background: {style.align === 'center' ? 'rgba(255,255,255,0.3)' : 'transparent'}; color: white; border: 1px solid white; border-radius: 3px;">C</button>
+    <button type="button" title="Align text right" onclick={() => style.align = 'right'} style="padding: 2px 6px; background: {style.align === 'right' ? 'rgba(255,255,255,0.3)' : 'transparent'}; color: white; border: 1px solid white; border-radius: 3px;">R</button>
 
-    <!-- 9-anchor snap grid -->
-    <div title="Snap to anchor" style="display: inline-grid; grid-template-columns: repeat(3, 12px); grid-template-rows: repeat(3, 12px); gap: 1px; border: 1px solid white; padding: 1px; border-radius: 3px;">
-      {#each [[0,0],[1,0],[2,0],[0,1],[1,1],[2,1],[0,2],[1,2],[2,2]] as [c, r]}
-        <button
-          type="button"
-          onclick={() => snapTo(c as 0|1|2, r as 0|1|2)}
-          aria-label={`Snap col ${c} row ${r}`}
-          style="width: 12px; height: 12px; padding: 0; background: rgba(255,255,255,0.25); border: none; border-radius: 1px;"
-        ></button>
-      {/each}
-    </div>
-    <button type="button" onclick={fullWidth} title="Stretch full width" style="padding: 2px 4px; background: transparent; color: white; border: 1px solid white; border-radius: 3px;">↔</button>
-    <button type="button" onclick={fullHeight} title="Stretch full height" style="padding: 2px 4px; background: transparent; color: white; border: 1px solid white; border-radius: 3px;">↕</button>
-
-    <button type="button" onclick={save} style="padding: 2px 8px; background: white; color: black; border: none; border-radius: 3px;">save</button>
-    <button type="button" onclick={remove} style="padding: 2px 6px; background: transparent; color: #ff8888; border: 1px solid #ff8888; border-radius: 3px;">del</button>
-    <button type="button" onclick={onClose} style="padding: 2px 6px; background: transparent; color: white; border: 1px solid white; border-radius: 3px;">esc</button>
+    <button type="button" title="Save changes" onclick={save} style="padding: 2px 8px; margin-left: 4px; background: white; color: black; border: none; border-radius: 3px;">save</button>
+    <button type="button" title="Delete this text" onclick={remove} style="padding: 2px 6px; background: transparent; color: #ff8888; border: 1px solid #ff8888; border-radius: 3px;">del</button>
+    <button type="button" title="Cancel (Esc)" onclick={onClose} style="padding: 2px 6px; background: transparent; color: white; border: 1px solid white; border-radius: 3px;">esc</button>
   </div>
 </div>
