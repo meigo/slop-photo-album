@@ -18,7 +18,7 @@
   }
   let { text, pagePaddingPx, onClose, snapTargetsX = [0, 0.5, 1], snapTargetsY = [0, 0.5, 1] }: Props = $props();
 
-  const SNAP_THRESHOLD = 0.012; // fractional — ~7px on a 600px-wide page
+  const SNAP_THRESHOLD = 0.02; // fractional — ~12px on a 600px-wide page
 
   // Intentionally snapshot the prop's initial values into local $state — this
   // component edits a local copy and only writes back on save(). The
@@ -189,10 +189,12 @@
     style="
       position: absolute;
       left: calc({pagePaddingPx}px + {activeSnapX} * (100% - {2 * pagePaddingPx}px));
-      top: 0; bottom: 0; width: 1px;
-      background: #00bcd4;
+      top: 0; bottom: 0; width: 2px;
+      background: #ff00ff;
+      box-shadow: 0 0 6px #ff00ff;
       pointer-events: none;
       z-index: 8;
+      transform: translateX(-1px);
     "
   ></div>
 {/if}
@@ -201,13 +203,34 @@
     style="
       position: absolute;
       top: calc({pagePaddingPx}px + {activeSnapY} * (100% - {2 * pagePaddingPx}px));
-      left: 0; right: 0; height: 1px;
-      background: #00bcd4;
+      left: 0; right: 0; height: 2px;
+      background: #ff00ff;
+      box-shadow: 0 0 6px #ff00ff;
       pointer-events: none;
       z-index: 8;
+      transform: translateY(-1px);
     "
   ></div>
 {/if}
+
+<!-- Always-on debug indicator: shows the live drag state. If you see this
+     ever change from "—" to numbers while dragging, snap logic is firing. -->
+<div
+  style="
+    position: absolute;
+    top: -56px; right: 0;
+    font-size: 10px;
+    background: rgba(255,0,255,0.9);
+    color: white;
+    padding: 2px 4px;
+    border-radius: 3px;
+    z-index: 9;
+    pointer-events: none;
+    font-family: monospace;
+  "
+>
+  snap x: {activeSnapX === null ? '—' : activeSnapX.toFixed(2)} · y: {activeSnapY === null ? '—' : activeSnapY.toFixed(2)}
+</div>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
