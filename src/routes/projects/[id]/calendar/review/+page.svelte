@@ -6,12 +6,15 @@
   import SlotEditor from '$lib/components/SlotEditor.svelte';
   import { getTemplate } from '$lib/layout/templates';
   import { invalidateAll } from '$app/navigation';
-  import { updateSlotPhoto, insertBlankPage, updateProjectSlotGap } from '$lib/db';
+  import { updateSlotPhoto, insertBlankPage, updateProjectSlotGap, updateProjectPagePadding } from '$lib/db';
 
   let { data } = $props();
 
   // svelte-ignore state_referenced_locally
   let slotGapPx = $state(data.project.slot_gap_px);
+  // svelte-ignore state_referenced_locally
+  let pagePaddingPx = $state(data.project.page_padding_px);
+
   let gapSavingTimer: ReturnType<typeof setTimeout> | null = null;
   function onGapChange(e: Event) {
     const v = Number((e.currentTarget as HTMLInputElement).value);
@@ -19,6 +22,16 @@
     if (gapSavingTimer) clearTimeout(gapSavingTimer);
     gapSavingTimer = setTimeout(async () => {
       await updateProjectSlotGap(data.project.id, v);
+    }, 250);
+  }
+
+  let padSavingTimer: ReturnType<typeof setTimeout> | null = null;
+  function onPadChange(e: Event) {
+    const v = Number((e.currentTarget as HTMLInputElement).value);
+    pagePaddingPx = v;
+    if (padSavingTimer) clearTimeout(padSavingTimer);
+    padSavingTimer = setTimeout(async () => {
+      await updateProjectPagePadding(data.project.id, v);
     }, 250);
   }
 
@@ -91,8 +104,13 @@
     </p>
     <label class="text-sm mt-2 flex items-center gap-2" style="color: var(--color-muted)">
       gap between images:
-      <input type="range" min="0" max="20" step="1" value={slotGapPx} oninput={onGapChange} style="width: 160px;" />
+      <input type="range" min="0" max="40" step="1" value={slotGapPx} oninput={onGapChange} style="width: 160px;" />
       <span style="font-variant-numeric: tabular-nums; min-width: 3ch;">{slotGapPx}px</span>
+    </label>
+    <label class="text-sm mt-1 flex items-center gap-2" style="color: var(--color-muted)">
+      page margin:
+      <input type="range" min="0" max="60" step="1" value={pagePaddingPx} oninput={onPadChange} style="width: 160px;" />
+      <span style="font-variant-numeric: tabular-nums; min-width: 3ch;">{pagePaddingPx}px</span>
     </label>
 
     <div class="grid grid-cols-2 gap-4 mt-4">
@@ -120,6 +138,7 @@
               onAdjustCrop={(i) => openEditor(page.id, i)}
               editingSlotIndex={editorOpen?.pageId === page.id ? editorOpen!.slotIndex : null}
               {slotGapPx}
+              {pagePaddingPx}
             />
             {#if editorOpen && editorOpen.pageId === page.id}
               {@const editorSlots = data.slotsByPage.get(page.id) ?? []}
@@ -130,11 +149,11 @@
                 <div
                   class="absolute"
                   style="
-                    left: {editorLayout.x * 100}%;
-                    top: {editorLayout.y * 100}%;
-                    width: {editorLayout.w * 100}%;
-                    height: {editorLayout.h * 100}%;
-                    padding: {slotGapPx}px;
+                    left: calc({pagePaddingPx}px + {editorLayout.x} * (100% - {2 * pagePaddingPx}px));
+                    top: calc({pagePaddingPx}px + {editorLayout.y} * (100% - {2 * pagePaddingPx}px));
+                    width: calc({editorLayout.w} * (100% - {2 * pagePaddingPx}px));
+                    height: calc({editorLayout.h} * (100% - {2 * pagePaddingPx}px));
+                    padding: {slotGapPx / 2}px;
                     z-index: 4;
                   "
                 >

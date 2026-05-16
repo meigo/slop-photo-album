@@ -24,11 +24,16 @@
     onSwapPhoto?: (slotIndex: number) => void;
     onAdjustCrop?: (slotIndex: number) => void;
     editingSlotIndex?: number | null;
-    /** Padding (px) around each slot — controls the visible gap between
-     *  adjacent images. 0 = no gap, default 2. */
+    /** Visible gap (px) between adjacent slot images. Each slot contributes
+     *  half of this as internal padding, so two adjacent slots produce
+     *  exactly slotGapPx between them. */
     slotGapPx?: number;
+    /** Extra inset (px) between the page's outer edge and the slot grid.
+     *  0 = slots run flush to the page's frame; the only outer space is
+     *  the half-gap a slot's own padding contributes. */
+    pagePaddingPx?: number;
   }
-  let { templateId, slots, onSlotClick, onSwapPhoto, onAdjustCrop, editingSlotIndex = null, slotGapPx = 2 }: Props = $props();
+  let { templateId, slots, onSlotClick, onSwapPhoto, onAdjustCrop, editingSlotIndex = null, slotGapPx = 2, pagePaddingPx = 0 }: Props = $props();
 
   let tpl = $derived<Template>(getTemplate(templateId));
   let aspectRatio = $derived(tpl.aspect === 'square' ? '1 / 1' : '4 / 3');
@@ -62,11 +67,11 @@
     <div
       class="absolute group"
       style="
-        left: {slotLayout.x * 100}%;
-        top: {slotLayout.y * 100}%;
-        width: {slotLayout.w * 100}%;
-        height: {slotLayout.h * 100}%;
-        padding: {slotGapPx}px;
+        left: calc({pagePaddingPx}px + {slotLayout.x} * (100% - {2 * pagePaddingPx}px));
+        top: calc({pagePaddingPx}px + {slotLayout.y} * (100% - {2 * pagePaddingPx}px));
+        width: calc({slotLayout.w} * (100% - {2 * pagePaddingPx}px));
+        height: calc({slotLayout.h} * (100% - {2 * pagePaddingPx}px));
+        padding: {slotGapPx / 2}px;
       "
     >
       <div class="relative w-full h-full overflow-hidden">

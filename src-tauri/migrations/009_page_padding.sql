@@ -1,0 +1,1 @@
+ALTER TABLE project ADD COLUMN page_padding_px INTEGER NOT NULL DEFAULT 0;

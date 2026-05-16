@@ -104,5 +104,11 @@ fn migrations() -> Vec<tauri_plugin_sql::Migration> {
       sql: include_str!("../migrations/008_slot_gap.sql"),
       kind: tauri_plugin_sql::MigrationKind::Up,
     },
+    tauri_plugin_sql::Migration {
+      version: 9,
+      description: "project_page_padding_px",
+      sql: include_str!("../migrations/009_page_padding.sql"),
+      kind: tauri_plugin_sql::MigrationKind::Up,
+    },
   ]
 }

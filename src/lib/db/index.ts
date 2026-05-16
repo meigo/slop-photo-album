@@ -40,8 +40,14 @@ export async function getProject(id: number): Promise<ProjectRow | null> {
 
 export async function updateProjectSlotGap(id: number, slotGapPx: number): Promise<void> {
   const d = await db();
-  const clamped = Math.max(0, Math.min(20, Math.round(slotGapPx)));
+  const clamped = Math.max(0, Math.min(40, Math.round(slotGapPx)));
   await d.execute('UPDATE project SET slot_gap_px = ? WHERE id = ?', [clamped, id]);
+}
+
+export async function updateProjectPagePadding(id: number, pagePaddingPx: number): Promise<void> {
+  const d = await db();
+  const clamped = Math.max(0, Math.min(60, Math.round(pagePaddingPx)));
+  await d.execute('UPDATE project SET page_padding_px = ? WHERE id = ?', [clamped, id]);
 }
 
 export async function upsertPhoto(p: PhotoInsert): Promise<void> {
