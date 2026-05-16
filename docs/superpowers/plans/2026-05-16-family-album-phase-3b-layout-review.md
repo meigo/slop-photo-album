@@ -212,58 +212,85 @@ export async function listSlotsForPages(pageIds: number[]): Promise<Array<PageSl
   );
 }
 
-// Photos eligible for a given bucket key — used by PhotoPicker to show
-// alternatives. For album: bucket_key = 'YYYY-MM-DD' → photos taken
-// that day. For calendar: bucket_key = 'YYYY-MM' (target year+month)
-// → photos taken in the same calendar month of the source year
-// (calendar_year - 1). Photos already used in the current selection
-// are NOT excluded — the user may want to move a photo from one slot
-// to another (in v1, the swap just leaves a duplicate; Phase 3c can
-// add "move" semantics if needed).
-export async function listCandidatesForBucket(args: {
+// Photos eligible for the PhotoPicker. The picker offers three scope
+// filter chips so the user can override the algorithm's default
+// bucket if they want to pick from a wider pool:
+//   - 'bucket': album = same day; calendar = same month of source year.
+//   - 'nearby': album = same month; calendar = same year (source year for
+//                calendar, no constraint for album beyond month).
+//   - 'all':    every photo in the project.
+//
+// The user's intuition is right: they should be able to "cheat" the
+// algorithm's bucket constraint when they want a specific photo that
+// doesn't technically belong to the date bucket. The picker still
+// defaults to 'bucket' so the common case is fast.
+export type PickerScope = 'bucket' | 'nearby' | 'all';
+
+export async function listCandidatesForPicker(args: {
   projectId: number;
-  bucketKey: string;
+  bucketKey: string;             // 'YYYY-MM-DD' for album, 'YYYY-MM' for calendar
   kind: 'album' | 'calendar';
-  sourceYear?: number;          // required when kind === 'calendar'
+  scope: PickerScope;
+  sourceYear?: number;            // required when kind === 'calendar'
 }): Promise<Array<{ id: number; path: string; thumb_path: string | null; taken_at: number | null; score: number | null; embedding: string | null }>> {
   const d = await db();
-  if (args.kind === 'album') {
-    // bucket_key is 'YYYY-MM-DD'. Match photos whose taken_at falls on that day.
-    // Compute day boundaries in UTC. Local TZ slight skew acceptable v1.
-    const dayStart = new Date(`${args.bucketKey}T00:00:00`).getTime();
-    const dayEnd = dayStart + 24 * 60 * 60 * 1000;
+
+  // Build the time-range filter clause based on scope + kind.
+  let rangeStart: number | null = null;
+  let rangeEnd: number | null = null;
+
+  if (args.scope === 'bucket') {
+    if (args.kind === 'album') {
+      // Same day.
+      const dayStart = new Date(`${args.bucketKey}T00:00:00`).getTime();
+      rangeStart = dayStart;
+      rangeEnd = dayStart + 24 * 60 * 60 * 1000;
+    } else {
+      // Same month of source year.
+      if (args.sourceYear === undefined) throw new Error('sourceYear required for calendar bucket');
+      const month = Number(args.bucketKey.slice(5, 7));
+      rangeStart = new Date(args.sourceYear, month - 1, 1).getTime();
+      rangeEnd = new Date(args.sourceYear, month, 1).getTime();
+    }
+  } else if (args.scope === 'nearby') {
+    if (args.kind === 'album') {
+      // Same month as the bucket date (any year).
+      const month = Number(args.bucketKey.slice(5, 7));
+      const year = Number(args.bucketKey.slice(0, 4));
+      rangeStart = new Date(year, month - 1, 1).getTime();
+      rangeEnd = new Date(year, month, 1).getTime();
+    } else {
+      // Same year as the source year (all months).
+      if (args.sourceYear === undefined) throw new Error('sourceYear required for calendar bucket');
+      rangeStart = new Date(args.sourceYear, 0, 1).getTime();
+      rangeEnd = new Date(args.sourceYear + 1, 0, 1).getTime();
+    }
+  }
+  // scope === 'all' leaves rangeStart/rangeEnd as null → no range filter.
+
+  if (rangeStart === null) {
     return d.select<Array<{ id: number; path: string; thumb_path: string | null; taken_at: number | null; score: number | null; embedding: string | null }>>(
       `SELECT p.id, p.path, p.thumb_path, p.taken_at,
               (SELECT cv.blur FROM cv_score cv WHERE cv.photo_id = p.id) as score,
               (SELECT ie.vector FROM image_embedding ie WHERE ie.photo_id = p.id) as embedding
        FROM photo p
        WHERE p.project_id = ?
-         AND p.taken_at IS NOT NULL
-         AND p.taken_at >= ?
-         AND p.taken_at < ?
        ORDER BY p.taken_at ASC, p.id ASC`,
-      [args.projectId, dayStart, dayEnd]
-    );
-  } else {
-    // bucket_key is 'YYYY-MM' (target year). Source month = same month
-    // of calendar_year - 1, which we get via args.sourceYear.
-    if (args.sourceYear === undefined) throw new Error('sourceYear required for calendar bucket');
-    const month = Number(args.bucketKey.slice(5, 7));
-    const monthStart = new Date(args.sourceYear, month - 1, 1).getTime();
-    const monthEnd = new Date(args.sourceYear, month, 1).getTime();
-    return d.select<Array<{ id: number; path: string; thumb_path: string | null; taken_at: number | null; score: number | null; embedding: string | null }>>(
-      `SELECT p.id, p.path, p.thumb_path, p.taken_at,
-              (SELECT cv.blur FROM cv_score cv WHERE cv.photo_id = p.id) as score,
-              (SELECT ie.vector FROM image_embedding ie WHERE ie.photo_id = p.id) as embedding
-       FROM photo p
-       WHERE p.project_id = ?
-         AND p.taken_at IS NOT NULL
-         AND p.taken_at >= ?
-         AND p.taken_at < ?
-       ORDER BY p.taken_at ASC, p.id ASC`,
-      [args.projectId, monthStart, monthEnd]
+      [args.projectId]
     );
   }
+  return d.select<Array<{ id: number; path: string; thumb_path: string | null; taken_at: number | null; score: number | null; embedding: string | null }>>(
+    `SELECT p.id, p.path, p.thumb_path, p.taken_at,
+            (SELECT cv.blur FROM cv_score cv WHERE cv.photo_id = p.id) as score,
+            (SELECT ie.vector FROM image_embedding ie WHERE ie.photo_id = p.id) as embedding
+     FROM photo p
+     WHERE p.project_id = ?
+       AND p.taken_at IS NOT NULL
+       AND p.taken_at >= ?
+       AND p.taken_at < ?
+     ORDER BY p.taken_at ASC, p.id ASC`,
+    [args.projectId, rangeStart, rangeEnd]
+  );
 }
 
 export async function clearPagesForSelection(selectionId: number): Promise<void> {
@@ -966,7 +993,7 @@ npm run build && npm run check
 ```svelte
 <script lang="ts">
   import { convertFileSrc } from '@tauri-apps/api/core';
-  import { listCandidatesForBucket, getPhotoTakenAt } from '$lib/db';
+  import { listCandidatesForPicker, getPhotoTakenAt, type PickerScope } from '$lib/db';
   import { onMount } from 'svelte';
 
   interface Props {
@@ -991,6 +1018,8 @@ npm run build && npm run check
   let candidates = $state<Candidate[]>([]);
   let loading = $state(true);
   let sortMode = $state<'score' | 'time' | 'similarity'>('score');
+  let scope = $state<PickerScope>('bucket');
+  let effectiveBucket = $state<string>('');
 
   // For 'similarity' sort: decode the current photo's embedding once.
   let currentEmbedding = $state<Float32Array | null>(null);
@@ -1010,27 +1039,44 @@ npm run build && npm run check
     return d;
   }
 
+  async function loadCandidates() {
+    loading = true;
+    candidates = await listCandidatesForPicker({
+      projectId, bucketKey: effectiveBucket, kind, scope, sourceYear,
+    });
+    // Re-resolve current embedding from the new candidate list (if the
+    // current photo is in this scope at all).
+    if (currentPhotoId !== null) {
+      const cur = candidates.find((c) => c.id === currentPhotoId);
+      if (cur) currentEmbedding = decodeB64(cur.embedding);
+    }
+    loading = false;
+  }
+
   onMount(async () => {
-    let effectiveBucket = bucketKey ?? '';
+    let bk = bucketKey ?? '';
     // For album with no bucket key passed: derive from current photo's date.
-    if (kind === 'album' && (!effectiveBucket || effectiveBucket.length === 0) && currentPhotoId !== null) {
+    if (kind === 'album' && (!bk || bk.length === 0) && currentPhotoId !== null) {
       const taken = await getPhotoTakenAt(currentPhotoId);
       if (taken !== null) {
         const d = new Date(taken);
         const y = d.getFullYear().toString().padStart(4, '0');
         const m = (d.getMonth() + 1).toString().padStart(2, '0');
         const dd = d.getDate().toString().padStart(2, '0');
-        effectiveBucket = `${y}-${m}-${dd}`;
+        bk = `${y}-${m}-${dd}`;
       }
     }
-    candidates = await listCandidatesForBucket({
-      projectId, bucketKey: effectiveBucket, kind, sourceYear,
-    });
-    if (currentPhotoId !== null) {
-      const cur = candidates.find((c) => c.id === currentPhotoId);
-      if (cur) currentEmbedding = decodeB64(cur.embedding);
+    effectiveBucket = bk;
+    await loadCandidates();
+  });
+
+  // Reload when the user changes scope.
+  $effect(() => {
+    if (effectiveBucket) {
+      void loadCandidates();
     }
-    loading = false;
+    // Track `scope` for reactivity:
+    scope;
   });
 
   let sorted = $derived.by(() => {
@@ -1069,12 +1115,33 @@ npm run build && npm run check
       <button type="button" class="btn-ghost" onclick={onClose}>Close (Esc)</button>
     </div>
 
-    <div class="flex gap-2 mb-3 text-sm">
+    <div class="flex flex-wrap items-center gap-2 mb-3 text-sm">
+      <span style="color: var(--color-muted)">Scope:</span>
+      <button
+        type="button"
+        class={scope === 'bucket' ? 'btn-primary' : 'btn-secondary'}
+        onclick={() => scope = 'bucket'}
+        title={kind === 'album' ? 'Photos from the same day' : 'Photos from the same month of the source year'}
+      >{kind === 'album' ? 'Same day' : 'Same month'}</button>
+      <button
+        type="button"
+        class={scope === 'nearby' ? 'btn-primary' : 'btn-secondary'}
+        onclick={() => scope = 'nearby'}
+        title={kind === 'album' ? 'Photos from the same month' : 'Photos from the source year'}
+      >{kind === 'album' ? 'Same month' : 'Source year'}</button>
+      <button
+        type="button"
+        class={scope === 'all' ? 'btn-primary' : 'btn-secondary'}
+        onclick={() => scope = 'all'}
+        title="All photos in the project"
+      >All photos</button>
+
+      <span class="ml-4" style="color: var(--color-muted)">Sort:</span>
       <button
         type="button"
         class={sortMode === 'score' ? 'btn-primary' : 'btn-secondary'}
         onclick={() => sortMode = 'score'}
-      >By score</button>
+      >Score</button>
       <button
         type="button"
         class={sortMode === 'time' ? 'btn-primary' : 'btn-secondary'}
@@ -1086,7 +1153,7 @@ npm run build && npm run check
         onclick={() => sortMode = 'similarity'}
         disabled={currentEmbedding === null}
         title={currentEmbedding === null ? 'No embedding for the current slot photo' : 'Sort by visual similarity to current slot photo'}
-      >By similarity</button>
+      >Similarity</button>
     </div>
 
     {#if loading}
@@ -1204,7 +1271,8 @@ git push origin phase-3b-layout-review
 - [ ] Album review page shows pages stacked vertically; each rendered with its template + slot photos.
 - [ ] Calendar review page shows 12 pages in a 2-column grid.
 - [ ] Clicking any slot opens the PhotoPicker popup.
-- [ ] PhotoPicker shows candidate photos for the slot's bucket, sortable by score / chronological / similarity.
+- [ ] PhotoPicker shows candidate photos with **three scope filter chips** (bucket / nearby / all) and **three sort modes** (score / chronological / similarity).
+- [ ] User can freely "cheat" the algorithm's date constraint by switching scope to 'all' to pick any photo in the project.
 - [ ] Visual similarity sort uses CLIP embedding cosine to the current slot photo (disabled if the current slot has no embedding).
 - [ ] Picking a candidate updates the slot's photo_id; the picker closes; the page re-renders with the new photo.
 - [ ] Esc / backdrop click closes the picker without changes.
