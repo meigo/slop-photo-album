@@ -1,4 +1,5 @@
 import Database from '@tauri-apps/plugin-sql';
+import { HOLIDAY_PRESETS } from '$lib/calendar/holidays';
 import type {
   ProjectRow, PhotoRow, PhotoInsert, CvScoreRow, CvScoreInsert,
   FaceRow, FaceInsert, PersonClusterRow,
@@ -814,4 +815,28 @@ export async function deleteEvent(id: number): Promise<void> {
 export async function updateProjectWeekStart(id: number, weekStart: 0 | 1): Promise<void> {
   const d = await db();
   await d.execute('UPDATE project SET week_start = ? WHERE id = ?', [weekStart, id]);
+}
+
+export async function seedHolidays(projectId: number, presetKey: 'estonian' | 'us'): Promise<number> {
+  const preset = HOLIDAY_PRESETS[presetKey];
+  if (!preset) return 0;
+  const d = await db();
+  const now = Date.now();
+  let inserted = 0;
+  for (const h of preset) {
+    // Skip if a holiday event already exists for this project on this month/day
+    // (idempotent re-seed).
+    const existing = await d.select<{ id: number }[]>(
+      `SELECT id FROM calendar_event WHERE project_id = ? AND month = ? AND day = ? AND kind = 'holiday'`,
+      [projectId, h.month, h.day]
+    );
+    if (existing.length > 0) continue;
+    await d.execute(
+      `INSERT INTO calendar_event (project_id, month, day, year, kind, label, created_at)
+       VALUES (?, ?, ?, NULL, 'holiday', ?, ?)`,
+      [projectId, h.month, h.day, h.label, now]
+    );
+    inserted++;
+  }
+  return inserted;
 }
