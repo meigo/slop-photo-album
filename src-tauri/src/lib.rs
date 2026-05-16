@@ -86,5 +86,11 @@ fn migrations() -> Vec<tauri_plugin_sql::Migration> {
       sql: include_str!("../migrations/005_selection_notes.sql"),
       kind: tauri_plugin_sql::MigrationKind::Up,
     },
+    tauri_plugin_sql::Migration {
+      version: 6,
+      description: "pages_and_page_slots",
+      sql: include_str!("../migrations/006_pages.sql"),
+      kind: tauri_plugin_sql::MigrationKind::Up,
+    },
   ]
 }
