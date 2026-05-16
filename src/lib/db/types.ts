@@ -132,3 +132,34 @@ export interface SelectedPhotoInsert {
   user_state?: string;
   notes?: string | null;
 }
+
+export interface PageRow {
+  id: number;
+  selection_id: number;
+  index_in_book: number;
+  template_id: string;
+  title: string | null;
+  body: string | null;
+}
+
+export interface PageInsert {
+  selection_id: number;
+  index_in_book: number;
+  template_id: string;
+  title?: string | null;
+  body?: string | null;
+}
+
+export interface PageSlotRow {
+  page_id: number;
+  slot_index: number;
+  photo_id: number | null;
+  transform_json: string | null;
+}
+
+export interface PageSlotInsert {
+  page_id: number;
+  slot_index: number;
+  photo_id: number | null;
+  transform_json?: string | null;
+}

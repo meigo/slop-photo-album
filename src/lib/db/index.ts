@@ -3,6 +3,7 @@ import type {
   ProjectRow, PhotoRow, PhotoInsert, CvScoreRow, CvScoreInsert,
   FaceRow, FaceInsert, PersonClusterRow,
   SelectionRow, SelectedPhotoRow, SelectedPhotoInsert,
+  PageRow, PageInsert, PageSlotRow, PageSlotInsert,
 } from './types';
 
 let _db: Database | null = null;
@@ -374,4 +375,135 @@ export async function listSelectedPhotos(selectionId: number): Promise<Array<Sel
      ORDER BY sp.bucket_key ASC, sp.rank ASC`,
     [selectionId]
   );
+}
+
+// ---- Pages ----
+
+export async function insertPage(p: PageInsert): Promise<number> {
+  const d = await db();
+  const r = await d.execute(
+    'INSERT INTO page (selection_id, index_in_book, template_id, title, body) VALUES (?, ?, ?, ?, ?)',
+    [p.selection_id, p.index_in_book, p.template_id, p.title ?? null, p.body ?? null]
+  );
+  return r.lastInsertId as number;
+}
+
+export async function insertPageSlot(s: PageSlotInsert): Promise<void> {
+  const d = await db();
+  await d.execute(
+    'INSERT INTO page_slot (page_id, slot_index, photo_id, transform_json) VALUES (?, ?, ?, ?)',
+    [s.page_id, s.slot_index, s.photo_id, s.transform_json ?? null]
+  );
+}
+
+export async function updateSlotPhoto(pageId: number, slotIndex: number, photoId: number): Promise<void> {
+  const d = await db();
+  await d.execute(
+    'UPDATE page_slot SET photo_id = ? WHERE page_id = ? AND slot_index = ?',
+    [photoId, pageId, slotIndex]
+  );
+}
+
+export async function listPagesForSelection(selectionId: number): Promise<PageRow[]> {
+  const d = await db();
+  return d.select<PageRow[]>(
+    'SELECT * FROM page WHERE selection_id = ? ORDER BY index_in_book ASC',
+    [selectionId]
+  );
+}
+
+// Returns slots for a set of page IDs, joined with photo path + thumb + embedding.
+// Used by the review route to render all pages in one shot.
+export async function listSlotsForPages(pageIds: number[]): Promise<Array<PageSlotRow & { path: string | null; thumb_path: string | null; embedding: string | null }>> {
+  if (pageIds.length === 0) return [];
+  const d = await db();
+  const placeholders = pageIds.map(() => '?').join(',');
+  return d.select<Array<PageSlotRow & { path: string | null; thumb_path: string | null; embedding: string | null }>>(
+    `SELECT ps.*, p.path, p.thumb_path, ie.vector as embedding
+     FROM page_slot ps
+     LEFT JOIN photo p ON p.id = ps.photo_id
+     LEFT JOIN image_embedding ie ON ie.photo_id = ps.photo_id
+     WHERE ps.page_id IN (${placeholders})
+     ORDER BY ps.page_id ASC, ps.slot_index ASC`,
+    pageIds
+  );
+}
+
+export async function clearPagesForSelection(selectionId: number): Promise<void> {
+  const d = await db();
+  await d.execute('DELETE FROM page WHERE selection_id = ?', [selectionId]);
+}
+
+// ---- Picker candidates with scope filter ----
+
+export type PickerScope = 'bucket' | 'nearby' | 'all';
+
+export async function listCandidatesForPicker(args: {
+  projectId: number;
+  bucketKey: string;
+  kind: 'album' | 'calendar';
+  scope: PickerScope;
+  sourceYear?: number;
+}): Promise<Array<{ id: number; path: string; thumb_path: string | null; taken_at: number | null; score: number | null; embedding: string | null }>> {
+  const d = await db();
+
+  // Build the time-range filter clause based on scope + kind.
+  let rangeStart: number | null = null;
+  let rangeEnd: number | null = null;
+
+  if (args.scope === 'bucket') {
+    if (args.kind === 'album') {
+      const dayStart = new Date(`${args.bucketKey}T00:00:00`).getTime();
+      rangeStart = dayStart;
+      rangeEnd = dayStart + 24 * 60 * 60 * 1000;
+    } else {
+      if (args.sourceYear === undefined) throw new Error('sourceYear required for calendar bucket');
+      const month = Number(args.bucketKey.slice(5, 7));
+      rangeStart = new Date(args.sourceYear, month - 1, 1).getTime();
+      rangeEnd = new Date(args.sourceYear, month, 1).getTime();
+    }
+  } else if (args.scope === 'nearby') {
+    if (args.kind === 'album') {
+      const month = Number(args.bucketKey.slice(5, 7));
+      const year = Number(args.bucketKey.slice(0, 4));
+      rangeStart = new Date(year, month - 1, 1).getTime();
+      rangeEnd = new Date(year, month, 1).getTime();
+    } else {
+      if (args.sourceYear === undefined) throw new Error('sourceYear required for calendar bucket');
+      rangeStart = new Date(args.sourceYear, 0, 1).getTime();
+      rangeEnd = new Date(args.sourceYear + 1, 0, 1).getTime();
+    }
+  }
+
+  if (rangeStart === null) {
+    return d.select<Array<{ id: number; path: string; thumb_path: string | null; taken_at: number | null; score: number | null; embedding: string | null }>>(
+      `SELECT p.id, p.path, p.thumb_path, p.taken_at,
+              (SELECT cv.blur FROM cv_score cv WHERE cv.photo_id = p.id) as score,
+              (SELECT ie.vector FROM image_embedding ie WHERE ie.photo_id = p.id) as embedding
+       FROM photo p
+       WHERE p.project_id = ?
+       ORDER BY p.taken_at ASC, p.id ASC`,
+      [args.projectId]
+    );
+  }
+  return d.select<Array<{ id: number; path: string; thumb_path: string | null; taken_at: number | null; score: number | null; embedding: string | null }>>(
+    `SELECT p.id, p.path, p.thumb_path, p.taken_at,
+            (SELECT cv.blur FROM cv_score cv WHERE cv.photo_id = p.id) as score,
+            (SELECT ie.vector FROM image_embedding ie WHERE ie.photo_id = p.id) as embedding
+     FROM photo p
+     WHERE p.project_id = ?
+       AND p.taken_at IS NOT NULL
+       AND p.taken_at >= ?
+       AND p.taken_at < ?
+     ORDER BY p.taken_at ASC, p.id ASC`,
+    [args.projectId, rangeStart, rangeEnd]
+  );
+}
+
+export async function getPhotoTakenAt(photoId: number): Promise<number | null> {
+  const d = await db();
+  const rows = await d.select<{ taken_at: number | null }[]>(
+    'SELECT taken_at FROM photo WHERE id = ?', [photoId]
+  );
+  return rows[0]?.taken_at ?? null;
 }
