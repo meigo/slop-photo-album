@@ -45,8 +45,7 @@
     }
     const next = [...localOrder];
     const [moved] = next.splice(fromIdx, 1);
-    const insertAt = fromIdx < dropIdx ? dropIdx - 1 : dropIdx;
-    next.splice(insertAt, 0, moved);
+    next.splice(dropIdx, 0, moved);
     localOrder = next;
     draggingId = null;
     if (!data.selection) return;
