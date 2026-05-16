@@ -168,7 +168,6 @@
       currentPhotoId={pickerOpen.currentPhotoId}
       onPick={pickPhoto}
       onClose={() => pickerOpen = null}
-      onEdit={() => pickerOpen && openEditor(pickerOpen.pageId, pickerOpen.slotIndex)}
     />
   {/if}
 </div>
