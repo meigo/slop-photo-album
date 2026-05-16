@@ -6,6 +6,7 @@
   import { onMount } from 'svelte';
   import { generateAlbumSelection } from '$lib/selection/album';
   import { generateCalendarSelection } from '$lib/selection/calendar';
+  import { assembleAlbumPages, assembleCalendarPages } from '$lib/layout/assembly';
 
   let { data } = $props();
 
@@ -36,7 +37,8 @@
     generating = 'album';
     try {
       await generateAlbumSelection(data.project.id);
-      await goto(`/projects/${data.project.id}/selection/album`);
+      await assembleAlbumPages(data.project.id);
+      await goto(`/projects/${data.project.id}/album/review`);
     } finally {
       generating = null;
     }
@@ -46,7 +48,8 @@
     generating = 'calendar';
     try {
       await generateCalendarSelection(data.project.id);
-      await goto(`/projects/${data.project.id}/selection/calendar`);
+      await assembleCalendarPages(data.project.id);
+      await goto(`/projects/${data.project.id}/calendar/review`);
     } finally {
       generating = null;
     }
