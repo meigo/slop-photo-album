@@ -62,5 +62,6 @@ export function cssForStyle(s: TextStyle): string {
     `color: ${s.color}`,
     `text-align: ${s.align}`,
     'line-height: 1.2',
+    'white-space: pre-wrap',
   ].join('; ');
 }

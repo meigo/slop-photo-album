@@ -156,10 +156,12 @@
   // Sync initial content into the contentEditable element on mount so the
   // caret doesn't reset on every reactive update. Also focus the editor
   // and select all so typing replaces the placeholder content immediately.
+  // We use innerText (not textContent) so multi-line content round-trips
+  // correctly — textContent strips \n into spaces, innerText preserves them.
   let editorEl: HTMLDivElement | undefined = $state(undefined);
   onMount(() => {
     if (!editorEl) return;
-    editorEl.textContent = content;
+    editorEl.innerText = content;
     editorEl.focus();
     const range = document.createRange();
     range.selectNodeContents(editorEl);
@@ -169,7 +171,7 @@
   });
 
   function onInput(e: Event) {
-    content = (e.currentTarget as HTMLDivElement).textContent ?? '';
+    content = (e.currentTarget as HTMLDivElement).innerText ?? '';
   }
 </script>
 
