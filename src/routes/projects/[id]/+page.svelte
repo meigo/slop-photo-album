@@ -77,7 +77,6 @@
       >
         Re-run CV
       </button>
-      <a class="btn-secondary" href={`/projects/${data.project.id}/people`}>People</a>
       <a class="btn-secondary" href={`/projects/${data.project.id}/library`}>Open library</a>
     </div>
     <div class="flex gap-2 mt-3">

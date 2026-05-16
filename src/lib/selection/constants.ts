@@ -9,7 +9,11 @@ export const SCORE_WEIGHTS = {
   exposure: 0.5,         // exposure score 0-1
   faces_count: 0.3,      // diminishing — capped at 4 faces
   faces_quality: 1.5,    // mean per-face quality
-  pinned_person: 1.0,    // bonus per pinned person present in this photo
+  // Pinned-person scoring is disabled in v1. Face clustering proved
+  // too fragile (over-segmentation) and the must-include nudge was a
+  // soft signal anyway. v1 relies on manual review (Phase 3b popup
+  // picker) for "swap in the right photo of grandma".
+  pinned_person: 0,
   // Negative contributors (subtracted)
   duplicate_member: 1.5,    // non-representative member of a duplicate group
   screenshot: 5.0,          // hard penalty if scene-tag 'screenshot' > 0.5
