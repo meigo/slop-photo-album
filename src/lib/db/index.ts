@@ -507,3 +507,70 @@ export async function getPhotoTakenAt(photoId: number): Promise<number | null> {
   );
   return rows[0]?.taken_at ?? null;
 }
+
+// ---- Page operations (Phase 3c) ----
+
+/**
+ * Move a page up or down in its selection (swap index_in_book with the
+ * adjacent page). No-op at the boundaries.
+ */
+export async function reorderPage(pageId: number, direction: 'up' | 'down'): Promise<void> {
+  const d = await db();
+  const rows = await d.select<{ id: number; selection_id: number; index_in_book: number }[]>(
+    'SELECT id, selection_id, index_in_book FROM page WHERE id = ?', [pageId]
+  );
+  if (rows.length === 0) return;
+  const page = rows[0];
+  const otherIndex = direction === 'up' ? page.index_in_book - 1 : page.index_in_book + 1;
+  if (otherIndex < 0) return;
+  const others = await d.select<{ id: number; index_in_book: number }[]>(
+    'SELECT id, index_in_book FROM page WHERE selection_id = ? AND index_in_book = ?',
+    [page.selection_id, otherIndex]
+  );
+  if (others.length === 0) return;
+  // Swap via a sentinel value to be robust against future unique
+  // constraints on (selection_id, index_in_book).
+  await d.execute('UPDATE page SET index_in_book = -1 WHERE id = ?', [page.id]);
+  await d.execute('UPDATE page SET index_in_book = ? WHERE id = ?', [page.index_in_book, others[0].id]);
+  await d.execute('UPDATE page SET index_in_book = ? WHERE id = ?', [otherIndex, page.id]);
+}
+
+/**
+ * Swap the template of a page. Preserves first min(old, new) photos;
+ * drops excess if shrinking; leaves new slots empty if growing.
+ */
+export async function updatePageTemplate(pageId: number, newTemplateId: string, newSlotCount: number): Promise<void> {
+  const d = await db();
+  const oldSlots = await d.select<{ slot_index: number; photo_id: number | null }[]>(
+    'SELECT slot_index, photo_id FROM page_slot WHERE page_id = ? ORDER BY slot_index ASC',
+    [pageId]
+  );
+  await d.execute('DELETE FROM page_slot WHERE page_id = ?', [pageId]);
+  await d.execute('UPDATE page SET template_id = ? WHERE id = ?', [newTemplateId, pageId]);
+  for (let i = 0; i < newSlotCount; i++) {
+    const photoId = oldSlots[i]?.photo_id ?? null;
+    await d.execute(
+      'INSERT INTO page_slot (page_id, slot_index, photo_id) VALUES (?, ?, ?)',
+      [pageId, i, photoId]
+    );
+  }
+}
+
+/**
+ * Delete a page and re-densify the remaining pages' index_in_book so
+ * the sequence stays 0, 1, 2, ... without gaps. ON DELETE CASCADE on
+ * page_slot.page_id removes the slot rows automatically.
+ */
+export async function deletePage(pageId: number): Promise<void> {
+  const d = await db();
+  const rows = await d.select<{ id: number; selection_id: number; index_in_book: number }[]>(
+    'SELECT id, selection_id, index_in_book FROM page WHERE id = ?', [pageId]
+  );
+  if (rows.length === 0) return;
+  const { selection_id, index_in_book } = rows[0];
+  await d.execute('DELETE FROM page WHERE id = ?', [pageId]);
+  await d.execute(
+    'UPDATE page SET index_in_book = index_in_book - 1 WHERE selection_id = ? AND index_in_book > ?',
+    [selection_id, index_in_book]
+  );
+}
