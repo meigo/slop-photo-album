@@ -43,6 +43,9 @@
     <p class="text-sm mt-2" style="color: var(--color-muted)">
       {data.pages.length} pages · click any photo to swap, use the dropdown to change layout
     </p>
+    <p class="text-sm mt-1">
+      <a class="btn-ghost" href={`/projects/${data.project.id}/album/sorter`}>open sorter view →</a>
+    </p>
 
     <div class="flex flex-col gap-6 mt-4">
       {#each data.pages as page, idx}
