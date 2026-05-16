@@ -1,14 +1,9 @@
 <script lang="ts">
   import { getTemplate, type Template } from '$lib/layout/templates';
-  import type { SlotLayout } from '$lib/layout/templates';
   import { convertFileSrc } from '@tauri-apps/api/core';
-  import {
-    parseTransform,
-    cssForTransform,
-    IDENTITY_TRANSFORM,
-    type SlotTransform,
-  } from '$lib/layout/transform';
+  import { parseTransform, cssForTransform, type SlotTransform, IDENTITY_TRANSFORM } from '$lib/layout/transform';
   import { autoPositionTransform } from '$lib/layout/autoposition';
+  import EmptySlotBg from './EmptySlotBg.svelte';
 
   interface Slot {
     slot_index: number;
@@ -16,11 +11,8 @@
     path: string | null;
     thumb_path: string | null;
     transform_json: string | null;
-    /** Photo's natural pixel dimensions, used by auto-position. May be null
-     *  when the slot is empty or photo metadata is missing. */
     photo_width: number | null;
     photo_height: number | null;
-    /** Face bboxes for this photo (used by auto-position). */
     faces: Array<{ bbox_x: number; bbox_y: number; bbox_w: number; bbox_h: number }>;
     top_tag: string | null;
   }
@@ -29,16 +21,17 @@
     templateId: string;
     slots: Slot[];
     onSlotClick?: (slotIndex: number) => void;
+    onSwapPhoto?: (slotIndex: number) => void;
+    onAdjustCrop?: (slotIndex: number) => void;
+    editingSlotIndex?: number | null;
   }
-  let { templateId, slots, onSlotClick }: Props = $props();
+  let { templateId, slots, onSlotClick, onSwapPhoto, onAdjustCrop, editingSlotIndex = null }: Props = $props();
 
   let tpl = $derived<Template>(getTemplate(templateId));
   let aspectRatio = $derived(tpl.aspect === 'square' ? '1 / 1' : '4 / 3');
-
-  // Order slots by slot_index ascending so they match tpl.slots index.
   let orderedSlots = $derived([...slots].sort((a, b) => a.slot_index - b.slot_index));
 
-  function effectiveTransform(slot: Slot, slotLayout: SlotLayout): SlotTransform {
+  function effectiveTransform(slot: Slot, slotLayout: { x: number; y: number; w: number; h: number }): SlotTransform {
     const manual = parseTransform(slot.transform_json);
     if (manual) return manual;
     if (slot.photo_width !== null && slot.photo_height !== null) {
@@ -62,40 +55,74 @@
     {@const slot = orderedSlots[i]}
     {@const t = slot ? effectiveTransform(slot, slotLayout) : IDENTITY_TRANSFORM}
     {@const css = cssForTransform(t)}
-    <button
-      type="button"
-      class="absolute"
+    {@const isEditing = editingSlotIndex === i}
+    <div
+      class="absolute group"
       style="
         left: {slotLayout.x * 100}%;
         top: {slotLayout.y * 100}%;
         width: {slotLayout.w * 100}%;
         height: {slotLayout.h * 100}%;
         padding: 2px;
-        background: none;
-        border: none;
-        cursor: {onSlotClick ? 'pointer' : 'default'};
       "
-      onclick={() => onSlotClick?.(i)}
     >
-      <div class="w-full h-full overflow-hidden" style="background: var(--color-line);">
+      <div class="relative w-full h-full overflow-hidden">
         {#if slot?.path}
-          <!-- Use the ORIGINAL photo path (not thumb_path) so review-page
-               rendering at ~700-1000px wide stays sharp. loading="lazy"
-               keeps off-screen pages from decoding until needed. -->
           <img
             src={convertFileSrc(slot.path)}
             alt=""
-            class="w-full h-full object-cover"
-            style="transform: {css.transform}; transform-origin: {css.transformOrigin};"
+            class="absolute inset-0 w-full h-full object-cover"
+            style="object-position: {css.objectPosition}; transform: {css.transform}; transform-origin: {css.transformOrigin};"
             draggable="false"
             loading="lazy"
           />
         {:else}
-          <div class="w-full h-full flex items-center justify-center" style="color: var(--color-muted)">
+          <EmptySlotBg />
+          <div class="absolute inset-0 flex items-center justify-center" style="color: var(--color-muted)">
             <span class="text-xs">empty slot</span>
           </div>
         {/if}
+
+        {#if !isEditing}
+          {#if onSlotClick}
+            <button
+              type="button"
+              class="absolute inset-0"
+              style="background: none; border: none; cursor: pointer;"
+              onclick={() => onSlotClick?.(i)}
+              aria-label={`Edit slot ${i + 1}`}
+            ></button>
+          {/if}
+
+          {#if slot?.path && (onSwapPhoto || onAdjustCrop)}
+            <div
+              class="absolute top-1 right-1 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
+              style="z-index: 2;"
+            >
+              {#if onSwapPhoto}
+                <button
+                  type="button"
+                  class="rounded p-1 text-xs"
+                  style="background: rgba(0,0,0,0.6); color: white; border: none; cursor: pointer;"
+                  onclick={(e) => { e.stopPropagation(); onSwapPhoto?.(i); }}
+                  title="Swap photo"
+                  aria-label={`Swap photo in slot ${i + 1}`}
+                >🖼</button>
+              {/if}
+              {#if onAdjustCrop}
+                <button
+                  type="button"
+                  class="rounded p-1 text-xs"
+                  style="background: rgba(0,0,0,0.6); color: white; border: none; cursor: pointer;"
+                  onclick={(e) => { e.stopPropagation(); onAdjustCrop?.(i); }}
+                  title="Adjust crop"
+                  aria-label={`Adjust crop in slot ${i + 1}`}
+                >✥</button>
+              {/if}
+            </div>
+          {/if}
+        {/if}
       </div>
-    </button>
+    </div>
   {/each}
 </div>
