@@ -22,7 +22,9 @@ Local-first desktop app for building printed family photo albums and seasonal-me
 
 **Phase 3f (In-place crop editor) — complete.** Slot edges show swap-photo and adjust-crop icons on hover; crop adjustments happen in-place over the slot (drag to reposition, scroll to zoom). Auto-position now uses `object-position` so slots always cover fully — no edge gaps. Empty slots show a checkerboard.
 
-Phase 4 (PDF export + LLM captions + optional per-photo color) is planned but not yet implemented.
+**Phase 4a (Calendar grid + events) — complete.** Calendar pages render an actual month grid (day headers + dates aligned to weekday, Mon/Sun toggle per project). Per-project events table with birthday/anniversary/event/holiday kinds, yearly-recurring or one-off. Inline events panel on the project page; one-click presets for Estonian + US holidays. Event marks show on the rendered grid color-coded by kind.
+
+Phase 4b (text layers), Phase 4c (slot polish), Phase 4d (PDF export) — planned but not yet implemented.
 
 See `docs/superpowers/specs/2026-05-14-family-album-builder-design.md` for the design.
 
