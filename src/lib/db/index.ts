@@ -449,6 +449,74 @@ export async function clearPagesForSelection(selectionId: number): Promise<void>
   await d.execute('DELETE FROM page WHERE selection_id = ?', [selectionId]);
 }
 
+/** Shape returned by enrichSlotsWithLayoutContext — used by review-route
+ *  loaders. Each enriched slot carries the photo's natural dimensions,
+ *  face boxes, and top scene tag so the renderer can compute auto-position. */
+export interface SlotLayoutContext {
+  photo_width: number | null;
+  photo_height: number | null;
+  faces: Array<{ bbox_x: number; bbox_y: number; bbox_w: number; bbox_h: number }>;
+  top_tag: string | null;
+}
+
+/** Given slot rows from listSlotsForPages, fetch each referenced photo's
+ *  natural dimensions, face boxes, and top scene tag in three bulk queries.
+ *  Returns the slots with those four fields attached. Slots whose photo_id
+ *  is null get null/empty values.
+ *
+ *  Expected scale: a single selection's slots (typically ≤ 500 photos);
+ *  parameter cap on modern SQLite is 32766, so safe well past practical use. */
+export async function enrichSlotsWithLayoutContext<S extends { photo_id: number | null }>(
+  slots: readonly S[],
+): Promise<Array<S & SlotLayoutContext>> {
+  const photoIds = [...new Set(slots.map((s) => s.photo_id).filter((x): x is number => x !== null))];
+  const photoMeta = new Map<number, { width: number | null; height: number | null }>();
+  const facesByPhoto = new Map<number, Array<{ bbox_x: number; bbox_y: number; bbox_w: number; bbox_h: number }>>();
+  const topTagByPhoto = new Map<number, string>();
+
+  if (photoIds.length > 0) {
+    const d = await db();
+    const placeholders = photoIds.map(() => '?').join(',');
+
+    const photoRows = await d.select<{ id: number; width: number | null; height: number | null }[]>(
+      `SELECT id, width, height FROM photo WHERE id IN (${placeholders})`,
+      photoIds
+    );
+    for (const p of photoRows) photoMeta.set(p.id, { width: p.width, height: p.height });
+
+    const faceRows = await d.select<{ photo_id: number; bbox_x: number; bbox_y: number; bbox_w: number; bbox_h: number }[]>(
+      `SELECT photo_id, bbox_x, bbox_y, bbox_w, bbox_h FROM face WHERE photo_id IN (${placeholders})`,
+      photoIds
+    );
+    for (const f of faceRows) {
+      const arr = facesByPhoto.get(f.photo_id) ?? [];
+      arr.push({ bbox_x: f.bbox_x, bbox_y: f.bbox_y, bbox_w: f.bbox_w, bbox_h: f.bbox_h });
+      facesByPhoto.set(f.photo_id, arr);
+    }
+
+    const tagRows = await d.select<{ photo_id: number; tag: string }[]>(
+      `SELECT pt.photo_id, pt.tag FROM photo_tag pt
+       INNER JOIN (
+         SELECT photo_id, MAX(score) as ms FROM photo_tag WHERE photo_id IN (${placeholders}) GROUP BY photo_id
+       ) m ON m.photo_id = pt.photo_id AND m.ms = pt.score
+       WHERE pt.photo_id IN (${placeholders})`,
+      [...photoIds, ...photoIds]
+    );
+    for (const t of tagRows) topTagByPhoto.set(t.photo_id, t.tag);
+  }
+
+  return slots.map((s) => {
+    const meta = s.photo_id !== null ? photoMeta.get(s.photo_id) : null;
+    return {
+      ...s,
+      photo_width: meta?.width ?? null,
+      photo_height: meta?.height ?? null,
+      faces: s.photo_id !== null ? (facesByPhoto.get(s.photo_id) ?? []) : [],
+      top_tag: s.photo_id !== null ? (topTagByPhoto.get(s.photo_id) ?? null) : null,
+    };
+  });
+}
+
 // ---- Picker candidates with scope filter ----
 
 export type PickerScope = 'bucket' | 'nearby' | 'all';
