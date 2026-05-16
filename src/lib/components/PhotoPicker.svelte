@@ -11,8 +11,9 @@
     currentPhotoId: number | null;
     onPick: (photoId: number) => void;
     onClose: () => void;
+    onEdit?: () => void;
   }
-  let { projectId, kind, bucketKey, sourceYear, currentPhotoId, onPick, onClose }: Props = $props();
+  let { projectId, kind, bucketKey, sourceYear, currentPhotoId, onPick, onClose, onEdit }: Props = $props();
 
   type Candidate = {
     id: number;
@@ -116,9 +117,14 @@
   onclick={handleBackdrop}
 >
   <div class="surface-card relative" style="width: 90vw; max-width: 900px; max-height: 90vh; overflow-y: auto;">
-    <div class="flex items-baseline justify-between mb-3">
+    <div class="flex items-baseline justify-between mb-3 gap-2">
       <h3 class="text-lg font-medium">Pick a photo</h3>
-      <button type="button" class="btn-ghost" onclick={onClose}>Close (Esc)</button>
+      <div class="flex gap-2">
+        {#if onEdit && currentPhotoId !== null}
+          <button type="button" class="btn-secondary" onclick={onEdit}>Adjust crop</button>
+        {/if}
+        <button type="button" class="btn-ghost" onclick={onClose}>Close (Esc)</button>
+      </div>
     </div>
 
     <div class="flex flex-wrap items-center gap-2 mb-3 text-sm">
