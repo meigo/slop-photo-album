@@ -2,7 +2,7 @@
   import { albumTemplates, calendarTemplates, type Template } from '$lib/layout/templates';
   import { reorderPage, updatePageTemplate, deletePage } from '$lib/db';
   import { invalidateAll } from '$app/navigation';
-  import { ArrowUp, ArrowDown, Trash2 } from 'lucide-svelte';
+  import { ArrowUp, ArrowDown, Trash2 } from '@lucide/svelte';
 
   interface Props {
     pageId: number;

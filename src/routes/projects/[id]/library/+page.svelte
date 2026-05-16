@@ -1,7 +1,7 @@
 <script lang="ts">
   import PageHeader from '$lib/components/PageHeader.svelte';
   import { convertFileSrc } from '@tauri-apps/api/core';
-  import { Users, Copy } from 'lucide-svelte';
+  import { Users, Copy } from '@lucide/svelte';
 
   let { data } = $props();
 

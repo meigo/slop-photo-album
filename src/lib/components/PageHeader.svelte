@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ArrowLeft } from 'lucide-svelte';
+  import { ArrowLeft } from '@lucide/svelte';
   import { page } from '$app/state';
   import ThemeToggle from './ThemeToggle.svelte';
 
