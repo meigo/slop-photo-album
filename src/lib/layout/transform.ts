@@ -16,7 +16,12 @@ export function parseTransform(json: string | null): SlotTransform | null {
   if (!json) return null;
   try {
     const parsed = JSON.parse(json);
-    if (typeof parsed.offsetX !== 'number' || typeof parsed.offsetY !== 'number' || typeof parsed.scale !== 'number') {
+    if (
+      !Number.isFinite(parsed.offsetX) ||
+      !Number.isFinite(parsed.offsetY) ||
+      !Number.isFinite(parsed.scale) ||
+      parsed.scale <= 0
+    ) {
       return null;
     }
     return { offsetX: parsed.offsetX, offsetY: parsed.offsetY, scale: parsed.scale };

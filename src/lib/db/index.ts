@@ -639,12 +639,7 @@ export async function updateSlotTransform(pageId: number, slotIndex: number, tra
      ON CONFLICT (page_id, slot_index) DO UPDATE SET transform_json = excluded.transform_json`,
     [pageId, slotIndex, transformJson]
   );
-  // Bump selection.updated_at (transforms count as edits).
-  await d.execute(
-    `UPDATE selection SET updated_at = ?
-     WHERE id = (SELECT selection_id FROM page WHERE id = ?)`,
-    [Date.now(), pageId]
-  );
+  await bumpSelectionFromPage(pageId);
 }
 
 /** Insert a blank page at the given index_in_book, shifting later pages
