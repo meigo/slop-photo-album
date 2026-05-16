@@ -52,6 +52,13 @@ export async function updateProjectPagePadding(id: number, pagePaddingPx: number
   await d.execute('UPDATE project SET page_padding_px = ? WHERE id = ?', [clamped, id]);
 }
 
+export async function updateProjectPageBgColor(id: number, color: string): Promise<void> {
+  const d = await db();
+  // Require #rrggbb form. Silently reject malformed input.
+  if (!/^#[0-9a-fA-F]{6}$/.test(color)) return;
+  await d.execute('UPDATE project SET page_bg_color = ? WHERE id = ?', [color, id]);
+}
+
 export async function upsertPhoto(p: PhotoInsert): Promise<void> {
   const d = await db();
   await d.execute(

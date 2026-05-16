@@ -7,7 +7,7 @@
   import TextEditor from '$lib/components/TextEditor.svelte';
   import { getTemplate } from '$lib/layout/templates';
   import { invalidateAll } from '$app/navigation';
-  import { updateSlotPhoto, clearSlotPhoto, insertBlankPage, updateProjectSlotGap, updateProjectPagePadding, updateProjectWeekStart, addPageText } from '$lib/db';
+  import { updateSlotPhoto, clearSlotPhoto, insertBlankPage, updateProjectSlotGap, updateProjectPagePadding, updateProjectPageBgColor, updateProjectWeekStart, addPageText } from '$lib/db';
   import { DEFAULT_TEXT_STYLE, serializeStyle } from '$lib/text/style';
 
   let { data } = $props();
@@ -18,6 +18,14 @@
   let pagePaddingPx = $state(data.project.page_padding_px);
   // svelte-ignore state_referenced_locally
   let weekStart = $state<0 | 1>(data.project.week_start === 0 ? 0 : 1);
+  // svelte-ignore state_referenced_locally
+  let pageBgColor = $state(data.project.page_bg_color);
+
+  async function onPageBgChange(e: Event) {
+    const v = (e.currentTarget as HTMLInputElement).value;
+    pageBgColor = v;
+    await updateProjectPageBgColor(data.project.id, v);
+  }
 
   async function setWeekStart(v: 0 | 1) {
     weekStart = v;
@@ -155,6 +163,11 @@
       <span style="font-variant-numeric: tabular-nums; min-width: 3ch;">{pagePaddingPx}px</span>
     </label>
     <label class="text-sm mt-1 flex items-center gap-2" style="color: var(--color-muted)">
+      page background:
+      <input type="color" bind:value={pageBgColor} oninput={onPageBgChange} style="width: 32px; height: 24px; border: 1px solid var(--color-line); border-radius: 3px;" />
+      <span style="font-family: var(--font-mono); font-size: 0.75rem;">{pageBgColor}</span>
+    </label>
+    <label class="text-sm mt-1 flex items-center gap-2" style="color: var(--color-muted)">
       week starts:
       <button
         type="button"
@@ -197,6 +210,7 @@
               editingSlotIndex={editorOpen?.pageId === page.id ? editorOpen!.slotIndex : null}
               {slotGapPx}
               {pagePaddingPx}
+              {pageBgColor}
               pageTitle={page.title}
               events={data.events}
               {weekStart}

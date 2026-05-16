@@ -28,7 +28,9 @@ Local-first desktop app for building printed family photo albums and seasonal-me
 
 **Phase 4c (Slot polish) — complete.** Hover a photo slot to swap (🖼), adjust (✥), or remove the photo entirely (🗑). The crop editor exposes brightness, contrast, and saturation sliders that render via CSS `filter` for live preview.
 
-Phase 4d (PDF export) and LLM-generated captions — planned but not yet implemented.
+**Phase 4d (Page + text backgrounds) — complete.** Per-project page background color (default white) — applies to every page in album and calendar. Per-text overlay background fill with adjustable padding — toggle on, pick a color, set the padding, useful for readable captions over photos.
+
+Phase 4e (PDF export) and LLM-generated captions — planned but not yet implemented.
 
 See `docs/superpowers/specs/2026-05-14-family-album-builder-design.md` for the design.
 

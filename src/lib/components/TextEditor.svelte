@@ -6,7 +6,7 @@
   import { updatePageText, deletePageText } from '$lib/db';
   import { invalidateAll } from '$app/navigation';
   import type { PageTextRow } from '$lib/db/types';
-  import { GripVertical, Italic, AlignLeft, AlignCenter, AlignRight, Trash2, X } from '@lucide/svelte';
+  import { GripVertical, Italic, AlignLeft, AlignCenter, AlignRight, Trash2, X, PaintBucket } from '@lucide/svelte';
 
   interface Props {
     text: PageTextRow;
@@ -177,6 +177,43 @@
       <Italic size={14} />
     </button>
     <input class="toolbar-field-color" title="Text color" type="color" bind:value={style.color} />
+
+    <button
+      type="button"
+      class="toolbar-btn"
+      class:active={style.backgroundColor !== null}
+      title={style.backgroundColor !== null ? 'Remove background fill' : 'Add a background fill'}
+      onclick={() => {
+        if (style.backgroundColor === null) {
+          style.backgroundColor = '#ffffff';
+          if (style.backgroundPadding === 0) style.backgroundPadding = 6;
+        } else {
+          style.backgroundColor = null;
+          style.backgroundPadding = 0;
+        }
+      }}
+    >
+      <PaintBucket size={14} />
+    </button>
+    {#if style.backgroundColor !== null}
+      <input
+        class="toolbar-field-color"
+        type="color"
+        title="Background color"
+        bind:value={style.backgroundColor}
+      />
+      <input
+        class="toolbar-field"
+        type="number"
+        min="0"
+        max="60"
+        step="1"
+        title="Background padding (px around the text)"
+        bind:value={style.backgroundPadding}
+        style="width: 48px;"
+      />
+    {/if}
+
     <button type="button" class="toolbar-btn" class:active={style.align === 'left'} title="Align text left" onclick={() => style.align = 'left'} style="margin-left: 4px;">
       <AlignLeft size={14} />
     </button>

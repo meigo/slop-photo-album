@@ -8,6 +8,7 @@ export interface ProjectRow {
   slot_gap_px: number;
   page_padding_px: number;
   week_start: number;
+  page_bg_color: string;
 }
 
 export interface CalendarEventRow {

@@ -7,7 +7,7 @@
   import TextEditor from '$lib/components/TextEditor.svelte';
   import { getTemplate } from '$lib/layout/templates';
   import { invalidateAll } from '$app/navigation';
-  import { updateSlotPhoto, clearSlotPhoto, insertBlankPage, updateProjectSlotGap, updateProjectPagePadding, addPageText } from '$lib/db';
+  import { updateSlotPhoto, clearSlotPhoto, insertBlankPage, updateProjectSlotGap, updateProjectPagePadding, updateProjectPageBgColor, addPageText } from '$lib/db';
   import { DEFAULT_TEXT_STYLE, serializeStyle } from '$lib/text/style';
 
   let { data } = $props();
@@ -16,6 +16,14 @@
   let slotGapPx = $state(data.project.slot_gap_px);
   // svelte-ignore state_referenced_locally
   let pagePaddingPx = $state(data.project.page_padding_px);
+  // svelte-ignore state_referenced_locally
+  let pageBgColor = $state(data.project.page_bg_color);
+
+  async function onPageBgChange(e: Event) {
+    const v = (e.currentTarget as HTMLInputElement).value;
+    pageBgColor = v;
+    await updateProjectPageBgColor(data.project.id, v);
+  }
 
   let gapSavingTimer: ReturnType<typeof setTimeout> | null = null;
   function onGapChange(e: Event) {
@@ -142,6 +150,11 @@
       <input type="range" min="0" max="60" step="1" value={pagePaddingPx} oninput={onPadChange} style="width: 160px;" />
       <span style="font-variant-numeric: tabular-nums; min-width: 3ch;">{pagePaddingPx}px</span>
     </label>
+    <label class="text-sm mt-1 flex items-center gap-2" style="color: var(--color-muted)">
+      page background:
+      <input type="color" bind:value={pageBgColor} oninput={onPageBgChange} style="width: 32px; height: 24px; border: 1px solid var(--color-line); border-radius: 3px;" />
+      <span style="font-family: var(--font-mono); font-size: 0.75rem;">{pageBgColor}</span>
+    </label>
 
     <div class="flex flex-col gap-6 mt-4">
       <button
@@ -187,6 +200,7 @@
               editingSlotIndex={editorOpen?.pageId === page.id ? editorOpen!.slotIndex : null}
               {slotGapPx}
               {pagePaddingPx}
+              {pageBgColor}
               texts={data.textsByPage.get(page.id) ?? []}
               editingTextId={editingTextId?.pageId === page.id ? editingTextId.textId : null}
               onEditText={(textId) => openTextEditor(page.id, textId)}

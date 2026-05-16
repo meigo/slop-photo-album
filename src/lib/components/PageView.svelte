@@ -47,8 +47,10 @@
     texts?: PageTextRow[];
     editingTextId?: number | null;
     onEditText?: (textId: number) => void;
+    /** Page background color (hex #rrggbb). Default white. */
+    pageBgColor?: string;
   }
-  let { templateId, slots, onSlotClick, onSwapPhoto, onAdjustCrop, onRemovePhoto, editingSlotIndex = null, slotGapPx = 2, pagePaddingPx = 0, pageTitle = null, events = [], weekStart = 1, texts = [], editingTextId = null, onEditText }: Props = $props();
+  let { templateId, slots, onSlotClick, onSwapPhoto, onAdjustCrop, onRemovePhoto, editingSlotIndex = null, slotGapPx = 2, pagePaddingPx = 0, pageTitle = null, events = [], weekStart = 1, texts = [], editingTextId = null, onEditText, pageBgColor = '#ffffff' }: Props = $props();
 
   let tpl = $derived<Template>(getTemplate(templateId));
   let aspectRatio = $derived(tpl.aspect === 'square' ? '1 / 1' : '4 / 3');
@@ -72,7 +74,7 @@
 
 <div
   class="relative w-full surface-card p-0 overflow-hidden"
-  style="aspect-ratio: {aspectRatio}; border: 1px solid var(--color-line);"
+  style="aspect-ratio: {aspectRatio}; border: 1px solid var(--color-line); background: {pageBgColor};"
 >
   {#each tpl.slots as slotLayout, i}
     {@const slot = orderedSlots[i]}
