@@ -43,26 +43,3 @@ export async function printWhenReady(): Promise<void> {
   }
 }
 
-/**
- * @deprecated The @page rule is now rendered statically in <svelte:head>
- * via the export routes — WKWebView ignores @page rules injected via JS
- * after page load. Left here only so existing imports don't break; will
- * be removed in a follow-up commit.
- */
-export function setPrintPageSize(_cssSize: string): void {
-  // no-op
-}
-
-/**
- * Inject (or replace) the @page rule for the print output. Browser uses
- * the most recently declared @page rule, so we replace any previous one.
- */
-export function setPrintPageSize(cssSize: string): void {
-  const id = 'print-page-size-style';
-  const existing = document.getElementById(id);
-  if (existing) existing.remove();
-  const style = document.createElement('style');
-  style.id = id;
-  style.textContent = `@media print { @page { size: ${cssSize}; margin: 0; } }`;
-  document.head.appendChild(style);
-}
