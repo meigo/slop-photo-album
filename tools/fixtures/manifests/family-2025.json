@@ -1,0 +1,2148 @@
+{
+  "schemaVersion": 1,
+  "name": "family-2025",
+  "year": 2025,
+  "generatedAt": "2026-05-17T20:42:45.363Z",
+  "generatorSeed": 1,
+  "defaults": {
+    "timezone": "+03:00",
+    "camera": {
+      "make": "Apple",
+      "model": "iPhone 13",
+      "lensModel": "iPhone 13 back dual wide camera"
+    }
+  },
+  "photos": [
+    {
+      "id": "2025_birthday_party_0001",
+      "filename": "IMG_20250113_150929.jpg",
+      "date": "2025:01:13 15:09:29",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "birthday_party",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 14 Pro",
+        "lensModel": "iPhone 14 Pro back triple camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid smartphone family photo, child's birthday party at home, parents and child around a small cake, wrapping paper, ordinary family snapshot, slightly cluttered background, realistic phone camera, imperfect framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3294703883
+    },
+    {
+      "id": "2025_school_morning_0002",
+      "filename": "IMG_20250114_084717.jpg",
+      "date": "2025:01:14 08:47:17",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "school_morning",
+      "peopleCount": 1,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid phone photo of a child eating breakfast before school, kitchen morning light, parent's hand visible holding a mug, realistic phone image",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 2345405883
+    },
+    {
+      "id": "2025_family_dinner_0003",
+      "filename": "IMG_20250115_215914.jpg",
+      "date": "2025:01:15 21:59:14",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "family_dinner",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid family dinner phone photo, two parents and a child around a table, warm kitchen light, food on plates, casual framing, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1388698731
+    },
+    {
+      "id": "2025_pet_photo_0000",
+      "filename": "IMG_20250131_221636.jpg",
+      "date": "2025:01:31 22:16:36",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a small dog in a kitchen, soft focus, candid moment",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 4272732016
+    },
+    {
+      "id": "2025_family_dinner_0006",
+      "filename": "IMG_20250202_211752.jpg",
+      "date": "2025:02:02 21:17:52",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "family_dinner",
+      "peopleCount": 3,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone snapshot of a small family eating pasta at home, parent helping a young child, ordinary moment, soft indoor light",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3025355065
+    },
+    {
+      "id": "2025_winter_walk_0005",
+      "filename": "IMG_20250212_124057.jpg",
+      "date": "2025:02:12 12:40:57",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "winter_walk",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "casual phone photo of two parents with a young child walking through a snowy forest path, late morning light, imperfect framing, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3946575760
+    },
+    {
+      "id": "2025_school_morning_0004",
+      "filename": "IMG_20250221_080715.jpg",
+      "date": "2025:02:21 08:07:15",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "school_morning",
+      "peopleCount": 1,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid phone photo of a child eating breakfast before school, kitchen morning light, parent's hand visible holding a mug, realistic phone image",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3718462708
+    },
+    {
+      "id": "2025_pet_photo_0008",
+      "filename": "IMG_20250303_205116.jpg",
+      "date": "2025:03:03 20:51:16",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 0,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 14 Pro",
+        "lensModel": "iPhone 14 Pro back triple camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a family cat on a couch, indoor light, slightly blurry, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3839589784
+    },
+    {
+      "id": "2025_spring_outdoor_0007",
+      "filename": "IMG_20250305_180923.jpg",
+      "date": "2025:03:05 18:09:23",
+      "timezone": "+03:00",
+      "gps": [
+        58.0588,
+        26.4969
+      ],
+      "locationLabel": "Otepää, Estonia",
+      "event": "spring_outdoor",
+      "peopleCount": 2,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone snapshot of a young couple with a small child looking at daffodils in a garden, soft daylight, slightly imperfect composition, realistic phone photo",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1392964936
+    },
+    {
+      "id": "2025_pet_photo_0010",
+      "filename": "IMG_20250317_114715.jpg",
+      "date": "2025:03:17 11:47:15",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a child hugging a family pet, warm indoor light, casual framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3736664104
+    },
+    {
+      "id": "2025_school_morning_0009",
+      "filename": "IMG_20250318_070708.jpg",
+      "date": "2025:03:18 07:07:08",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "school_morning",
+      "peopleCount": 1,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a child with a backpack ready for school, hallway light, hurried framing, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 2901714288
+    },
+    {
+      "id": "2025_spring_outdoor_0011",
+      "filename": "IMG_20250331_124351.jpg",
+      "date": "2025:03:31 12:43:51",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "spring_outdoor",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid phone photo of a small family in a park, early spring, bare trees beginning to bud, light jackets, mother and father with their child, casual framing, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3735629950
+    },
+    {
+      "id": "2025_messy_kitchen_0014",
+      "filename": "IMG_20250403_084723.jpg",
+      "date": "2025:04:03 08:47:23",
+      "timezone": "+03:00",
+      "gps": [
+        58.3776,
+        26.729
+      ],
+      "locationLabel": "Tartu, Estonia",
+      "event": "messy_kitchen",
+      "peopleCount": 0,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a slightly messy kitchen after a family meal, dishes in sink, ordinary family moment, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3526941841
+    },
+    {
+      "id": "2025_family_dinner_0012",
+      "filename": "IMG_20250403_182432.jpg",
+      "date": "2025:04:03 18:24:32",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "family_dinner",
+      "peopleCount": 2,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone snapshot of a small family eating pasta at home, parent helping a young child, ordinary moment, soft indoor light",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1340886621
+    },
+    {
+      "id": "2025_school_morning_0015",
+      "filename": "IMG_20250413_092014.jpg",
+      "date": "2025:04:13 09:20:14",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "school_morning",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid phone photo of a child eating breakfast before school, kitchen morning light, parent's hand visible holding a mug, realistic phone image",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3411641395
+    },
+    {
+      "id": "2025_spring_outdoor_0016",
+      "filename": "IMG_20250420_101925.jpg",
+      "date": "2025:04:20 10:19:25",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "spring_outdoor",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone snapshot of a young couple with a small child looking at daffodils in a garden, soft daylight, slightly imperfect composition, realistic phone photo",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1540855189
+    },
+    {
+      "id": "2025_family_dinner_0013",
+      "filename": "IMG_20250421_182318.jpg",
+      "date": "2025:04:21 18:23:18",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "family_dinner",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid family dinner phone photo, two parents and a child around a table, warm kitchen light, food on plates, casual framing, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3998495418
+    },
+    {
+      "id": "2025_birthday_party_0017",
+      "filename": "IMG_20250428_173438.jpg",
+      "date": "2025:04:28 17:34:38",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "birthday_party",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 14 Pro",
+        "lensModel": "iPhone 14 Pro back triple camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid smartphone family photo, child's birthday party at home, parents and child around a small cake, wrapping paper, ordinary family snapshot, slightly cluttered background, realistic phone camera, imperfect framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3497143506
+    },
+    {
+      "id": "2025_playground_0021",
+      "filename": "IMG_20250506_151409.jpg",
+      "date": "2025:05:06 15:14:09",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "playground",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 14 Pro",
+        "lensModel": "iPhone 14 Pro back triple camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone snapshot of two small children on a slide, mother visible in background, ordinary playground in Estonia, imperfect framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 82517148
+    },
+    {
+      "id": "2025_pet_photo_0019",
+      "filename": "IMG_20250512_191505.jpg",
+      "date": "2025:05:12 19:15:05",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a child hugging a family pet, warm indoor light, casual framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 63075629
+    },
+    {
+      "id": "2025_birthday_party_0024",
+      "filename": "IMG_20250518_185129.jpg",
+      "date": "2025:05:18 18:51:29",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "birthday_party",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid smartphone family photo, child's birthday party at home, parents and child around a small cake, wrapping paper, ordinary family snapshot, slightly cluttered background, realistic phone camera, imperfect framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1714104560
+    },
+    {
+      "id": "2025_family_dinner_0020",
+      "filename": "IMG_20250519_202342.jpg",
+      "date": "2025:05:19 20:23:42",
+      "timezone": "+03:00",
+      "gps": [
+        58.3776,
+        26.729
+      ],
+      "locationLabel": "Tartu, Estonia",
+      "event": "family_dinner",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid family dinner phone photo, two parents and a child around a table, warm kitchen light, food on plates, casual framing, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 4148492471
+    },
+    {
+      "id": "2025_spring_outdoor_0018",
+      "filename": "IMG_20250520_123255.jpg",
+      "date": "2025:05:20 12:32:55",
+      "timezone": "+03:00",
+      "gps": [
+        58.3776,
+        26.729
+      ],
+      "locationLabel": "Tartu, Estonia",
+      "event": "spring_outdoor",
+      "peopleCount": 2,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid phone photo of a small family in a park, early spring, bare trees beginning to bud, light jackets, mother and father with their child, casual framing, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 744464782
+    },
+    {
+      "id": "2025_spring_outdoor_0022",
+      "filename": "IMG_20250521_154738.jpg",
+      "date": "2025:05:21 15:47:38",
+      "timezone": "+03:00",
+      "gps": [
+        58.3776,
+        26.729
+      ],
+      "locationLabel": "Tartu, Estonia",
+      "event": "spring_outdoor",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "casual phone photo of a small family on a walk along a path with new green leaves, light jackets, ordinary family album snapshot",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 96593750
+    },
+    {
+      "id": "2025_family_dinner_0023",
+      "filename": "IMG_20250526_203322.jpg",
+      "date": "2025:05:26 20:33:22",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "family_dinner",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid family dinner phone photo, two parents and a child around a table, warm kitchen light, food on plates, casual framing, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 2939553923
+    },
+    {
+      "id": "2025_pet_photo_0032",
+      "filename": "IMG_20250602_125618.jpg",
+      "date": "2025:06:02 12:56:18",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 1,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a child hugging a family pet, warm indoor light, casual framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 620033969
+    },
+    {
+      "id": "2025_pet_photo_0030",
+      "filename": "IMG_20250605_212357.jpg",
+      "date": "2025:06:05 21:23:57",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 1,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a small dog in a kitchen, soft focus, candid moment",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1846110825
+    },
+    {
+      "id": "2025_playground_0033",
+      "filename": "IMG_20250615_112454.jpg",
+      "date": "2025:06:15 11:24:54",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "playground",
+      "peopleCount": 2,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone snapshot of two small children on a slide, mother visible in background, ordinary playground in Estonia, imperfect framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 4280778560
+    },
+    {
+      "id": "2025_beach_day_0028",
+      "filename": "IMG_20250615_113701.jpg",
+      "date": "2025:06:15 11:37:01",
+      "timezone": "+03:00",
+      "gps": [
+        58.3796,
+        24.5043
+      ],
+      "locationLabel": "Pärnu beach, Estonia",
+      "event": "beach_day",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone snapshot of a small family at a sandy Baltic beach, parents and one or two children, harsh midday sun, casual framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 769687593
+    },
+    {
+      "id": "2025_playground_0027",
+      "filename": "IMG_20250618_120957.jpg",
+      "date": "2025:06:18 12:09:57",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "playground",
+      "peopleCount": 1,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid phone photo of a child on a playground swing, parent standing beside, casual framing, natural daylight, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 2125797562
+    },
+    {
+      "id": "2025_playground_0029",
+      "filename": "IMG_20250618_143634.jpg",
+      "date": "2025:06:18 14:36:34",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "playground",
+      "peopleCount": 3,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone snapshot of two small children on a slide, mother visible in background, ordinary playground in Estonia, imperfect framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1684245011
+    },
+    {
+      "id": "2025_beach_day_0026",
+      "filename": "IMG_20250619_143526.jpg",
+      "date": "2025:06:19 14:35:26",
+      "timezone": "+03:00",
+      "gps": [
+        58.3796,
+        24.5043
+      ],
+      "locationLabel": "Pärnu beach, Estonia",
+      "event": "beach_day",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid family beach photo on the Baltic coast, mother and father with a child playing in the sand, bright sunlight, slightly overexposed, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 4030379664
+    },
+    {
+      "id": "2025_pet_photo_0025",
+      "filename": "IMG_20250624_091142.jpg",
+      "date": "2025:06:24 09:11:42",
+      "timezone": "+03:00",
+      "gps": [
+        58.0588,
+        26.4969
+      ],
+      "locationLabel": "Otepää, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 0,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a child hugging a family pet, warm indoor light, casual framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 4111692375
+    },
+    {
+      "id": "2025_summer_trip_0031",
+      "filename": "IMG_20250624_110047.jpg",
+      "date": "2025:06:24 11:00:47",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "summer_trip",
+      "peopleCount": 4,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid smartphone photo of a small family on a summer trip in Estonia, near a river, mother father and a child, casual framing, natural light, realistic phone photo",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1370108971
+    },
+    {
+      "id": "2025_playground_0040",
+      "filename": "IMG_20250702_130537.jpg",
+      "date": "2025:07:02 13:05:37",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "playground",
+      "peopleCount": 3,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone snapshot of two small children on a slide, mother visible in background, ordinary playground in Estonia, imperfect framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 2081427230
+    },
+    {
+      "id": "2025_pet_photo_0042",
+      "filename": "IMG_20250706_081037.jpg",
+      "date": "2025:07:06 08:10:37",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 1,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a small dog in a kitchen, soft focus, candid moment",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1947277151
+    },
+    {
+      "id": "2025_pet_photo_0041",
+      "filename": "IMG_20250709_210220.jpg",
+      "date": "2025:07:09 21:02:20",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 14 Pro",
+        "lensModel": "iPhone 14 Pro back triple camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a child hugging a family pet, warm indoor light, casual framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1694361623
+    },
+    {
+      "id": "2025_playground_0037",
+      "filename": "IMG_20250711_151308.jpg",
+      "date": "2025:07:11 15:13:08",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "playground",
+      "peopleCount": 1,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid phone photo of a child on a playground swing, parent standing beside, casual framing, natural daylight, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1249623352
+    },
+    {
+      "id": "2025_playground_0038",
+      "filename": "IMG_20250713_124632.jpg",
+      "date": "2025:07:13 12:46:32",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "playground",
+      "peopleCount": 1,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 14 Pro",
+        "lensModel": "iPhone 14 Pro back triple camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid phone photo of a child on a playground swing, parent standing beside, casual framing, natural daylight, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 20355530
+    },
+    {
+      "id": "2025_summer_trip_0035",
+      "filename": "IMG_20250715_171848.jpg",
+      "date": "2025:07:15 17:18:48",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "summer_trip",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone snapshot of a young couple with a child playing outside on a summer day, slightly imperfect composition, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 805070556
+    },
+    {
+      "id": "2025_beach_day_0044",
+      "filename": "IMG_20250718_161353.jpg",
+      "date": "2025:07:18 16:13:53",
+      "timezone": "+03:00",
+      "gps": [
+        58.3796,
+        24.5043
+      ],
+      "locationLabel": "Pärnu beach, Estonia",
+      "event": "beach_day",
+      "peopleCount": 3,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone snapshot of a small family at a sandy Baltic beach, parents and one or two children, harsh midday sun, casual framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 572289314
+    },
+    {
+      "id": "2025_playground_0034",
+      "filename": "IMG_20250720_155422.jpg",
+      "date": "2025:07:20 15:54:22",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "playground",
+      "peopleCount": 3,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid phone photo of a child on a playground swing, parent standing beside, casual framing, natural daylight, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1931357778
+    },
+    {
+      "id": "2025_beach_day_0043",
+      "filename": "IMG_20250726_115232.jpg",
+      "date": "2025:07:26 11:52:32",
+      "timezone": "+03:00",
+      "gps": [
+        58.3796,
+        24.5043
+      ],
+      "locationLabel": "Pärnu beach, Estonia",
+      "event": "beach_day",
+      "peopleCount": 3,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone snapshot of a small family at a sandy Baltic beach, parents and one or two children, harsh midday sun, casual framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 2197028564
+    },
+    {
+      "id": "2025_playground_0036",
+      "filename": "IMG_20250730_163029.jpg",
+      "date": "2025:07:30 16:30:29",
+      "timezone": "+03:00",
+      "gps": [
+        58.3776,
+        26.729
+      ],
+      "locationLabel": "Tartu, Estonia",
+      "event": "playground",
+      "peopleCount": 1,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 14 Pro",
+        "lensModel": "iPhone 14 Pro back triple camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid phone photo of a child on a playground swing, parent standing beside, casual framing, natural daylight, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 835258271
+    },
+    {
+      "id": "2025_summer_trip_0039",
+      "filename": "IMG_20250731_133631.jpg",
+      "date": "2025:07:31 13:36:31",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "summer_trip",
+      "peopleCount": 3,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone snapshot of a young couple with a child playing outside on a summer day, slightly imperfect composition, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 292140649
+    },
+    {
+      "id": "2025_birthday_party_0049",
+      "filename": "IMG_20250803_172115.jpg",
+      "date": "2025:08:03 17:21:15",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "birthday_party",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 14 Pro",
+        "lensModel": "iPhone 14 Pro back triple camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a small child blowing out birthday candles, parents in soft focus behind, warm kitchen light, casual home setting",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1433000954
+    },
+    {
+      "id": "2025_summer_trip_0046",
+      "filename": "IMG_20250804_133923.jpg",
+      "date": "2025:08:04 13:39:23",
+      "timezone": "+03:00",
+      "gps": [
+        58.3776,
+        26.729
+      ],
+      "locationLabel": "Tartu, Estonia",
+      "event": "summer_trip",
+      "peopleCount": 3,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone snapshot of a young couple with a child playing outside on a summer day, slightly imperfect composition, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3040377671
+    },
+    {
+      "id": "2025_beach_day_0048",
+      "filename": "IMG_20250808_113933.jpg",
+      "date": "2025:08:08 11:39:33",
+      "timezone": "+03:00",
+      "gps": [
+        58.3796,
+        24.5043
+      ],
+      "locationLabel": "Pärnu beach, Estonia",
+      "event": "beach_day",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone snapshot of a small family at a sandy Baltic beach, parents and one or two children, harsh midday sun, casual framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1666264794
+    },
+    {
+      "id": "2025_family_dinner_0047",
+      "filename": "IMG_20250811_191031.jpg",
+      "date": "2025:08:11 19:10:31",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "family_dinner",
+      "peopleCount": 2,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid family dinner phone photo, two parents and a child around a table, warm kitchen light, food on plates, casual framing, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1413900033
+    },
+    {
+      "id": "2025_beach_day_0045",
+      "filename": "IMG_20250812_142820.jpg",
+      "date": "2025:08:12 14:28:20",
+      "timezone": "+03:00",
+      "gps": [
+        58.3796,
+        24.5043
+      ],
+      "locationLabel": "Pärnu beach, Estonia",
+      "event": "beach_day",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone snapshot of a small family at a sandy Baltic beach, parents and one or two children, harsh midday sun, casual framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 4216886642
+    },
+    {
+      "id": "2025_summer_trip_0051",
+      "filename": "IMG_20250820_170038.jpg",
+      "date": "2025:08:20 17:00:38",
+      "timezone": "+03:00",
+      "gps": [
+        58.0588,
+        26.4969
+      ],
+      "locationLabel": "Otepää, Estonia",
+      "event": "summer_trip",
+      "peopleCount": 3,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid smartphone photo of a small family on a summer trip in Estonia, near a river, mother father and a child, casual framing, natural light, realistic phone photo",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 978472542
+    },
+    {
+      "id": "2025_family_dinner_0053",
+      "filename": "IMG_20250821_201803.jpg",
+      "date": "2025:08:21 20:18:03",
+      "timezone": "+03:00",
+      "gps": [
+        58.0588,
+        26.4969
+      ],
+      "locationLabel": "Otepää, Estonia",
+      "event": "family_dinner",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid family dinner phone photo, two parents and a child around a table, warm kitchen light, food on plates, casual framing, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 2931688919
+    },
+    {
+      "id": "2025_pet_photo_0050",
+      "filename": "IMG_20250827_202624.jpg",
+      "date": "2025:08:27 20:26:24",
+      "timezone": "+03:00",
+      "gps": [
+        58.0588,
+        26.4969
+      ],
+      "locationLabel": "Otepää, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 0,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a child hugging a family pet, warm indoor light, casual framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3161283517
+    },
+    {
+      "id": "2025_summer_trip_0052",
+      "filename": "IMG_20250828_112302.jpg",
+      "date": "2025:08:28 11:23:02",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "summer_trip",
+      "peopleCount": 3,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "casual phone photo of a family of three or four on a summer hike, t-shirts, warm afternoon light, ordinary family album snapshot",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3717891754
+    },
+    {
+      "id": "2025_family_dinner_0057",
+      "filename": "IMG_20250902_194939.jpg",
+      "date": "2025:09:02 19:49:39",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "family_dinner",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid family dinner phone photo, two parents and a child around a table, warm kitchen light, food on plates, casual framing, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1922238318
+    },
+    {
+      "id": "2025_autumn_walk_0055",
+      "filename": "IMG_20250913_140856.jpg",
+      "date": "2025:09:13 14:08:56",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "autumn_walk",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid phone photo of a small family among autumn leaves, mother and father with a young child, knitted hats, yellow and red foliage, low afternoon sun, realistic phone camera, slight lens flare",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1896117908
+    },
+    {
+      "id": "2025_autumn_walk_0060",
+      "filename": "IMG_20250919_100720.jpg",
+      "date": "2025:09:19 10:07:20",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "autumn_walk",
+      "peopleCount": 3,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid phone photo of a small family among autumn leaves, mother and father with a young child, knitted hats, yellow and red foliage, low afternoon sun, realistic phone camera, slight lens flare",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 2674695448
+    },
+    {
+      "id": "2025_autumn_walk_0056",
+      "filename": "IMG_20250920_175813.jpg",
+      "date": "2025:09:20 17:58:13",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "autumn_walk",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone snapshot of two parents and their child kicking through fallen leaves in a park, overcast autumn light, casual framing, realistic phone image",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1062579696
+    },
+    {
+      "id": "2025_birthday_party_0058",
+      "filename": "IMG_20250923_184203.jpg",
+      "date": "2025:09:23 18:42:03",
+      "timezone": "+03:00",
+      "gps": [
+        58.3776,
+        26.729
+      ],
+      "locationLabel": "Tartu, Estonia",
+      "event": "birthday_party",
+      "peopleCount": 3,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 14 Pro",
+        "lensModel": "iPhone 14 Pro back triple camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid smartphone family photo, child's birthday party at home, parents and child around a small cake, wrapping paper, ordinary family snapshot, slightly cluttered background, realistic phone camera, imperfect framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1813326373
+    },
+    {
+      "id": "2025_family_dinner_0059",
+      "filename": "IMG_20250929_205410.jpg",
+      "date": "2025:09:29 20:54:10",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "family_dinner",
+      "peopleCount": 4,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid family dinner phone photo, two parents and a child around a table, warm kitchen light, food on plates, casual framing, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 2011974950
+    },
+    {
+      "id": "2025_family_dinner_0054",
+      "filename": "IMG_20250929_210746.jpg",
+      "date": "2025:09:29 21:07:46",
+      "timezone": "+03:00",
+      "gps": [
+        58.3776,
+        26.729
+      ],
+      "locationLabel": "Tartu, Estonia",
+      "event": "family_dinner",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone snapshot of a small family eating pasta at home, parent helping a young child, ordinary moment, soft indoor light",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1545638353
+    },
+    {
+      "id": "2025_autumn_walk_0065",
+      "filename": "IMG_20251007_145832.jpg",
+      "date": "2025:10:07 14:58:32",
+      "timezone": "+03:00",
+      "gps": [
+        58.3776,
+        26.729
+      ],
+      "locationLabel": "Tartu, Estonia",
+      "event": "autumn_walk",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 14 Pro",
+        "lensModel": "iPhone 14 Pro back triple camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "casual family phone photo, autumn forest path, parents with a small child, warm jackets, ordinary family album snapshot",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 2300716302
+    },
+    {
+      "id": "2025_messy_kitchen_0062",
+      "filename": "IMG_20251017_153506.jpg",
+      "date": "2025:10:17 15:35:06",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "messy_kitchen",
+      "peopleCount": 1,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a child making a mess with breakfast cereal, kitchen counter, candid morning light, realistic phone image",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 2959273107
+    },
+    {
+      "id": "2025_autumn_walk_0061",
+      "filename": "IMG_20251022_162828.jpg",
+      "date": "2025:10:22 16:28:28",
+      "timezone": "+03:00",
+      "gps": [
+        58.3776,
+        26.729
+      ],
+      "locationLabel": "Tartu, Estonia",
+      "event": "autumn_walk",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "casual family phone photo, autumn forest path, parents with a small child, warm jackets, ordinary family album snapshot",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 308169599
+    },
+    {
+      "id": "2025_family_dinner_0064",
+      "filename": "IMG_20251025_215403.jpg",
+      "date": "2025:10:25 21:54:03",
+      "timezone": "+03:00",
+      "gps": [
+        58.3776,
+        26.729
+      ],
+      "locationLabel": "Tartu, Estonia",
+      "event": "family_dinner",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 14 Pro",
+        "lensModel": "iPhone 14 Pro back triple camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid family dinner phone photo, two parents and a child around a table, warm kitchen light, food on plates, casual framing, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1697494766
+    },
+    {
+      "id": "2025_pet_photo_0066",
+      "filename": "IMG_20251026_195553.jpg",
+      "date": "2025:10:26 19:55:53",
+      "timezone": "+03:00",
+      "gps": [
+        58.0588,
+        26.4969
+      ],
+      "locationLabel": "Otepää, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 1,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a family cat on a couch, indoor light, slightly blurry, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 2942269631
+    },
+    {
+      "id": "2025_birthday_party_0063",
+      "filename": "IMG_20251030_175445.jpg",
+      "date": "2025:10:30 17:54:45",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "birthday_party",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 14 Pro",
+        "lensModel": "iPhone 14 Pro back triple camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid smartphone family photo, child's birthday party at home, parents and child around a small cake, wrapping paper, ordinary family snapshot, slightly cluttered background, realistic phone camera, imperfect framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3777593059
+    },
+    {
+      "id": "2025_autumn_walk_0070",
+      "filename": "IMG_20251102_111436.jpg",
+      "date": "2025:11:02 11:14:36",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "autumn_walk",
+      "peopleCount": 3,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid phone photo of a small family among autumn leaves, mother and father with a young child, knitted hats, yellow and red foliage, low afternoon sun, realistic phone camera, slight lens flare",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 4014485404
+    },
+    {
+      "id": "2025_pet_photo_0069",
+      "filename": "IMG_20251112_151723.jpg",
+      "date": "2025:11:12 15:17:23",
+      "timezone": "+03:00",
+      "gps": [
+        58.3776,
+        26.729
+      ],
+      "locationLabel": "Tartu, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 1,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a small dog in a kitchen, soft focus, candid moment",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 2128897839
+    },
+    {
+      "id": "2025_birthday_party_0068",
+      "filename": "IMG_20251113_143809.jpg",
+      "date": "2025:11:13 14:38:09",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "birthday_party",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid smartphone family photo, child's birthday party at home, parents and child around a small cake, wrapping paper, ordinary family snapshot, slightly cluttered background, realistic phone camera, imperfect framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3693466555
+    },
+    {
+      "id": "2025_birthday_party_0067",
+      "filename": "IMG_20251119_154410.jpg",
+      "date": "2025:11:19 15:44:10",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "birthday_party",
+      "peopleCount": 3,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid smartphone family photo, child's birthday party at home, parents and child around a small cake, wrapping paper, ordinary family snapshot, slightly cluttered background, realistic phone camera, imperfect framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 859931955
+    },
+    {
+      "id": "2025_birthday_party_0071",
+      "filename": "IMG_20251206_144435.jpg",
+      "date": "2025:12:06 14:44:35",
+      "timezone": "+03:00",
+      "gps": [
+        58.0588,
+        26.4969
+      ],
+      "locationLabel": "Otepää, Estonia",
+      "event": "birthday_party",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "candid smartphone family photo, child's birthday party at home, parents and child around a small cake, wrapping paper, ordinary family snapshot, slightly cluttered background, realistic phone camera, imperfect framing",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 2926510147
+    },
+    {
+      "id": "2025_pet_photo_0072",
+      "filename": "IMG_20251208_111916.jpg",
+      "date": "2025:12:08 11:19:16",
+      "timezone": "+03:00",
+      "gps": [
+        58.0588,
+        26.4969
+      ],
+      "locationLabel": "Otepää, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 1,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a family cat on a couch, indoor light, slightly blurry, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1092386533
+    },
+    {
+      "id": "2025_christmas_evening_0078",
+      "filename": "IMG_20251210_213822.jpg",
+      "date": "2025:12:10 21:38:22",
+      "timezone": "+03:00",
+      "gps": [
+        58.3776,
+        26.729
+      ],
+      "locationLabel": "Tartu, Estonia",
+      "event": "christmas_evening",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a small family around a Christmas table in Estonia, warm tungsten light, ordinary family moment, slightly cluttered home setting",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 67488049
+    },
+    {
+      "id": "2025_messy_kitchen_0076",
+      "filename": "IMG_20251211_134446.jpg",
+      "date": "2025:12:11 13:44:46",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "messy_kitchen",
+      "peopleCount": 1,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a child making a mess with breakfast cereal, kitchen counter, candid morning light, realistic phone image",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 4264483480
+    },
+    {
+      "id": "2025_messy_kitchen_0074",
+      "filename": "IMG_20251212_213024.jpg",
+      "date": "2025:12:12 21:30:24",
+      "timezone": "+03:00",
+      "gps": [
+        58.3776,
+        26.729
+      ],
+      "locationLabel": "Tartu, Estonia",
+      "event": "messy_kitchen",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a slightly messy kitchen after a family meal, dishes in sink, ordinary family moment, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1736748106
+    },
+    {
+      "id": "2025_messy_kitchen_0079",
+      "filename": "IMG_20251213_104620.jpg",
+      "date": "2025:12:13 10:46:20",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "messy_kitchen",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a slightly messy kitchen after a family meal, dishes in sink, ordinary family moment, realistic phone camera",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3310525917
+    },
+    {
+      "id": "2025_christmas_evening_0075",
+      "filename": "IMG_20251220_185707.jpg",
+      "date": "2025:12:20 18:57:07",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "christmas_evening",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a small family around a Christmas table in Estonia, warm tungsten light, ordinary family moment, slightly cluttered home setting",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 511472440
+    },
+    {
+      "id": "2025_pet_photo_0077",
+      "filename": "IMG_20251221_124827.jpg",
+      "date": "2025:12:21 12:48:27",
+      "timezone": "+03:00",
+      "gps": [
+        58.3776,
+        26.729
+      ],
+      "locationLabel": "Tartu, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a small dog in a kitchen, soft focus, candid moment",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 2906839848
+    },
+    {
+      "id": "2025_christmas_evening_0073",
+      "filename": "IMG_20251221_211842.jpg",
+      "date": "2025:12:21 21:18:42",
+      "timezone": "+03:00",
+      "gps": [
+        58.3776,
+        26.729
+      ],
+      "locationLabel": "Tartu, Estonia",
+      "event": "christmas_evening",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 14 Pro",
+        "lensModel": "iPhone 14 Pro back triple camera"
+      },
+      "style": "realistic",
+      "quality": [
+        "good"
+      ],
+      "prompt": "phone photo of a small family around a Christmas table in Estonia, warm tungsten light, ordinary family moment, slightly cluttered home setting",
+      "negativePrompt": "studio portrait, fashion shoot, cinematic lighting, perfect skin, airbrushed, stock photo, advertisement, surreal, extra fingers, distorted face, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 338261073
+    }
+  ]
+}
