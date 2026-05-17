@@ -7,8 +7,10 @@ Generates synthetic family-album folders for testing the CV/EXIF/selection pipel
 ```
 generate-manifest → run-comfy → postprocess → write-exif
                                                   ↓
-                              sample-albums/family-2025/2025/MM/IMG_*.jpg
+                              sample-albums/family-2025/IMG_*.jpg
 ```
+
+Output is a single flat folder of JPEGs — same as what a phone import dumps. The app under test reads EXIF and organizes from there; pre-sorting into `YYYY/MM/` would defeat the test.
 
 ## Prerequisites
 
@@ -59,7 +61,7 @@ npm run manifest -- --year 2025 --count 80 --seed 1 --name family-2025
 # 2. Render via ComfyUI → raw PNGs
 npm run comfy -- --manifest manifests/family-2025.json --workflow workflow.json --overrides workflow.overrides.json --out ../../sample-albums/family-2025/raw
 
-# 3. Sharp pass: JPEG re-encode + quality effects → final folder structure
+# 3. Sharp pass: JPEG re-encode + quality effects → flat folder of JPEGs
 npm run postprocess -- --manifest manifests/family-2025.json --raw ../../sample-albums/family-2025/raw --out ../../sample-albums/family-2025
 
 # 4. Write camera-style EXIF onto the JPEGs

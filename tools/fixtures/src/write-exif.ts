@@ -27,8 +27,7 @@ async function exists(path: string): Promise<boolean> {
 }
 
 function pathFor(photo: PhotoEntry): string {
-  const monthFolder = photo.date.slice(0, 7).replace(":", "/");
-  return join(albumDir, monthFolder, photo.filename);
+  return join(albumDir, photo.filename);
 }
 
 async function writeExif(photo: PhotoEntry): Promise<void> {

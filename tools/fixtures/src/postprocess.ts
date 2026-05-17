@@ -48,9 +48,9 @@ async function processOne(photo: PhotoEntry): Promise<"ok" | "missing"> {
   if (quality.includes("dark")) pipeline = pipeline.linear(0.4, -20);
   if (quality.includes("overexposed")) pipeline = pipeline.linear(1.6, 30);
 
-  const monthFolder = photo.date.slice(0, 7).replace(":", "/");
-  const dest = join(outDir, monthFolder, photo.filename);
-  await mkdir(resolve(dest, ".."), { recursive: true });
+  // Flat layout: this mimics what a phone import dumps into a single folder.
+  // The app under test is expected to sort by EXIF, not folder structure.
+  const dest = join(outDir, photo.filename);
   await pipeline.jpeg({ quality: jpegQuality, mozjpeg: true }).toFile(dest);
   return "ok";
 }
