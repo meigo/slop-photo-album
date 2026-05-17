@@ -102,30 +102,11 @@ export async function exportPagesToPdf(opts: ExportOptions): Promise<string | nu
         embedWebFont: false,
         fixSvgXmlDecode: false,
       },
-      fetchFn: async (url) => {
-        const tStart = performance.now();
-        const cached = dataUrlCache.get(url);
-        if (cached) {
-          console.log(`[pdf-export]   cache hit (${Math.round(performance.now() - tStart)}ms)`);
-          return cached;
-        }
-        const path = imagePathMap?.get(url);
-        if (path) {
-          try {
-            const dataUrl = await invoke<string>('read_image_data_url', { path });
-            const dt = Math.round(performance.now() - tStart);
-            const fname = path.split('/').slice(-1)[0];
-            console.log(`[pdf-export]   rust read ${dt}ms ${fname}`);
-            dataUrlCache.set(url, dataUrl);
-            return dataUrl;
-          } catch (e) {
-            console.warn('[pdf-export] read_image_data_url failed for', path, e);
-            return false;
-          }
-        }
-        console.log(`[pdf-export]   MISS (map has ${imagePathMap?.size ?? 0}): ${url.slice(0, 100)}`);
-        return false;
-      },
+      // Note: routing photo reads through a Tauri command turned out to
+      // sometimes produce data URLs that the SVG <foreignObject> didn't
+      // render (photos missing in the saved PDF). Falling back to
+      // modern-screenshot's built-in fetch+base64 path until we can
+      // root-cause that.
       progress: (cur, total) =>
         console.log(`[pdf-export]   asset ${cur}/${total}`),
     });
