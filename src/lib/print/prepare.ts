@@ -95,16 +95,20 @@ export async function exportPagesToPdf(opts: ExportOptions): Promise<string | nu
       scale,
       backgroundColor: null,
       timeout: 20000,
-      // Route asset URLs through the read_image_data_url Tauri command —
-      // Rust reads + base64-encodes the file ~10-20× faster than JS
-      // fetch + btoa. Cached so each photo is read at most once.
       fetchFn: async (url) => {
+        const tStart = performance.now();
         const cached = dataUrlCache.get(url);
-        if (cached) return cached;
+        if (cached) {
+          console.log(`[pdf-export]   cache hit (${Math.round(performance.now() - tStart)}ms)`);
+          return cached;
+        }
         const path = imagePathMap?.get(url);
         if (path) {
           try {
             const dataUrl = await invoke<string>('read_image_data_url', { path });
+            const dt = Math.round(performance.now() - tStart);
+            const fname = path.split('/').slice(-1)[0];
+            console.log(`[pdf-export]   rust read ${dt}ms ${fname}`);
             dataUrlCache.set(url, dataUrl);
             return dataUrl;
           } catch (e) {
@@ -112,6 +116,7 @@ export async function exportPagesToPdf(opts: ExportOptions): Promise<string | nu
             return false;
           }
         }
+        console.log(`[pdf-export]   MISS (map has ${imagePathMap?.size ?? 0}): ${url.slice(0, 100)}`);
         return false;
       },
       progress: (cur, total) =>
