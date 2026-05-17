@@ -100,10 +100,11 @@
     align-items: center;
     justify-content: center;
   }
+  /* Letterbox: width is min(paper-width, paper-height × page-aspect) so
+     the page fits inside the paper without overflowing either axis. */
   .page-letterbox {
+    width: min(100%, calc(100% * var(--page-aspect) / var(--paper-aspect)));
     aspect-ratio: var(--page-aspect);
-    max-width: 100%;
-    max-height: 100%;
   }
 
   @media print {

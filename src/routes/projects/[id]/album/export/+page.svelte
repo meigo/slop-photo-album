@@ -98,11 +98,12 @@
     justify-content: center;
   }
   /* Letterbox: the rendered page sits inside the paper at its own
-     template aspect; if aspects differ, white space fills the rest. */
+     template aspect; if aspects differ, white space fills the rest.
+     Width is min(paper-width, paper-height × page-aspect) so the page
+     fits without overflowing either axis. */
   .page-letterbox {
+    width: min(100%, calc(100% * var(--page-aspect) / var(--paper-aspect)));
     aspect-ratio: var(--page-aspect);
-    max-width: 100%;
-    max-height: 100%;
   }
 
   @media print {
