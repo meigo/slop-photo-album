@@ -10,7 +10,14 @@
   let exporting = $state(false);
   let savedPath = $state<string | null>(null);
   let error = $state<string | null>(null);
+  let quality = $state<'low' | 'medium' | 'high'>('medium');
   let paper = $derived(paperForAspect(data.project.page_aspect));
+
+  function qualityToParams(q: 'low' | 'medium' | 'high'): { scale: number; jpegQuality: number } {
+    if (q === 'low')  return { scale: 2, jpegQuality: 0.85 };
+    if (q === 'high') return { scale: 5, jpegQuality: 0.98 };
+    return { scale: 4, jpegQuality: 0.92 };
+  }
   let pageAspect = $derived<'landscape' | 'portrait' | 'square' | null>(
     (data.project.page_aspect === 'landscape' || data.project.page_aspect === 'portrait' || data.project.page_aspect === 'square')
       ? data.project.page_aspect
@@ -29,11 +36,14 @@
     error = null;
     try {
       const { w, h } = parseMm(paper.cssSize);
+      const { scale, jpegQuality } = qualityToParams(quality);
       const path = await exportPagesToPdf({
         pageSelector: '.print-page',
         paperWidthMm: w,
         paperHeightMm: h,
         filename: `${data.project.name} — album`,
+        scale,
+        jpegQuality,
       });
       if (path) savedPath = path;
     } catch (e) {
@@ -62,6 +72,14 @@
       <span class="text-sm" style="color: var(--color-muted)">
         Paper: A4 {data.project.page_aspect ?? 'landscape (default)'}. Change the page format on the album review page.
       </span>
+      <label class="text-sm flex items-center gap-2">
+        Quality:
+        <select bind:value={quality} class="input-base" style="padding: 0.25rem 0.5rem; width: auto;">
+          <option value="low">Low (~150 DPI, smaller file)</option>
+          <option value="medium">Medium (~340 DPI)</option>
+          <option value="high">High (~430 DPI, larger file)</option>
+        </select>
+      </label>
       <button type="button" class="btn-primary flex items-center gap-2" style="width: auto; margin-left: auto;" onclick={exportPdf} disabled={exporting}>
         <Printer size={16} />
         {exporting ? 'Generating PDF…' : 'Save as PDF'}
