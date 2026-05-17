@@ -9,7 +9,6 @@
   import { invalidateAll } from '$app/navigation';
   import { updateSlotPhoto, clearSlotPhoto, insertBlankPage, updateProjectSlotGap, updateProjectPagePadding, updateProjectPageBgColor, updateProjectPageAspect, updateProjectWeekStart, addPageText } from '$lib/db';
   import { autoBalancePageColors } from '$lib/color/match';
-  import { Wand2 } from '@lucide/svelte';
   import { DEFAULT_TEXT_STYLE, serializeStyle } from '$lib/text/style';
 
   let { data } = $props();
@@ -132,11 +131,11 @@
 
   let balancing = $state<number | null>(null);
 
-  async function autoBalance(pageId: number, templateId: string) {
+  async function balanceFromReference(pageId: number, templateId: string, referenceSlotIndex: number) {
     balancing = pageId;
     try {
       const slots = data.slotsByPage.get(pageId) ?? [];
-      await autoBalancePageColors({ pageId, templateId, slots });
+      await autoBalancePageColors({ pageId, templateId, slots, referenceSlotIndex });
       await invalidateAll();
     } finally {
       balancing = null;
@@ -240,6 +239,7 @@
               onSwapPhoto={(i) => openPicker(page.id, i, page.title ?? '')}
               onAdjustCrop={(i) => openEditor(page.id, i)}
               onRemovePhoto={(i) => removePhoto(page.id, i)}
+              onUseAsReference={(i) => balanceFromReference(page.id, page.template_id, i)}
               editingSlotIndex={editorOpen?.pageId === page.id ? editorOpen!.slotIndex : null}
               {slotGapPx}
               {pagePaddingPx}
@@ -303,17 +303,9 @@
               isFirst={idx === 0}
               isLast={idx === data.pages.length - 1}
             />
-            <button
-              type="button"
-              class="btn-secondary flex items-center gap-1"
-              style="font-size: 0.75rem; padding: 0.25rem 0.5rem;"
-              title="Match colors across photos on this page"
-              onclick={() => autoBalance(page.id, page.template_id)}
-              disabled={balancing !== null}
-            >
-              <Wand2 size={12} />
-              {balancing === page.id ? 'Balancing…' : 'Auto-balance'}
-            </button>
+            {#if balancing === page.id}
+              <span class="text-sm" style="color: var(--color-muted)">Balancing…</span>
+            {/if}
             <button
               type="button"
               class="btn-secondary"

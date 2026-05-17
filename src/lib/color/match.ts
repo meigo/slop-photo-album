@@ -47,22 +47,26 @@ function autoTransformFor(slot: SlotForMatch, templateId: string): SlotTransform
 }
 
 /**
- * Analyze every filled slot on a page, compute the page-wide average
- * RGB, and derive per-slot warmth + brightness corrections that pull
- * each photo's mean color toward that average. Persists the updated
- * transforms via updateSlotTransform.
+ * Use one slot's photo as the color reference and pull every other
+ * filled slot on the page toward it. The reference itself gets its
+ * warmth + brightness reset to identity (0, 1) — it's the truth, not
+ * something to be adjusted.
  *
- * Returns the number of slots adjusted.
+ * Returns the number of non-reference slots adjusted.
  */
 export async function autoBalancePageColors(args: {
   pageId: number;
   templateId: string;
   slots: SlotForMatch[];
+  referenceSlotIndex: number;
 }): Promise<number> {
   const valid = args.slots.filter((s) => s.path !== null && s.photo_id !== null);
-  if (valid.length < 2) return 0;
+  if (valid.length < 1) return 0;
 
-  // Analyze. Use the cached thumbnail when available (much faster).
+  const refIndex = valid.findIndex((s) => s.slot_index === args.referenceSlotIndex);
+  if (refIndex < 0) return 0;
+
+  // Analyze every slot via its cached thumbnail.
   const means = await Promise.all(
     valid.map(async (s) => {
       const src = convertFileSrc(s.thumb_path ?? s.path!);
@@ -74,43 +78,33 @@ export async function autoBalancePageColors(args: {
     })
   );
 
-  // Target = per-channel median of the per-photo means. Median (vs.
-  // simple mean) resists outliers — a single wildly off-color photo
-  // can't drag the target with it.
-  const median = (values: number[]): number => {
-    const sorted = [...values].sort((a, b) => a - b);
-    const mid = Math.floor(sorted.length / 2);
-    return sorted.length % 2 === 0
-      ? (sorted[mid - 1] + sorted[mid]) / 2
-      : sorted[mid];
-  };
-  const target = {
-    r: median(means.map((m) => m.r)),
-    g: median(means.map((m) => m.g)),
-    b: median(means.map((m) => m.b)),
-  };
+  const target = means[refIndex];
   const targetLum = 0.299 * target.r + 0.587 * target.g + 0.114 * target.b;
   const targetRB = target.r - target.b;
 
-  // Apply per-slot corrections.
+  let adjusted = 0;
   for (let i = 0; i < valid.length; i++) {
-    const cur = means[i];
-    const curLum = 0.299 * cur.r + 0.587 * cur.g + 0.114 * cur.b;
-    const curRB = cur.r - cur.b;
+    const slot = valid[i];
+    const base = autoTransformFor(slot, args.templateId);
 
-    // Warmth: bring (R-B) toward target. The SVG matrix uses
-    // k = 0.25 strength; one unit of warmth shifts (R-B) by ~k*(R+B).
-    // Empirically a linear factor of (targetRB-curRB)/80 maps well to
-    // the slider's -1..1 range without overshoot.
-    const warmth = clamp((targetRB - curRB) / 80, -1, 1);
+    let warmth: number;
+    let brightness: number;
+    if (i === refIndex) {
+      // Reference: reset its color adjustments to identity.
+      warmth = 0;
+      brightness = 1;
+    } else {
+      const cur = means[i];
+      const curLum = 0.299 * cur.r + 0.587 * cur.g + 0.114 * cur.b;
+      const curRB = cur.r - cur.b;
+      warmth = clamp((targetRB - curRB) / 80, -1, 1);
+      brightness = clamp(targetLum / Math.max(curLum, 1), 0.7, 1.4);
+      adjusted++;
+    }
 
-    // Brightness: linear scale to match luminance.
-    const brightness = clamp(targetLum / Math.max(curLum, 1), 0.7, 1.4);
-
-    const base = autoTransformFor(valid[i], args.templateId);
     const updated: SlotTransform = { ...base, warmth, brightness };
-    await updateSlotTransform(args.pageId, valid[i].slot_index, serializeTransform(updated));
+    await updateSlotTransform(args.pageId, slot.slot_index, serializeTransform(updated));
   }
 
-  return valid.length;
+  return adjusted;
 }
