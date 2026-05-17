@@ -45,8 +45,10 @@
   --radius-lg: 10px;
 
   /* floating toolbar tokens — always dark-on-light regardless of theme so
-     it stays readable over photos and on light/dark page backgrounds */
-  --toolbar-bg: rgba(20, 20, 22, 0.92);
+     it stays readable over photos and on light/dark page backgrounds.
+     Low alpha + backdrop blur keeps the underlying image visible while
+     keeping toolbar contents legible. */
+  --toolbar-bg: rgba(20, 20, 22, 0.55);
   --toolbar-fg: #fafafa;
   --toolbar-fg-muted: #c4c4c8;
   --toolbar-border: rgba(255, 255, 255, 0.35);
@@ -137,6 +139,10 @@ button:not(:disabled) {
   color: var(--toolbar-fg);
   border-radius: var(--radius-md);
   font-size: var(--text-sm);
+  /* Blur the photo behind the toolbar so its low-alpha background stays
+     readable even over busy/high-contrast image content. */
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
 }
 
 .toolbar-row {
