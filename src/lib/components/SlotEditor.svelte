@@ -87,7 +87,7 @@
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
-  class="absolute inset-0 overflow-hidden"
+  class="absolute inset-0"
   style="touch-action: none; user-select: none; cursor: {dragging ? 'grabbing' : 'grab'};"
   onpointerdown={onPointerDown}
   onpointermove={onPointerMove}
@@ -96,31 +96,35 @@
   onwheel={onWheel}
   role="presentation"
 >
-  <!-- Inline SVG color matrix for warmth/tint live preview. -->
-  {#if hasColorShift(t)}
-    <svg width="0" height="0" style="position: absolute; pointer-events: none;">
-      <defs>
-        <filter id="cm-editor-preview" color-interpolation-filters="sRGB">
-          <feColorMatrix type="matrix" values={svgColorMatrix(t)} />
-        </filter>
-      </defs>
-    </svg>
-  {/if}
-  <img
-    src={convertFileSrc(photoPath)}
-    alt=""
-    class="absolute inset-0 w-full h-full object-cover"
-    style="object-position: {css.objectPosition}; transform: {css.transform}; transform-origin: {css.transformOrigin}; filter: {css.filter}{hasColorShift(t) ? ' url(#cm-editor-preview)' : ''}; pointer-events: none;"
-    draggable="false"
-  />
-  <!-- Floating toolbar pinned to the slot's bottom-left, inside the slot.
-       Stop pointer events from bubbling to the drag surface — otherwise
-       the surface captures the pointer on pointerdown and the button's
-       click event never fires. -->
+  <!-- Image container clips the photo to the slot bounds (img can be
+       scaled past those bounds via the transform). The toolbar sibling
+       below lives OUTSIDE this clip so it can wrap freely without being
+       hidden. -->
+  <div class="absolute inset-0 overflow-hidden">
+    {#if hasColorShift(t)}
+      <svg width="0" height="0" style="position: absolute; pointer-events: none;">
+        <defs>
+          <filter id="cm-editor-preview" color-interpolation-filters="sRGB">
+            <feColorMatrix type="matrix" values={svgColorMatrix(t)} />
+          </filter>
+        </defs>
+      </svg>
+    {/if}
+    <img
+      src={convertFileSrc(photoPath)}
+      alt=""
+      class="absolute inset-0 w-full h-full object-cover"
+      style="object-position: {css.objectPosition}; transform: {css.transform}; transform-origin: {css.transformOrigin}; filter: {css.filter}{hasColorShift(t) ? ' url(#cm-editor-preview)' : ''}; pointer-events: none;"
+      draggable="false"
+    />
+  </div>
+  <!-- Floating toolbar pinned bottom-left, sized to fit the slot width
+       (left/right both set). Stop pointer events from bubbling to the
+       drag surface so clicks/sliders work without starting a drag. -->
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div
-    class="toolbar toolbar-stack absolute bottom-1 left-1"
-    style="z-index: var(--z-toolbar);"
+    class="toolbar toolbar-stack absolute"
+    style="bottom: 4px; left: 4px; right: 4px; z-index: var(--z-toolbar);"
     onpointerdown={(e) => e.stopPropagation()}
     onpointerup={(e) => e.stopPropagation()}
     onwheel={(e) => e.stopPropagation()}
