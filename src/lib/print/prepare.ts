@@ -47,6 +47,8 @@ export interface ExportOptions {
    *  reads through the `read_image_data_url` Tauri command — Rust does
    *  the file IO + base64 encoding, much faster than JS fetch+btoa. */
   imagePathMap?: Map<string, string>;
+  /** Called after each page is rendered. `current` is 1-based. */
+  onProgress?: (current: number, total: number) => void;
 }
 
 /**
@@ -67,6 +69,7 @@ export async function exportPagesToPdf(opts: ExportOptions): Promise<string | nu
     scale = 2,
     jpegQuality = 0.92,
     imagePathMap,
+    onProgress,
   } = opts;
 
   // Cache: asset URL → data URL. Each photo is read at most once even if
@@ -112,10 +115,10 @@ export async function exportPagesToPdf(opts: ExportOptions): Promise<string | nu
     const imgData = canvas.toDataURL('image/jpeg', jpegQuality);
     if (i > 0) pdf.addPage([paperWidthMm, paperHeightMm], orientation);
     pdf.addImage(imgData, 'JPEG', 0, 0, paperWidthMm, paperHeightMm, undefined, 'FAST');
-    // Yield to the browser between pages so accumulated sandbox iframes,
-    // image decoders, and SVG parser state can release. Without this,
-    // pages 3+ stall for tens of seconds while the renderer thrashes.
-    await new Promise((r) => setTimeout(r, 100));
+    onProgress?.(i + 1, pageEls.length);
+    // Yield to the browser between pages so the UI gets to repaint
+    // (otherwise the progress text wouldn't update visibly).
+    await new Promise((r) => setTimeout(r, 16));
   }
 
   const path = await save({
