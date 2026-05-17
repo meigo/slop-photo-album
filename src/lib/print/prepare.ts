@@ -1,6 +1,6 @@
 import { invoke } from '@tauri-apps/api/core';
 import { save } from '@tauri-apps/plugin-dialog';
-import html2canvas from 'html2canvas-pro';
+import { domToCanvas } from 'modern-screenshot';
 import jsPDF from 'jspdf';
 
 /** Wait for fonts + images to settle. 5s hard cap so we never hang. */
@@ -79,11 +79,14 @@ export async function exportPagesToPdf(opts: ExportOptions): Promise<string | nu
   });
 
   for (let i = 0; i < pageEls.length; i++) {
-    const canvas = await html2canvas(pageEls[i], {
+    // modern-screenshot clones the DOM into an SVG <foreignObject> and
+    // lets the browser render it natively — that means every CSS feature
+    // (object-position, filter, SVG color matrices) is honored exactly
+    // as it appears on screen. html2canvas-pro's JS-side CSS reimpl
+    // silently dropped object-position + filter, which the v1 export did.
+    const canvas = await domToCanvas(pageEls[i], {
       scale,
-      backgroundColor: null, // preserve the element's bg
-      useCORS: true,
-      logging: false,
+      backgroundColor: null,
     });
     const imgData = canvas.toDataURL('image/jpeg', jpegQuality);
     if (i > 0) pdf.addPage([paperWidthMm, paperHeightMm], orientation);
