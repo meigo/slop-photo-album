@@ -94,7 +94,14 @@ export async function exportPagesToPdf(opts: ExportOptions): Promise<string | nu
     const canvas = await domToCanvas(pageEls[i], {
       scale,
       backgroundColor: null,
-      timeout: 20000,
+      timeout: 60000,
+      // Disable WebKit-specific retry loop and per-call web-font
+      // re-embedding. Fonts are already loaded in the main document by
+      // printWhenReady; the SVG <foreignObject> inherits them.
+      features: {
+        embedWebFont: false,
+        fixSvgXmlDecode: false,
+      },
       fetchFn: async (url) => {
         const tStart = performance.now();
         const cached = dataUrlCache.get(url);
