@@ -1,13 +1,13 @@
 <script lang="ts">
   import { getTemplate, type Template } from '$lib/layout/templates';
   import { convertFileSrc } from '@tauri-apps/api/core';
-  import { parseTransform, cssForTransform, type SlotTransform, IDENTITY_TRANSFORM } from '$lib/layout/transform';
+  import { parseTransform, cssForTransform, hasColorShift, svgColorMatrix, type SlotTransform, IDENTITY_TRANSFORM } from '$lib/layout/transform';
   import { autoPositionTransform } from '$lib/layout/autoposition';
   import { parseYearMonth } from '$lib/calendar/grid';
   import CalendarGrid from './CalendarGrid.svelte';
   import TextOverlay from './TextOverlay.svelte';
   import type { CalendarEventRow, PageTextRow } from '$lib/db/types';
-  import { Replace, Crop, Trash2 } from '@lucide/svelte';
+  import { Replace, Sliders, Trash2 } from '@lucide/svelte';
 
   interface Slot {
     slot_index: number;
@@ -69,6 +69,10 @@
   });
   let orderedSlots = $derived([...slots].sort((a, b) => a.slot_index - b.slot_index));
 
+  // Per-PageView instance ID so SVG filter URLs don't collide between
+  // multiple PageView mounts on the same review page.
+  const instanceId = Math.random().toString(36).slice(2, 8);
+
   function effectiveTransform(slot: Slot, slotLayout: { x: number; y: number; w: number; h: number }): SlotTransform {
     const manual = parseTransform(slot.transform_json);
     if (manual) return manual;
@@ -110,7 +114,7 @@
             src={convertFileSrc(slot.path)}
             alt=""
             class="absolute inset-0 w-full h-full object-cover"
-            style="object-position: {css.objectPosition}; transform: {css.transform}; transform-origin: {css.transformOrigin}; filter: {css.filter};"
+            style="object-position: {css.objectPosition}; transform: {css.transform}; transform-origin: {css.transformOrigin}; filter: {css.filter}{hasColorShift(t) ? ` url(#cm-${instanceId}-${i})` : ''};"
             draggable="false"
             loading="lazy"
           />
@@ -153,9 +157,9 @@
                   type="button"
                   class="slot-action-btn"
                   onclick={(e) => { e.stopPropagation(); onAdjustCrop?.(i); }}
-                  title="Adjust crop / brightness"
-                  aria-label={`Adjust crop in slot ${i + 1}`}
-                ><Crop size={14} /></button>
+                  title="Adjust crop & color"
+                  aria-label={`Adjust crop and color in slot ${i + 1}`}
+                ><Sliders size={14} /></button>
               {/if}
               {#if onRemovePhoto}
                 <button
@@ -209,4 +213,20 @@
       />
     {/if}
   {/each}
+
+  <!-- Inline SVG color matrices for warmth/tint per slot. Zero-size,
+       no layout impact. Only emitted for slots that actually shift color. -->
+  <svg width="0" height="0" style="position: absolute; pointer-events: none;">
+    <defs>
+      {#each tpl.slots as _slotLayout, i}
+        {@const slot = orderedSlots[i]}
+        {@const t = slot ? effectiveTransform(slot, tpl.slots[i]) : IDENTITY_TRANSFORM}
+        {#if hasColorShift(t)}
+          <filter id="cm-{instanceId}-{i}" color-interpolation-filters="sRGB">
+            <feColorMatrix type="matrix" values={svgColorMatrix(t)} />
+          </filter>
+        {/if}
+      {/each}
+    </defs>
+  </svg>
 </div>

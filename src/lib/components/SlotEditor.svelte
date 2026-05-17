@@ -1,11 +1,11 @@
 <script lang="ts">
   import { convertFileSrc } from '@tauri-apps/api/core';
-  import { parseTransform, serializeTransform, cssForTransform, type SlotTransform } from '$lib/layout/transform';
+  import { parseTransform, serializeTransform, cssForTransform, hasColorShift, svgColorMatrix, type SlotTransform } from '$lib/layout/transform';
   import { autoPositionTransform } from '$lib/layout/autoposition';
   import { updateSlotTransform } from '$lib/db';
   import { invalidateAll } from '$app/navigation';
   import type { SlotLayout } from '$lib/layout/templates';
-  import { Check, RotateCcw, X, SunMedium, Contrast, Droplets } from '@lucide/svelte';
+  import { Check, RotateCcw, X, SunMedium, Contrast, Droplets, Thermometer, Palette } from '@lucide/svelte';
 
   interface Props {
     pageId: number;
@@ -96,11 +96,21 @@
   onwheel={onWheel}
   role="presentation"
 >
+  <!-- Inline SVG color matrix for warmth/tint live preview. -->
+  {#if hasColorShift(t)}
+    <svg width="0" height="0" style="position: absolute; pointer-events: none;">
+      <defs>
+        <filter id="cm-editor-preview" color-interpolation-filters="sRGB">
+          <feColorMatrix type="matrix" values={svgColorMatrix(t)} />
+        </filter>
+      </defs>
+    </svg>
+  {/if}
   <img
     src={convertFileSrc(photoPath)}
     alt=""
     class="absolute inset-0 w-full h-full object-cover"
-    style="object-position: {css.objectPosition}; transform: {css.transform}; transform-origin: {css.transformOrigin}; filter: {css.filter}; pointer-events: none;"
+    style="object-position: {css.objectPosition}; transform: {css.transform}; transform-origin: {css.transformOrigin}; filter: {css.filter}{hasColorShift(t) ? ' url(#cm-editor-preview)' : ''}; pointer-events: none;"
     draggable="false"
   />
   <!-- Floating toolbar pinned to the slot's bottom-left, inside the slot.
@@ -128,11 +138,19 @@
         <Droplets size={14} />
         <input type="range" min="0" max="2" step="0.01" bind:value={t.saturation} style="width: 70px;" />
       </label>
+      <label class="toolbar-row" title="Warmth — negative = cooler (blue), positive = warmer (orange). For matching photos with different white balance.">
+        <Thermometer size={14} />
+        <input type="range" min="-1" max="1" step="0.01" bind:value={t.warmth} style="width: 70px;" />
+      </label>
+      <label class="toolbar-row" title="Tint — negative = magenta, positive = green">
+        <Palette size={14} />
+        <input type="range" min="-1" max="1" step="0.01" bind:value={t.tint} style="width: 70px;" />
+      </label>
       <button
         type="button"
         class="toolbar-btn"
         title="Reset image adjustments"
-        onclick={() => { t.brightness = 1; t.contrast = 1; t.saturation = 1; }}
+        onclick={() => { t.brightness = 1; t.contrast = 1; t.saturation = 1; t.warmth = 0; t.tint = 0; }}
       >
         <RotateCcw size={12} /> adj
       </button>

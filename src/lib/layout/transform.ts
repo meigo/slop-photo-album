@@ -11,6 +11,10 @@ export interface SlotTransform {
   contrast: number;
   /** CSS filter saturation. 1 = unchanged, 0 = grayscale, 2 = oversaturated. */
   saturation: number;
+  /** Color temperature (-1..1). Positive = warmer (R+/B-), negative = cooler. */
+  warmth: number;
+  /** Green-magenta tint (-1..1). Positive = greener, negative = magenta. */
+  tint: number;
 }
 
 export const IDENTITY_TRANSFORM: SlotTransform = {
@@ -20,6 +24,8 @@ export const IDENTITY_TRANSFORM: SlotTransform = {
   brightness: 1,
   contrast: 1,
   saturation: 1,
+  warmth: 0,
+  tint: 0,
 };
 
 export function parseTransform(json: string | null): SlotTransform | null {
@@ -42,6 +48,12 @@ export function parseTransform(json: string | null): SlotTransform | null {
       if (n < 0 || n > 3) return fallback;
       return n;
     };
+    const clampSigned = (v: unknown, fallback: number): number => {
+      if (!Number.isFinite(v as number)) return fallback;
+      const n = v as number;
+      if (n < -1 || n > 1) return fallback;
+      return n;
+    };
     return {
       objectPositionX: parsed.objectPositionX,
       objectPositionY: parsed.objectPositionY,
@@ -49,6 +61,8 @@ export function parseTransform(json: string | null): SlotTransform | null {
       brightness: clampFilter(parsed.brightness, 1),
       contrast: clampFilter(parsed.contrast, 1),
       saturation: clampFilter(parsed.saturation, 1),
+      warmth: clampSigned(parsed.warmth, 0),
+      tint: clampSigned(parsed.tint, 0),
     };
   } catch {
     return null;
@@ -63,17 +77,15 @@ export function serializeTransform(t: SlotTransform): string {
     brightness: t.brightness,
     contrast: t.contrast,
     saturation: t.saturation,
+    warmth: t.warmth,
+    tint: t.tint,
   });
 }
 
-/** Returns the CSS the renderer needs:
- *  - objectPosition: applied to <img style="object-position: ...">
- *  - transform: applied to <img style="transform: ..."> for zoom
- *  - transformOrigin: matches object-position so zooming keeps the
- *    focal point fixed.
- *  - filter: CSS filter string for brightness/contrast/saturation;
- *    empty when all are 1.0.
- */
+/** Returns the CSS the renderer needs. The `filter` field carries only
+ *  the brightness/contrast/saturate functions; warmth + tint live in an
+ *  SVG color matrix (see `svgColorMatrix`) referenced via `url(#id)`
+ *  appended to the filter chain by the renderer when needed. */
 export function cssForTransform(t: SlotTransform): {
   objectPosition: string;
   transform: string;
@@ -93,4 +105,19 @@ export function cssForTransform(t: SlotTransform): {
     transformOrigin: `${px}% ${py}%`,
     filter: parts.join(' '),
   };
+}
+
+/** True if warmth or tint differs from neutral. */
+export function hasColorShift(t: SlotTransform): boolean {
+  return t.warmth !== 0 || t.tint !== 0;
+}
+
+/** Generate the 20-value feColorMatrix string for warmth + tint.
+ *  Warmth shifts R↑ B↓ (or reverse); tint shifts G. Identity when both 0. */
+export function svgColorMatrix(t: SlotTransform): string {
+  const k = 0.25; // strength factor at slider extremes
+  const r = (1 + t.warmth * k).toFixed(4);
+  const g = (1 + t.tint * k).toFixed(4);
+  const b = (1 - t.warmth * k).toFixed(4);
+  return `${r} 0 0 0 0  0 ${g} 0 0 0  0 0 ${b} 0 0  0 0 0 1 0`;
 }
