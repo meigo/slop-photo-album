@@ -1,15 +1,21 @@
 <script lang="ts">
   import PageHeader from '$lib/components/PageHeader.svelte';
   import PageView from '$lib/components/PageView.svelte';
-  import { PAPER_SIZES_LANDSCAPE, findSize } from '$lib/print/sizes';
+  import { getTemplate } from '$lib/layout/templates';
+  import { PAPER_SIZES, findSize, DEFAULT_SIZE_ID } from '$lib/print/sizes';
   import { printWhenReady, setPrintPageSize } from '$lib/print/prepare';
   import { Printer } from '@lucide/svelte';
 
   let { data } = $props();
 
-  let sizeId = $state(PAPER_SIZES_LANDSCAPE[0].id);
+  let sizeId = $state(DEFAULT_SIZE_ID.calendar);
   let printing = $state(false);
-  let chosenSize = $derived(findSize(PAPER_SIZES_LANDSCAPE, sizeId));
+  let chosenSize = $derived(findSize(sizeId));
+
+  function pageAspect(templateId: string): number {
+    const tpl = getTemplate(templateId);
+    return tpl.aspect === 'square' ? 1 : 4 / 3;
+  }
 
   async function exportPdf() {
     printing = true;
@@ -40,7 +46,7 @@
       <label class="text-sm flex items-center gap-2">
         Paper size:
         <select bind:value={sizeId} class="input-base" style="padding: 0.25rem 0.5rem; width: auto;">
-          {#each PAPER_SIZES_LANDSCAPE as s}
+          {#each PAPER_SIZES as s}
             <option value={s.id}>{s.label}</option>
           {/each}
         </select>
@@ -56,21 +62,23 @@
   {/if}
 </div>
 
-<div class="print-pages" style="--page-aspect: {chosenSize.aspect};">
+<div class="print-pages">
   {#each data.pages as page (page.id)}
-    <div class="print-page">
-      <PageView
-        templateId={page.template_id}
-        slots={data.slotsByPage.get(page.id) ?? []}
-        slotGapPx={data.project.slot_gap_px}
-        pagePaddingPx={data.project.page_padding_px}
-        pageBgColor={data.project.page_bg_color}
-        pageTitle={page.title}
-        events={data.events}
-        weekStart={data.project.week_start === 0 ? 0 : 1}
-        texts={data.textsByPage.get(page.id) ?? []}
-        printMode
-      />
+    <div class="print-page" style="--paper-aspect: {chosenSize.aspect};">
+      <div class="page-letterbox" style="--page-aspect: {pageAspect(page.template_id)};">
+        <PageView
+          templateId={page.template_id}
+          slots={data.slotsByPage.get(page.id) ?? []}
+          slotGapPx={data.project.slot_gap_px}
+          pagePaddingPx={data.project.page_padding_px}
+          pageBgColor={data.project.page_bg_color}
+          pageTitle={page.title}
+          events={data.events}
+          weekStart={data.project.week_start === 0 ? 0 : 1}
+          texts={data.textsByPage.get(page.id) ?? []}
+          printMode
+        />
+      </div>
     </div>
   {/each}
 </div>
@@ -86,7 +94,16 @@
   }
   .print-page {
     width: 100%;
+    aspect-ratio: var(--paper-aspect);
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .page-letterbox {
     aspect-ratio: var(--page-aspect);
+    max-width: 100%;
+    max-height: 100%;
   }
 
   @media print {
