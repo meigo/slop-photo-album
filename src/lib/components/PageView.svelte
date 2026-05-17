@@ -7,7 +7,7 @@
   import CalendarGrid from './CalendarGrid.svelte';
   import TextOverlay from './TextOverlay.svelte';
   import type { CalendarEventRow, PageTextRow } from '$lib/db/types';
-  import { Replace, Sliders, Trash2, Target } from '@lucide/svelte';
+  import { Replace, Sliders, Trash2 } from '@lucide/svelte';
 
   interface Slot {
     slot_index: number;
@@ -28,7 +28,6 @@
     onSwapPhoto?: (slotIndex: number) => void;
     onAdjustCrop?: (slotIndex: number) => void;
     onRemovePhoto?: (slotIndex: number) => void;
-    onUseAsReference?: (slotIndex: number) => void;
     editingSlotIndex?: number | null;
     /** Visible gap (px) between adjacent slot images. Each slot contributes
      *  half of this as internal padding, so two adjacent slots produce
@@ -57,7 +56,7 @@
      *  overlay, border) so the page renders as it should appear in print. */
     printMode?: boolean;
   }
-  let { templateId, slots, onSlotClick, onSwapPhoto, onAdjustCrop, onRemovePhoto, onUseAsReference, editingSlotIndex = null, slotGapPx = 2, pagePaddingPx = 0, pageTitle = null, events = [], weekStart = 1, texts = [], editingTextId = null, onEditText, pageBgColor = '#ffffff', pageAspect = null, printMode = false }: Props = $props();
+  let { templateId, slots, onSlotClick, onSwapPhoto, onAdjustCrop, onRemovePhoto, editingSlotIndex = null, slotGapPx = 2, pagePaddingPx = 0, pageTitle = null, events = [], weekStart = 1, texts = [], editingTextId = null, onEditText, pageBgColor = '#ffffff', pageAspect = null, printMode = false }: Props = $props();
 
   let tpl = $derived<Template>(getTemplate(templateId));
   let aspectRatio = $derived.by(() => {
@@ -139,7 +138,7 @@
             ></button>
           {/if}
 
-          {#if slot?.path && (onSwapPhoto || onAdjustCrop || onRemovePhoto || onUseAsReference)}
+          {#if slot?.path && (onSwapPhoto || onAdjustCrop || onRemovePhoto)}
             <div
               class="absolute top-1 right-1 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
               style="z-index: 2;"
@@ -161,15 +160,6 @@
                   title="Adjust crop & color"
                   aria-label={`Adjust crop and color in slot ${i + 1}`}
                 ><Sliders size={14} /></button>
-              {/if}
-              {#if onUseAsReference}
-                <button
-                  type="button"
-                  class="slot-action-btn"
-                  onclick={(e) => { e.stopPropagation(); onUseAsReference?.(i); }}
-                  title="Use this photo as color reference and balance the page against it"
-                  aria-label={`Use slot ${i + 1} as color reference and balance page`}
-                ><Target size={14} /></button>
               {/if}
               {#if onRemovePhoto}
                 <button
