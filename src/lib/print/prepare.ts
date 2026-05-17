@@ -95,11 +95,10 @@ export async function exportPagesToPdf(opts: ExportOptions): Promise<string | nu
       scale,
       backgroundColor: null,
       timeout: 60000,
-      // Disable WebKit-specific retry loop and per-call web-font
-      // re-embedding. Fonts are already loaded in the main document by
-      // printWhenReady; the SVG <foreignObject> inherits them.
+      // Disable per-call web-font re-embedding (already loaded in the
+      // main doc) and the WebKit-specific drawImage retry loop.
+      font: false,
       features: {
-        embedWebFont: false,
         fixSvgXmlDecode: false,
       },
       // Note: routing photo reads through a Tauri command turned out to
