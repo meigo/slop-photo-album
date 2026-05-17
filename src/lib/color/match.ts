@@ -120,14 +120,19 @@ export async function autoBalancePageColors(args: {
       const cur = stats[i];
       const curLum = 0.299 * cur.r + 0.587 * cur.g + 0.114 * cur.b;
       const curRB = cur.r - cur.b;
-      // The SVG color matrix applies ~k*(R+B) shift per unit of warmth
-      // (k=0.25). For a typical mid-tone (R+B ≈ 250), one unit shifts
-      // (R-B) by ~62. So divide the delta by 62 to land at the target.
-      warmth = clamp((targetRB - curRB) / 62, -1, 1);
-      brightness = clamp(targetLum / Math.max(curLum, 1), 0.7, 1.4);
-      // Saturation: match average chroma. Photos with a dull tone get a
-      // multiplier > 1; an over-saturated one gets < 1.
-      saturation = clamp(target.chroma / Math.max(cur.chroma, 1), 0.6, 1.8);
+      // Apply corrections at half-strength. A per-pixel mean is a crude
+      // statistic and applying the FULL delta as a global filter tends
+      // to overshoot visually (skies turn yellow, skin turns pink). Half-
+      // strength + tight clamps acts as a gentle nudge that gets each
+      // photo closer to the reference without dramatic distortion.
+      // Users can tweak further via the manual SlotEditor sliders.
+      const STRENGTH = 0.5;
+      const warmthDelta = (targetRB - curRB) / 62;
+      warmth = clamp(warmthDelta * STRENGTH, -0.5, 0.5);
+      const lumRatio = targetLum / Math.max(curLum, 1);
+      brightness = clamp(1 + (lumRatio - 1) * STRENGTH, 0.85, 1.15);
+      const chromaRatio = target.chroma / Math.max(cur.chroma, 1);
+      saturation = clamp(1 + (chromaRatio - 1) * STRENGTH, 0.85, 1.2);
       adjusted++;
     }
 
