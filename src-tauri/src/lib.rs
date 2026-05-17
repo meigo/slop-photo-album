@@ -5,6 +5,14 @@ mod sidecar;
 use py_sidecar::{py_sidecar_port, PySidecarState};
 use sidecar::{sidecar_port, start_sidecar, SidecarState};
 
+/// Open the OS print dialog for the current webview window. `window.print()`
+/// in WKWebView (macOS) doesn't reliably trigger the dialog; the Tauri
+/// WebviewWindow::print() Rust API does.
+#[tauri::command]
+async fn print_window(window: tauri::WebviewWindow) -> Result<(), String> {
+  window.print().map_err(|e| e.to_string())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
   tauri::Builder::default()
@@ -26,7 +34,8 @@ pub fn run() {
       sidecar_port,
       py_sidecar_port,
       crate::fs_ops::walk_image_dir,
-      crate::fs_ops::hash_file
+      crate::fs_ops::hash_file,
+      print_window
     ])
     .setup(|app| {
       if cfg!(debug_assertions) {
