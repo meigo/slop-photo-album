@@ -116,7 +116,7 @@
             class="absolute inset-0 w-full h-full object-cover"
             style="object-position: {css.objectPosition}; transform: {css.transform}; transform-origin: {css.transformOrigin}; filter: {css.filter}{hasColorShift(t) ? ` url(#cm-${instanceId}-${i})` : ''};"
             draggable="false"
-            loading="lazy"
+            loading={printMode ? 'eager' : 'lazy'}
           />
         {:else}
           <div
