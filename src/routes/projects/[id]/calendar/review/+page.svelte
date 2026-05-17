@@ -243,6 +243,11 @@
               {@const editorTpl = getTemplate(page.template_id)}
               {@const editorLayout = editorTpl.slots[editorOpen!.slotIndex]}
               {#if editorSlot?.path && editorSlot.photo_width !== null && editorSlot.photo_height !== null && editorLayout}
+                {@const eHalf = slotGapPx / 2}
+                {@const ePadTop    = editorLayout.y <= 0.001 ? 0 : eHalf}
+                {@const ePadLeft   = editorLayout.x <= 0.001 ? 0 : eHalf}
+                {@const ePadBottom = editorLayout.y + editorLayout.h >= 0.999 ? 0 : eHalf}
+                {@const ePadRight  = editorLayout.x + editorLayout.w >= 0.999 ? 0 : eHalf}
                 <div
                   class="absolute"
                   style="
@@ -250,7 +255,7 @@
                     top: calc({pagePaddingPx}px + {editorLayout.y} * (100% - {2 * pagePaddingPx}px));
                     width: calc({editorLayout.w} * (100% - {2 * pagePaddingPx}px));
                     height: calc({editorLayout.h} * (100% - {2 * pagePaddingPx}px));
-                    padding: {slotGapPx / 2}px;
+                    padding: {ePadTop}px {ePadRight}px {ePadBottom}px {ePadLeft}px;
                     z-index: 4;
                   "
                 >

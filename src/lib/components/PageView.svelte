@@ -98,6 +98,11 @@
     {@const t = slot ? effectiveTransform(slot, slotLayout) : IDENTITY_TRANSFORM}
     {@const css = cssForTransform(t)}
     {@const isEditing = editingSlotIndex === i}
+    {@const half = slotGapPx / 2}
+    {@const padTop    = slotLayout.y <= 0.001 ? 0 : half}
+    {@const padLeft   = slotLayout.x <= 0.001 ? 0 : half}
+    {@const padBottom = slotLayout.y + slotLayout.h >= 0.999 ? 0 : half}
+    {@const padRight  = slotLayout.x + slotLayout.w >= 0.999 ? 0 : half}
     <div
       class="absolute group"
       style="
@@ -105,7 +110,7 @@
         top: calc({pagePaddingPx}px + {slotLayout.y} * (100% - {2 * pagePaddingPx}px));
         width: calc({slotLayout.w} * (100% - {2 * pagePaddingPx}px));
         height: calc({slotLayout.h} * (100% - {2 * pagePaddingPx}px));
-        padding: {slotGapPx / 2}px;
+        padding: {padTop}px {padRight}px {padBottom}px {padLeft}px;
       "
     >
       <div class="relative w-full h-full overflow-hidden">
