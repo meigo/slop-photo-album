@@ -49,7 +49,11 @@
   <!-- Day headers. Use the calendar color at 70% opacity so headers
        sit lighter than date numbers — matches the previous "muted"
        look without depending on app theme colors. -->
-  <div class="grid grid-cols-7 gap-px mb-1">
+  <!-- Column gap is 1px for `boxed` (creates the visible cell separator
+       alongside each cell's full border) but 0 for `lines` / `none` so
+       the border-top of each date row reads as a continuous horizontal
+       rule across all 7 columns instead of seven 1px-wide segments. -->
+  <div class="grid grid-cols-7 mb-1" style="gap: {gridStyle === 'boxed' ? '1px' : '0'};">
     {#each grid.dayHeaders as h}
       <div class="text-center font-medium" style="opacity: 0.7;">{h}</div>
     {/each}
@@ -58,7 +62,7 @@
        container's height evenly so the grid never overflows the
        template's calendarGrid bbox when its content would otherwise
        push past the allocation. -->
-  <div class="grid grid-cols-7 gap-px flex-1 min-h-0" style="grid-auto-rows: 1fr;">
+  <div class="grid grid-cols-7 flex-1 min-h-0" style="grid-auto-rows: 1fr; gap: {gridStyle === 'boxed' ? '1px' : '0'};">
     {#each grid.rows as row, rowIdx}
       {#each row as cell}
         <div
