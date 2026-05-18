@@ -24,10 +24,12 @@
     /** Hex color for text + cell borders. Default black. */
     color?: string;
     /** Cell rule style:
-     *   - 'boxed': full border around every cell (default).
-     *   - 'lines': horizontal divider above each row of dates.
+     *   - 'boxed': full border around every cell, 1px gap between cells.
+     *   - 'grid':  full border around every cell, no gap — borders touch
+     *              (think spreadsheet grid).
+     *   - 'lines': horizontal divider above each row of dates, no gap.
      *   - 'none':  no rules at all, dates float on the page background. */
-    gridStyle?: 'boxed' | 'lines' | 'none';
+    gridStyle?: 'boxed' | 'grid' | 'lines' | 'none';
   }
   let { year, month, weekStart, locale, showHeading = true, fontFamily = null, color = '#000000', gridStyle = 'boxed' }: Props = $props();
 
@@ -36,7 +38,7 @@
 
   function cellBorder(cellHasDay: boolean, rowIdx: number): string {
     if (!cellHasDay) return 'border: 1px solid transparent';
-    if (gridStyle === 'boxed') return `border: 1px solid ${color}`;
+    if (gridStyle === 'boxed' || gridStyle === 'grid') return `border: 1px solid ${color}`;
     if (gridStyle === 'lines') return rowIdx === 0 ? 'border: 1px solid transparent' : `border-top: 1px solid ${color}`;
     return 'border: 1px solid transparent';
   }
@@ -53,7 +55,7 @@
        alongside each cell's full border) but 0 for `lines` / `none` so
        the border-top of each date row reads as a continuous horizontal
        rule across all 7 columns instead of seven 1px-wide segments. -->
-  <div class="grid grid-cols-7 mb-1" style="gap: {gridStyle === 'boxed' ? '1px' : '0'};">
+  <div class="grid grid-cols-7 mb-1" style="gap: {gridStyle === 'boxed' ? '1px' : '0'};;">
     {#each grid.dayHeaders as h}
       <div class="text-center font-medium" style="opacity: 0.7;">{h}</div>
     {/each}
@@ -62,7 +64,7 @@
        container's height evenly so the grid never overflows the
        template's calendarGrid bbox when its content would otherwise
        push past the allocation. -->
-  <div class="grid grid-cols-7 flex-1 min-h-0" style="grid-auto-rows: 1fr; gap: {gridStyle === 'boxed' ? '1px' : '0'};">
+  <div class="grid grid-cols-7 flex-1 min-h-0" style="grid-auto-rows: 1fr; gap: {gridStyle === 'boxed' ? '1px' : '0'};;">
     {#each grid.rows as row, rowIdx}
       {#each row as cell}
         <div

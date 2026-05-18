@@ -102,11 +102,11 @@ export async function updateProjectCalendarColor(id: number, color: string): Pro
   await d.execute('UPDATE project SET calendar_color = ? WHERE id = ?', [color, id]);
 }
 
-export type CalendarGridStyle = 'boxed' | 'lines' | 'none';
+export type CalendarGridStyle = 'boxed' | 'grid' | 'lines' | 'none';
 
 export async function updateProjectCalendarGridStyle(id: number, style: CalendarGridStyle): Promise<void> {
   const d = await db();
-  if (style !== 'boxed' && style !== 'lines' && style !== 'none') return;
+  if (style !== 'boxed' && style !== 'grid' && style !== 'lines' && style !== 'none') return;
   await d.execute('UPDATE project SET calendar_grid_style = ? WHERE id = ?', [style, id]);
 }
 

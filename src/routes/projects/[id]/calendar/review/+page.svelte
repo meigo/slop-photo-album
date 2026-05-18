@@ -34,7 +34,7 @@
   let calendarColor = $state(data.project.calendar_color);
   // svelte-ignore state_referenced_locally
   let calendarGridStyle = $state<CalendarGridStyle>(
-    (data.project.calendar_grid_style === 'lines' || data.project.calendar_grid_style === 'none')
+    (data.project.calendar_grid_style === 'grid' || data.project.calendar_grid_style === 'lines' || data.project.calendar_grid_style === 'none')
       ? data.project.calendar_grid_style
       : 'boxed'
   );
@@ -217,6 +217,7 @@
     <label class="text-sm mt-1 flex items-center gap-2" style="color: var(--color-muted)">
       grid style:
       <button type="button" class={calendarGridStyle === 'boxed' ? 'btn-primary' : 'btn-ghost'} style="font-size: 0.75rem; padding: 0.125rem 0.5rem;" onclick={() => setCalendarGridStyle('boxed')}>boxed</button>
+      <button type="button" class={calendarGridStyle === 'grid' ? 'btn-primary' : 'btn-ghost'} style="font-size: 0.75rem; padding: 0.125rem 0.5rem;" onclick={() => setCalendarGridStyle('grid')}>grid</button>
       <button type="button" class={calendarGridStyle === 'lines' ? 'btn-primary' : 'btn-ghost'} style="font-size: 0.75rem; padding: 0.125rem 0.5rem;" onclick={() => setCalendarGridStyle('lines')}>lines</button>
       <button type="button" class={calendarGridStyle === 'none' ? 'btn-primary' : 'btn-ghost'} style="font-size: 0.75rem; padding: 0.125rem 0.5rem;" onclick={() => setCalendarGridStyle('none')}>none</button>
     </label>
