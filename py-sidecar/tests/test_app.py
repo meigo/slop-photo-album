@@ -31,6 +31,20 @@ def test_blur_endpoint_404_on_missing() -> None:
     assert r.status_code == 404
 
 
+def test_blur_endpoint_accepts_face_bboxes() -> None:
+    app = build_app()
+    client = TestClient(app)
+    r = client.post(
+        "/blur",
+        json={
+            "path": str(FIX / "sharp.jpg"),
+            "faces": [{"x": 50, "y": 50, "w": 100, "h": 100}],
+        },
+    )
+    assert r.status_code == 200
+    assert r.json()["blur"] > 0
+
+
 def test_embed_endpoint_returns_b64() -> None:
     app = build_app()
     client = TestClient(app)

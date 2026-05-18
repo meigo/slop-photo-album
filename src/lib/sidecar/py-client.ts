@@ -30,8 +30,13 @@ export interface PyFaceWithEmbed extends PyFaceBox {
   quality: number;
 }
 
-export async function blurViaPy(path: string): Promise<number> {
-  const r = await pyFetch<{ blur: number }>('/blur', { path });
+export async function blurViaPy(
+  path: string,
+  faces?: ReadonlyArray<PyFaceBox>,
+): Promise<number> {
+  const body: { path: string; faces?: ReadonlyArray<PyFaceBox> } = { path };
+  if (faces && faces.length > 0) body.faces = faces;
+  const r = await pyFetch<{ blur: number }>('/blur', body);
   return r.blur;
 }
 

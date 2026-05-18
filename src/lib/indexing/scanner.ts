@@ -94,13 +94,19 @@ export async function indexProject(
     if (cvFresh && embFresh) continue;
 
     try {
-      // Phase 2a signals + exposure (parallel; all touch the same image once)
-      const [blur, phash, facesResult, exposure] = await Promise.all([
-        blurViaPy(ph.path),
-        phashViaPy(ph.path),
+      // Phase 2a signals + exposure. Faces is computed first so we can pass
+      // its bboxes to blur — whole-image Laplacian variance misranks
+      // shallow-DOF portraits as blurry, so we measure sharpness on the
+      // largest face region when faces are present.
+      const [facesResult, phash, exposure] = await Promise.all([
         facesViaPy(ph.path, /*withEmbeddings=*/ true),
+        phashViaPy(ph.path),
         exposureViaPy(ph.path),
       ]);
+      const bboxes = (facesResult.faces as PyFaceWithEmbed[]).map(
+        (f) => ({ x: f.x, y: f.y, w: f.w, h: f.h }),
+      );
+      const blur = await blurViaPy(ph.path, bboxes);
 
       // Re-write face rows: clear existing, insert new
       await clearFacesForPhoto(ph.id);

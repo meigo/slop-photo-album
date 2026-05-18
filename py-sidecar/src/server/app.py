@@ -13,8 +13,18 @@ from server.phash import perceptual_hash
 from server.tags import score_tags
 
 
+class FaceBBox(BaseModel):
+    x: int
+    y: int
+    w: int
+    h: int
+
+
 class BlurRequest(BaseModel):
     path: str
+    # Optional: when present, blur is computed on the largest face's bbox
+    # region rather than the whole image. Fixes shallow-DOF portraits.
+    faces: list[FaceBBox] | None = None
 
 
 class PhashRequest(BaseModel):
@@ -59,7 +69,8 @@ def build_app() -> FastAPI:
     @app.post("/blur")
     async def blur(req: BlurRequest) -> dict[str, float]:
         try:
-            return {"blur": laplacian_variance(req.path)}
+            bboxes = [(f.x, f.y, f.w, f.h) for f in req.faces] if req.faces else None
+            return {"blur": laplacian_variance(req.path, bboxes)}
         except FileNotFoundError as e:
             raise HTTPException(status_code=404, detail=str(e))
         except ValueError as e:
