@@ -178,5 +178,11 @@ fn migrations() -> Vec<tauri_plugin_sql::Migration> {
       sql: include_str!("../migrations/020_calendar_weekend_color.sql"),
       kind: tauri_plugin_sql::MigrationKind::Up,
     },
+    tauri_plugin_sql::Migration {
+      version: 21,
+      description: "project_style_preset",
+      sql: include_str!("../migrations/021_style_preset.sql"),
+      kind: tauri_plugin_sql::MigrationKind::Up,
+    },
   ]
 }

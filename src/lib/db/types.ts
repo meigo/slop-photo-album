@@ -27,6 +27,9 @@ export interface ProjectRow {
   /** Hex color (#rrggbb) for Sunday column header + Sunday date cells.
    *  Defaults to red. Set equal to calendar_color to disable. */
   calendar_weekend_color: string;
+  /** Last-applied style preset id (Minimal, Classic, Polaroid,
+   *  Modern). NULL = user hasn't applied one or tweaked manually. */
+  style_preset_id: string | null;
 }
 
 export interface CalendarEventRow {

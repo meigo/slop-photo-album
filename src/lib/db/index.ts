@@ -125,6 +125,13 @@ export async function updateProjectCalendarWeekendColor(id: number, color: strin
   await d.execute('UPDATE project SET calendar_weekend_color = ? WHERE id = ?', [color, id]);
 }
 
+/** Save the last-applied style preset id. Pass null to mark "no preset
+ *  (user tweaked fields directly)". */
+export async function updateProjectStylePreset(id: number, presetId: string | null): Promise<void> {
+  const d = await db();
+  await d.execute('UPDATE project SET style_preset_id = ? WHERE id = ?', [presetId, id]);
+}
+
 export async function upsertPhoto(p: PhotoInsert): Promise<void> {
   const d = await db();
   await d.execute(
