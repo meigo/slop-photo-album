@@ -99,9 +99,13 @@
   }
 </script>
 
+<!-- container-type: inline-size lets children use cqi units so things
+     like text-overlay font-size scale with the page's rendered width
+     instead of being a fixed pixel size. Lets the compact export-grid
+     thumbnails read correctly without per-thumb scaling logic. -->
 <div
   class="relative w-full overflow-hidden group"
-  style="aspect-ratio: {aspectRatio}; background: {pageBgColor}; border-radius: 0; box-shadow: {printMode ? 'none' : '0 0 6px rgba(0, 0, 0, 0.08)'}; user-select: none; -webkit-user-select: none;"
+  style="aspect-ratio: {aspectRatio}; background: {pageBgColor}; border-radius: 0; box-shadow: {printMode ? 'none' : '0 0 6px rgba(0, 0, 0, 0.08)'}; user-select: none; -webkit-user-select: none; container-type: inline-size;"
 >
   {#each tpl.slots as slotLayout, i}
     {@const slot = orderedSlots[i]}

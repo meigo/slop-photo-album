@@ -137,7 +137,7 @@
         slotGapPx={data.project.slot_gap_px}
         pagePaddingPx={data.project.page_padding_px}
         pageBgColor={data.project.page_bg_color}
-        slotCornerRadiusPx={data.project.slot_corner_radius_px}
+        slotCornerRadiusPx={data.project.calendar_slot_corner_radius_px}
         pageWidthMm={data.project.calendar_page_size_w_mm}
         pageHeightMm={data.project.calendar_page_size_h_mm}
         calendarFontFamily={data.project.calendar_font_family}

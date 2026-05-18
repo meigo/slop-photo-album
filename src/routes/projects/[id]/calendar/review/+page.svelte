@@ -7,7 +7,7 @@
   import TextEditor from '$lib/components/TextEditor.svelte';
   import { getTemplate } from '$lib/layout/templates';
   import { invalidateAll } from '$app/navigation';
-  import { updateSlotPhoto, clearSlotPhoto, swapPageSlots, updateProjectSlotGap, updateProjectPagePadding, updateProjectPageBgColor, updateProjectCalendarPageSize, updateProjectWeekStart, updateProjectCalendarFontFamily, updateProjectCalendarColor, updateProjectCalendarGridStyle, updateProjectCalendarWeekendColor, updateProjectSlotCornerRadius, updateProjectStylePreset, type CalendarGridStyle, addPageText } from '$lib/db';
+  import { updateSlotPhoto, clearSlotPhoto, swapPageSlots, updateProjectSlotGap, updateProjectPagePadding, updateProjectPageBgColor, updateProjectCalendarPageSize, updateProjectWeekStart, updateProjectCalendarFontFamily, updateProjectCalendarColor, updateProjectCalendarGridStyle, updateProjectCalendarWeekendColor, updateProjectCalendarSlotCornerRadius, updateProjectStylePreset, type CalendarGridStyle, addPageText } from '$lib/db';
   import { DEFAULT_TEXT_STYLE, serializeStyle } from '$lib/text/style';
   import { PAPER_PRESETS } from '$lib/print/presets';
   import { STYLE_PRESETS } from '$lib/print/style-presets';
@@ -31,7 +31,7 @@
   // svelte-ignore state_referenced_locally
   let pageHeightMm = $state(data.project.calendar_page_size_h_mm);
   // svelte-ignore state_referenced_locally
-  let slotCornerRadiusPx = $state(data.project.slot_corner_radius_px);
+  let slotCornerRadiusPx = $state(data.project.calendar_slot_corner_radius_px);
   // svelte-ignore state_referenced_locally
   let stylePresetId = $state<string>(data.project.style_preset_id ?? '');
 
@@ -57,7 +57,7 @@
     await Promise.all([
       updateProjectSlotGap(data.project.id, preset.slot_gap_px),
       updateProjectPagePadding(data.project.id, preset.page_padding_px),
-      updateProjectSlotCornerRadius(data.project.id, preset.slot_corner_radius_px),
+      updateProjectCalendarSlotCornerRadius(data.project.id, preset.slot_corner_radius_px),
       updateProjectPageBgColor(data.project.id, preset.page_bg_color),
       updateProjectCalendarFontFamily(data.project.id, preset.calendar_font_family),
       updateProjectCalendarColor(data.project.id, preset.calendar_color),
@@ -106,6 +106,16 @@
     const v = (e.currentTarget as HTMLInputElement).value;
     calendarWeekendColor = v;
     await updateProjectCalendarWeekendColor(data.project.id, v);
+  }
+
+  let cornerSavingTimer: ReturnType<typeof setTimeout> | null = null;
+  function onCornerChange(e: Event) {
+    const v = Number((e.currentTarget as HTMLInputElement).value);
+    slotCornerRadiusPx = v;
+    if (cornerSavingTimer) clearTimeout(cornerSavingTimer);
+    cornerSavingTimer = setTimeout(async () => {
+      await updateProjectCalendarSlotCornerRadius(data.project.id, v);
+    }, 250);
   }
 
   async function onPageBgChange(e: Event) {
@@ -276,6 +286,11 @@
           <span style="font-variant-numeric: tabular-nums; min-width: 3ch;">{slotGapPx}px</span>
         </label>
         <label class="text-sm flex items-center gap-2" style="color: var(--color-muted)">
+          slot corner radius:
+          <input type="range" min="0" max="40" step="1" value={slotCornerRadiusPx} oninput={onCornerChange} style="width: 160px;" />
+          <span style="font-variant-numeric: tabular-nums; min-width: 3ch;">{slotCornerRadiusPx}px</span>
+        </label>
+        <label class="text-sm flex items-center gap-2" style="color: var(--color-muted)">
           page background:
           <input type="color" bind:value={pageBgColor} oninput={onPageBgChange} style="width: 32px; height: 24px; border: 1px solid var(--color-line); border-radius: 3px;" />
           <span style="font-family: var(--font-mono); font-size: 0.75rem;">{pageBgColor}</span>
@@ -366,7 +381,7 @@
               {calendarColor}
               {calendarWeekendColor}
               {calendarGridStyle}
-              slotCornerRadiusPx={data.project.slot_corner_radius_px}
+              {slotCornerRadiusPx}
               pageTitle={page.title}
               events={data.events}
               {weekStart}

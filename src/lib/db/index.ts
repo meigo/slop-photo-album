@@ -104,6 +104,13 @@ export async function updateProjectSlotCornerRadius(id: number, radiusPx: number
   await d.execute('UPDATE project SET slot_corner_radius_px = ? WHERE id = ?', [clamped, id]);
 }
 
+/** Same as updateProjectSlotCornerRadius but writes the calendar column. */
+export async function updateProjectCalendarSlotCornerRadius(id: number, radiusPx: number): Promise<void> {
+  const d = await db();
+  const clamped = Math.max(0, Math.min(40, Math.round(radiusPx)));
+  await d.execute('UPDATE project SET calendar_slot_corner_radius_px = ? WHERE id = ?', [clamped, id]);
+}
+
 /** null = app default (monospace). Caller is expected to invoke
  *  loadGoogleFont before persisting a non-null value so the font is
  *  available to the renderer on next paint. */

@@ -1,6 +1,8 @@
 export interface TextStyle {
   fontFamily: string;
-  fontSize: number;       // px at review size
+  /** Font size in "px-at-1000px-page-width". Rendered via cqi so the
+   *  actual size scales with the page's current rendered width. */
+  fontSize: number;
   fontWeight: number;     // 100..900
   italic: boolean;
   color: string;          // #rrggbb
@@ -80,9 +82,14 @@ export function serializeStyle(s: TextStyle): string {
 }
 
 export function cssForStyle(s: TextStyle): string {
+  // fontSize is stored as px-at-1000px-page-width. cqi (container query
+  // inline) makes the actual rendered size scale with the page: 1cqi =
+  // 1% of the PageView's width, so fontSize/10 cqi reproduces the
+  // original px size on a 1000px page and shrinks/grows proportionally
+  // on smaller/larger previews (compact export grid, mobile widths).
   const parts = [
     `font-family: '${s.fontFamily.replace(/'/g, "\\'")}', sans-serif`,
-    `font-size: ${s.fontSize}px`,
+    `font-size: ${s.fontSize / 10}cqi`,
     `font-weight: ${s.fontWeight}`,
     `font-style: ${s.italic ? 'italic' : 'normal'}`,
     `color: ${s.color}`,

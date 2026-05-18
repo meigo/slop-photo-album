@@ -35,6 +35,9 @@ export interface ProjectRow {
    *  projects render unchanged. */
   calendar_page_size_w_mm: number;
   calendar_page_size_h_mm: number;
+  /** Slot corner radius for calendar pages, mirroring slot_corner_radius_px
+   *  on the album side. Backfilled from that column on migration. */
+  calendar_slot_corner_radius_px: number;
 }
 
 export interface CalendarEventRow {
