@@ -60,7 +60,7 @@
   <PageHeader>
     <h1 class="text-xl font-medium flex items-center gap-2">
       <LayoutDashboard size={22} aria-hidden="true" />
-      Family Album & Calendar Builder
+      Annual Photo Album & Calendar
     </h1>
   </PageHeader>
 
