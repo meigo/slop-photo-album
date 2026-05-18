@@ -6,6 +6,7 @@
   import { onMount } from 'svelte';
   import type { ProjectRow } from '$lib/db/types';
   import { LayoutDashboard, Trash2 } from '@lucide/svelte';
+  import ConfirmDialog from '$lib/components/ConfirmDialog.svelte';
 
   let projects = $state<ProjectRow[]>([]);
   let name = $state('');
@@ -25,10 +26,13 @@
     await goto(`/projects/${id}`);
   }
 
-  async function removeProject(p: ProjectRow) {
-    const msg = `Delete project "${p.name}"?\n\nThis removes the index, CV scores, selections, generated pages, and all events — but does NOT touch the photos on disk in:\n${p.source_dir}`;
-    if (!confirm(msg)) return;
-    await deleteProject(p.id);
+  let pendingDelete = $state<ProjectRow | null>(null);
+
+  async function confirmDelete() {
+    if (!pendingDelete) return;
+    const id = pendingDelete.id;
+    pendingDelete = null;
+    await deleteProject(id);
     projects = await listProjects();
   }
 </script>
@@ -84,7 +88,7 @@
                 type="button"
                 class="btn-icon absolute top-1 right-1 opacity-0 group-hover:opacity-100"
                 style="width: 24px; height: 24px; color: var(--color-danger);"
-                onclick={() => removeProject(p)}
+                onclick={() => (pendingDelete = p)}
                 title="Delete project"
                 aria-label={`Delete project ${p.name}`}
               >
@@ -96,4 +100,15 @@
       {/if}
     </section>
   </div>
+
+  {#if pendingDelete}
+    <ConfirmDialog
+      title={`Delete project "${pendingDelete.name}"?`}
+      message={`This removes the index, CV scores, selections, generated pages, and all events.\n\nThe photos on disk in\n${pendingDelete.source_dir}\nare not touched.`}
+      confirmLabel="Delete"
+      danger
+      onConfirm={confirmDelete}
+      onCancel={() => (pendingDelete = null)}
+    />
+  {/if}
 </div>

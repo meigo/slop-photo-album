@@ -110,6 +110,16 @@ button:not(:disabled) {
   border-radius: var(--radius-md);
 }
 
+.btn-danger {
+  background: var(--color-danger);
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+}
+.btn-danger:hover { filter: brightness(1.1); }
+.btn-danger:disabled { opacity: 0.5; cursor: default; }
+
 .btn-ghost {
   background: transparent;
   color: var(--color-muted);
