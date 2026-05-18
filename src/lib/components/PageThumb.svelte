@@ -14,10 +14,12 @@
   interface Props {
     templateId: string;
     slots: Slot[];
-    width: number;             // px
+    /** Fixed pixel width. Omit to fill the parent (width: 100%) — useful
+     *  for responsive grids where the column already constrains size. */
+    width?: number | null;
     texts?: PageTextRow[];
   }
-  let { templateId, slots, width, texts = [] }: Props = $props();
+  let { templateId, slots, width = null, texts = [] }: Props = $props();
 
   let tpl = $derived<Template>(getTemplate(templateId));
   let aspectRatio = $derived(tpl.aspect === 'square' ? '1 / 1' : '4 / 3');
@@ -27,7 +29,7 @@
 <div
   class="relative overflow-hidden"
   style="
-    width: {width}px;
+    width: {width === null ? '100%' : `${width}px`};
     aspect-ratio: {aspectRatio};
     background: var(--color-surface);
     border: 1px solid var(--color-line);
