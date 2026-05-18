@@ -167,39 +167,44 @@
       <a class="btn-ghost" href={`/projects/${data.project.id}/album/sorter`}>open sorter view →</a>
       <a class="btn-ghost" href={`/projects/${data.project.id}/album/export`}>export PDF →</a>
     </p>
-    <label class="text-sm mt-2 flex items-center gap-2" style="color: var(--color-muted)">
-      gap between images:
-      <input type="range" min="0" max="40" step="1" value={slotGapPx} oninput={onGapChange} style="width: 160px;" />
-      <span style="font-variant-numeric: tabular-nums; min-width: 3ch;">{slotGapPx}px</span>
-    </label>
-    <label class="text-sm mt-1 flex items-center gap-2" style="color: var(--color-muted)">
-      page margin:
-      <input type="range" min="0" max="60" step="1" value={pagePaddingPx} oninput={onPadChange} style="width: 160px;" />
-      <span style="font-variant-numeric: tabular-nums; min-width: 3ch;">{pagePaddingPx}px</span>
-    </label>
-    <label class="text-sm mt-1 flex items-center gap-2" style="color: var(--color-muted)">
-      slot corner radius:
-      <input type="range" min="0" max="40" step="1" value={slotCornerRadiusPx} oninput={onCornerChange} style="width: 160px;" />
-      <span style="font-variant-numeric: tabular-nums; min-width: 3ch;">{slotCornerRadiusPx}px</span>
-    </label>
-    <label class="text-sm mt-1 flex items-center gap-2" style="color: var(--color-muted)">
-      page background:
-      <input type="color" bind:value={pageBgColor} oninput={onPageBgChange} style="width: 32px; height: 24px; border: 1px solid var(--color-line); border-radius: 3px;" />
-      <span style="font-family: var(--font-mono); font-size: 0.75rem;">{pageBgColor}</span>
-    </label>
-    <label class="text-sm mt-1 flex items-center gap-2" style="color: var(--color-muted)">
-      paper size:
-      <select onchange={onPageSizeChange} style="background: var(--color-surface); border: 1px solid var(--color-line); border-radius: 4px; padding: 2px 6px; font-size: 0.75rem;">
-        {#each ['landscape', 'portrait', 'square'] as group}
-          <optgroup label={group}>
-            {#each PAPER_PRESETS.filter((p) => p.group === group) as preset}
-              <option value={preset.id} selected={preset.width_mm === pageWidthMm && preset.height_mm === pageHeightMm}>{preset.label}</option>
+    <details open class="mt-3 settings-section">
+      <summary>Page</summary>
+      <div class="settings-body">
+        <label class="text-sm flex items-center gap-2" style="color: var(--color-muted)">
+          paper size:
+          <select onchange={onPageSizeChange} class="settings-select">
+            {#each ['landscape', 'portrait', 'square'] as group}
+              <optgroup label={group}>
+                {#each PAPER_PRESETS.filter((p) => p.group === group) as preset}
+                  <option value={preset.id} selected={preset.width_mm === pageWidthMm && preset.height_mm === pageHeightMm}>{preset.label}</option>
+                {/each}
+              </optgroup>
             {/each}
-          </optgroup>
-        {/each}
-      </select>
-      <span style="font-variant-numeric: tabular-nums;">{pageWidthMm}×{pageHeightMm}mm</span>
-    </label>
+          </select>
+          <span style="font-variant-numeric: tabular-nums;">{pageWidthMm}×{pageHeightMm}mm</span>
+        </label>
+        <label class="text-sm flex items-center gap-2" style="color: var(--color-muted)">
+          page margin:
+          <input type="range" min="0" max="60" step="1" value={pagePaddingPx} oninput={onPadChange} style="width: 160px;" />
+          <span style="font-variant-numeric: tabular-nums; min-width: 3ch;">{pagePaddingPx}px</span>
+        </label>
+        <label class="text-sm flex items-center gap-2" style="color: var(--color-muted)">
+          gap between images:
+          <input type="range" min="0" max="40" step="1" value={slotGapPx} oninput={onGapChange} style="width: 160px;" />
+          <span style="font-variant-numeric: tabular-nums; min-width: 3ch;">{slotGapPx}px</span>
+        </label>
+        <label class="text-sm flex items-center gap-2" style="color: var(--color-muted)">
+          slot corner radius:
+          <input type="range" min="0" max="40" step="1" value={slotCornerRadiusPx} oninput={onCornerChange} style="width: 160px;" />
+          <span style="font-variant-numeric: tabular-nums; min-width: 3ch;">{slotCornerRadiusPx}px</span>
+        </label>
+        <label class="text-sm flex items-center gap-2" style="color: var(--color-muted)">
+          page background:
+          <input type="color" bind:value={pageBgColor} oninput={onPageBgChange} style="width: 32px; height: 24px; border: 1px solid var(--color-line); border-radius: 3px;" />
+          <span style="font-family: var(--font-mono); font-size: 0.75rem;">{pageBgColor}</span>
+        </label>
+      </div>
+    </details>
 
     <div class="flex flex-col gap-6 mt-4">
       <button
