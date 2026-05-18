@@ -62,12 +62,13 @@
     {#each grid.rows as row}
       {#each row as cell}
         <div
-          class="relative px-1 py-0.5"
+          class="relative"
           style="
             border: 1px solid {cell.day === null ? 'transparent' : 'var(--color-line)'};
             background: {cell.isToday ? 'rgba(255,200,0,0.15)' : 'transparent'};
             min-height: 0;
             overflow: hidden;
+            padding: 1px 2px;
           "
         >
           {#if cell.day !== null}
