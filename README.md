@@ -1,6 +1,6 @@
-# slop-family-album
+# slop-photo-album
 
-Local-first desktop app for building printed family photo albums and seasonal-memory wall calendars from a year of family photos.
+Local-first desktop app for building printed photo albums and seasonal-memory wall calendars from a year of photos.
 
 ## Status
 

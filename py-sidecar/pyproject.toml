@@ -1,7 +1,7 @@
 [project]
-name = "slop-family-album-py-sidecar"
+name = "slop-photo-album-py-sidecar"
 version = "0.1.0"
-description = "Python CV sidecar for Family Album & Calendar Builder"
+description = "Python CV sidecar for the slop-photo-album app"
 requires-python = ">=3.11"
 dependencies = [
   "fastapi>=0.110",

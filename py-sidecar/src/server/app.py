@@ -50,7 +50,7 @@ class ExposureRequest(BaseModel):
 
 
 def build_app() -> FastAPI:
-    app = FastAPI(title="slop-family-album-py-sidecar")
+    app = FastAPI(title="slop-photo-album-py-sidecar")
 
     # Allow the Tauri renderer (origin http://localhost:1420 in dev,
     # tauri:// in prod) to call us. Safe because we bind to 127.0.0.1
