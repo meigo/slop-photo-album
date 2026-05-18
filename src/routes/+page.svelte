@@ -64,7 +64,14 @@
     </h1>
   </PageHeader>
 
-  <section class="mt-4">
+  <p class="mt-2 max-w-3xl" style="color: var(--color-muted); line-height: 1.5;">
+    Build a printable photo book and matching wall calendar from a year of your photos.
+    The app indexes a source folder, scores photos with on-device computer vision,
+    auto-assembles pages you can review and tweak, and exports both as PDFs ready
+    for a print shop.
+  </p>
+
+  <section class="mt-6">
     <div class="flex items-center justify-between mb-3">
       <h2 class="text-lg font-medium">Projects</h2>
       <button type="button" class="btn-primary flex items-center gap-1" onclick={openNewProject}>
