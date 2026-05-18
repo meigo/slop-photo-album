@@ -68,7 +68,7 @@
 </script>
 
 <div class="container-page">
-  <PageHeader backHref={`/projects/${data.project.id}`}>
+  <PageHeader backHref={`/projects/${data.project.id}/album/review`}>
     <h1 class="text-xl font-medium">{data.project.name} — album sorter</h1>
   </PageHeader>
 
@@ -80,10 +80,6 @@
     <p class="text-sm mt-2" style="color: var(--color-muted)">
       {localOrder.length} pages · drag to reorder · click a page to open the full review
     </p>
-    <p class="text-sm mt-1">
-      <a class="btn-ghost" href={`/projects/${data.project.id}/album/review`}>← back to full review</a>
-    </p>
-
     <!-- Responsive grid: columns auto-fill at min 200px, sharing leftover
          width equally. Narrow viewports wrap to fewer columns; the dashed
          drop highlight tracks the actual column width (no longer a fixed
