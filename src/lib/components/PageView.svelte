@@ -229,7 +229,13 @@
           padding: {slotGapPx / 2}px;
         "
       >
-        <div class="w-full h-full" style="padding: 4px; font-size: 1.2em;">
+        <!-- font-size in cqi (% of PageView width) so the calendar grid
+             text scales proportionally with the page. 1.92cqi ≈ 19.2px on
+             a 1000px-wide page (matches the previous 1.2em of 16px), and
+             shrinks/grows correctly for compact thumbnails or large
+             previews. CalendarGrid's internal em-based sizes cascade off
+             this. -->
+        <div class="w-full h-full" style="padding: 4px; font-size: 1.92cqi;">
           <CalendarGrid
             year={ym.year}
             month={ym.month}
