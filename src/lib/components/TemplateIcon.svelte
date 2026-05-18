@@ -17,17 +17,24 @@
   style="width: {width}px; height: {width}px; background: var(--color-surface); border: 1px solid var(--color-line); flex-shrink: 0;"
 >
   {#each tpl.slots as slotLayout}
+    {@const EPS = 0.001}
+    {@const inT = slotLayout.y > EPS ? 1 : 0}
+    {@const inL = slotLayout.x > EPS ? 1 : 0}
+    {@const inB = slotLayout.y + slotLayout.h < 1 - EPS ? 1 : 0}
+    {@const inR = slotLayout.x + slotLayout.w < 1 - EPS ? 1 : 0}
+    <!-- 1px inset on edges adjacent to another slot or the calendar grid;
+         flush with the icon frame on edges that touch the outer border.
+         Adjacent slots end up with a ~2px gap between them (1px from
+         each); slots filling the icon edge-to-edge stay flush. -->
     <div
       class="absolute"
       style="
-        left: {slotLayout.x * 100}%;
-        top: {slotLayout.y * 100}%;
-        width: {slotLayout.w * 100}%;
-        height: {slotLayout.h * 100}%;
+        left: calc({slotLayout.x * 100}% + {inL}px);
+        top: calc({slotLayout.y * 100}% + {inT}px);
+        width: calc({slotLayout.w * 100}% - {inL + inR}px);
+        height: calc({slotLayout.h * 100}% - {inT + inB}px);
         background: var(--color-fg);
         opacity: 0.6;
-        outline: 1px solid var(--color-surface);
-        outline-offset: -1px;
       "
     ></div>
   {/each}
