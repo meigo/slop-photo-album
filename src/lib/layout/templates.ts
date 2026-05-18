@@ -63,7 +63,17 @@ export const TEMPLATES: Record<string, Template> = {
       { x: 0.66, y: 0, w: 0.34, h: 1 },
     ],
     aspect: 'square',
-    label: '2 photos (hero + small, side)',
+    label: '2 photos (hero left + small right)',
+  },
+  'pair-asym-h-r': {
+    id: 'pair-asym-h-r',
+    slot_count: 2,
+    slots: [
+      { x: 0,    y: 0, w: 0.34, h: 1 },
+      { x: 0.34, y: 0, w: 0.66, h: 1 },
+    ],
+    aspect: 'square',
+    label: '2 photos (small left + hero right)',
   },
   'trio-asym': {
     id: 'trio-asym',
@@ -74,7 +84,18 @@ export const TEMPLATES: Record<string, Template> = {
       { x: 0.66, y: 0.5,  w: 0.34, h: 0.5 },
     ],
     aspect: 'square',
-    label: '3 photos (hero + 2 stacked)',
+    label: '3 photos (hero left + 2 stacked right)',
+  },
+  'trio-asym-r': {
+    id: 'trio-asym-r',
+    slot_count: 3,
+    slots: [
+      { x: 0,    y: 0,    w: 0.34, h: 0.5 },
+      { x: 0,    y: 0.5,  w: 0.34, h: 0.5 },
+      { x: 0.34, y: 0,    w: 0.66, h: 1 },
+    ],
+    aspect: 'square',
+    label: '3 photos (2 stacked left + hero right)',
   },
   'trio-h': {
     id: 'trio-h',
@@ -144,6 +165,14 @@ export const TEMPLATES: Record<string, Template> = {
     label: '1 photo on top + grid',
     calendarGrid: { x: 0, y: 0.55, w: 1, h: 0.45 },
   },
+  'cal-month-bottom': {
+    id: 'cal-month-bottom',
+    slot_count: 1,
+    slots: [{ x: 0, y: 0.45, w: 1, h: 0.55 }],
+    aspect: 'landscape',
+    label: '1 photo on bottom + grid',
+    calendarGrid: { x: 0, y: 0, w: 1, h: 0.45 },
+  },
   'cal-side': {
     id: 'cal-side',
     slot_count: 1,
@@ -151,6 +180,14 @@ export const TEMPLATES: Record<string, Template> = {
     aspect: 'landscape',
     label: '1 photo left + grid right',
     calendarGrid: { x: 0.5, y: 0, w: 0.5, h: 1 },
+  },
+  'cal-side-r': {
+    id: 'cal-side-r',
+    slot_count: 1,
+    slots: [{ x: 0.5, y: 0, w: 0.5, h: 1 }],
+    aspect: 'landscape',
+    label: '1 photo right + grid left',
+    calendarGrid: { x: 0, y: 0, w: 0.5, h: 1 },
   },
   'cal-pair-top': {
     id: 'cal-pair-top',
@@ -163,6 +200,17 @@ export const TEMPLATES: Record<string, Template> = {
     label: '2 photos on top + grid',
     calendarGrid: { x: 0, y: 0.5, w: 1, h: 0.5 },
   },
+  'cal-pair-bottom': {
+    id: 'cal-pair-bottom',
+    slot_count: 2,
+    slots: [
+      { x: 0,   y: 0.5, w: 0.5, h: 0.5 },
+      { x: 0.5, y: 0.5, w: 0.5, h: 0.5 },
+    ],
+    aspect: 'landscape',
+    label: '2 photos on bottom + grid',
+    calendarGrid: { x: 0, y: 0, w: 1, h: 0.5 },
+  },
   'cal-trio-top': {
     id: 'cal-trio-top',
     slot_count: 3,
@@ -174,6 +222,18 @@ export const TEMPLATES: Record<string, Template> = {
     aspect: 'landscape',
     label: '3 photos on top + grid',
     calendarGrid: { x: 0, y: 0.45, w: 1, h: 0.55 },
+  },
+  'cal-trio-bottom': {
+    id: 'cal-trio-bottom',
+    slot_count: 3,
+    slots: [
+      { x: 0,     y: 0.55, w: 0.333, h: 0.45 },
+      { x: 0.333, y: 0.55, w: 0.334, h: 0.45 },
+      { x: 0.667, y: 0.55, w: 0.333, h: 0.45 },
+    ],
+    aspect: 'landscape',
+    label: '3 photos on bottom + grid',
+    calendarGrid: { x: 0, y: 0, w: 1, h: 0.55 },
   },
 };
 
