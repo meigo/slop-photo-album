@@ -1,4 +1,4 @@
-import { getProject, countPhotos, getCurrentSelection, countPagesForSelection, getMaxIndexedAt } from '$lib/db';
+import { getProject, countPhotos, getCurrentSelection, countPagesForSelection, getMaxIndexedAt, listTopProjectThumbs } from '$lib/db';
 import { error } from '@sveltejs/kit';
 
 export const ssr = false;
@@ -14,10 +14,12 @@ export async function load({ params }) {
   const albumPageCount = albumSelection ? await countPagesForSelection(albumSelection.id) : 0;
   const calendarPageCount = calendarSelection ? await countPagesForSelection(calendarSelection.id) : 0;
   const lastIndexedAt = await getMaxIndexedAt(id);
+  const topThumbs = count > 0 ? await listTopProjectThumbs(id, 8) : [];
   return {
     project, count,
     albumSelection, calendarSelection,
     albumPageCount, calendarPageCount,
     lastIndexedAt,
+    topThumbs,
   };
 }

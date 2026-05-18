@@ -1,5 +1,6 @@
 <script lang="ts">
   import PageHeader from '$lib/components/PageHeader.svelte';
+  import { convertFileSrc } from '@tauri-apps/api/core';
   import { indexProject } from '$lib/indexing/scanner';
   import { indexProgress, type IndexProgress } from '$lib/indexing/progress';
   import { invalidateAll, goto } from '$app/navigation';
@@ -111,6 +112,23 @@
         <span style="color: var(--color-muted)" class="text-sm"> · last index {formatRelativeTime(data.lastIndexedAt)}</span>
       {/if}
     </p>
+    {#if data.topThumbs.length > 0}
+      <!-- Strip of top-scored thumbnails: instant feedback that the
+           index worked and a preview of what the album/calendar will
+           draw from. Drops gracefully on narrow widths via flex-wrap. -->
+      <div class="flex flex-wrap gap-2 mt-3">
+        {#each data.topThumbs as thumb}
+          <img
+            src={convertFileSrc(thumb)}
+            alt=""
+            class="block"
+            style="width: 96px; aspect-ratio: 1; object-fit: cover; border-radius: var(--radius-sm); background: var(--color-line);"
+            loading="lazy"
+            draggable="false"
+          />
+        {/each}
+      </div>
+    {/if}
     <div class="flex flex-wrap gap-2 mt-3">
       <button type="button" class="btn-primary" onclick={runIndex} disabled={mine && (pStateLocal.phase === 'walking' || pStateLocal.phase === 'indexing')}>
         {(!mine || pStateLocal.phase === 'idle' || pStateLocal.phase === 'done') ? 'Index now' : 'Indexing…'}

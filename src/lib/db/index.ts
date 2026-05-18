@@ -42,6 +42,42 @@ export interface ProjectWithThumb extends ProjectRow {
   thumb_path: string | null;
 }
 
+/** Top N photo thumbnails for a project, ordered by the album selection's
+ *  per-photo score (most "album-worthy" first). Falls back to any
+ *  indexed photo's thumb_path when no album selection exists yet. */
+export async function listTopProjectThumbs(projectId: number, limit = 6): Promise<string[]> {
+  const d = await db();
+  const scored = await d.select<{ thumb_path: string }[]>(
+    `SELECT ph.thumb_path
+       FROM photo ph
+       JOIN selected_photo sp ON sp.photo_id = ph.id
+       JOIN selection s ON s.id = sp.selection_id
+      WHERE s.project_id = ?
+        AND s.kind = 'album'
+        AND s.is_current = 1
+        AND ph.thumb_path IS NOT NULL
+        AND sp.score IS NOT NULL
+      ORDER BY sp.score DESC
+      LIMIT ?`,
+    [projectId, limit]
+  );
+  if (scored.length >= limit) return scored.map((r) => r.thumb_path);
+  // Pad from any indexed photo for the project that's not already in the list.
+  const have = new Set(scored.map((r) => r.thumb_path));
+  const rest = await d.select<{ thumb_path: string }[]>(
+    `SELECT thumb_path FROM photo
+      WHERE project_id = ? AND thumb_path IS NOT NULL
+      LIMIT ?`,
+    [projectId, limit * 2]
+  );
+  const out = scored.map((r) => r.thumb_path);
+  for (const r of rest) {
+    if (out.length >= limit) break;
+    if (!have.has(r.thumb_path)) out.push(r.thumb_path);
+  }
+  return out;
+}
+
 export async function listProjectsWithThumbs(): Promise<ProjectWithThumb[]> {
   const d = await db();
   return d.select<ProjectWithThumb[]>(
