@@ -1,44 +1,76 @@
 # slop-photo-album
 
-Local-first desktop app for building printed photo albums and seasonal-memory wall calendars from a year of photos.
+Local-first desktop app that turns a folder of a year's photos into a printable
+photo book and a matching wall calendar. Indexes your source folder, scores
+each photo with on-device computer vision (blur, faces, scene tags, exposure),
+auto-assembles pages you can review and tweak, and exports both as PDFs ready
+for a print shop.
 
-## Status
+All photo data and analysis stays on your machine — nothing leaves the computer.
 
-**Phase 1 (Foundation) — complete.** Index folder → SQLite with thumbnails + EXIF, library grid.
+## Features
 
-**Phase 2a (CV pipeline) — complete.** Blur + face detection + perceptual hash; pHash duplicate groups.
+**Library**
 
-**Phase 2b (Semantic CV) — complete.** OpenCLIP embeddings, scene tags, SFace face embeddings, exposure scoring.
+- Walks any source folder; extracts EXIF (dates, GPS, camera, lens) and writes a
+  thumbnail for each photo into local SQLite.
+- HEIC, JPEG, PNG, WebP. Cross-platform via libheif on macOS / built-in on Win.
+- On-device CV pipeline: Laplacian blur (focused on face regions when present),
+  YuNet face detection + SFace identity embeddings, OpenCLIP scene tagging,
+  exposure scoring, pHash for duplicate detection.
 
-**Phase 3a (Selection) — complete.** Aggregate scoring + album/calendar selection.
+**Album**
 
-**Phase 3b (Layout + Review) — complete.** Auto-composed pages + popup picker.
+- Auto-selects the best photos per day (top-N by aggregate score) up to a
+  per-month cap, then packs them into pages using a varied template rotation
+  (hero, side-by-side, asymmetric trio, quad grid, six grid + mirrored
+  variants) with a user-configurable max page count.
+- Per-page template picker as a schematic-icon popover; reorder, regenerate,
+  delete, swap two adjacent photos via mid-edge buttons, insert blank pages,
+  adjust crop in-place with brightness / contrast / saturation sliders,
+  face-aware default cropping.
+- Drag-to-reorder sorter view shows every page as a thumbnail grid.
+- Place text overlays anywhere on a page; ~20 curated Google Fonts.
 
-**Phase 3c (Review power) — complete.** Per-page template dropdown, reorder, delete.
+**Calendar**
 
-**Phase 3d (Slot transform + auto-position) — complete.** Drag-to-reposition + scroll/pinch zoom inside any slot, face-aware default crop (no AI needed — uses Phase 2a face data), insert blank pages anywhere in the album.
+- 12 monthly pages, auto-populated from the year's photos with one representative
+  photo per month (or several per page via the per-page template — side, pair,
+  trio variants on top or bottom).
+- Calendar grid with configurable rule style (boxed / spreadsheet-grid / lines /
+  none), text + grid color, separate weekend (Sunday) color, Google Font for
+  the grid, Mon/Sun week-start.
+- Date numbers vertically centered under their column headers, scaled with
+  page width so previews and exports render proportionally.
 
-**Phase 3e (Sorter view) — complete.** Drag-reorder pages from a thumbnail-grid view.
+**Style + paper**
 
-**Phase 3f (In-place crop editor) — complete.** Slot edges show swap-photo and adjust-crop icons on hover; crop adjustments happen in-place over the slot (drag to reposition, scroll to zoom). Auto-position now uses `object-position` so slots always cover fully — no edge gaps. Empty slots show a checkerboard.
+- Per-output paper size from a 14-preset catalog (A4/A4-portrait, US Letter,
+  20/21/28/30 cm squares, 8/10/12" squares, 30×20cm + 28×21cm landscape,
+  21×28cm + 20×28cm portrait). Album and calendar can have different sizes.
+- Page bg color, slot gap, page margin, slot corner radius — separate values
+  for album and calendar where it matters.
+- Four built-in style presets (Minimal / Classic / Polaroid / Modern) that
+  bundle gap / padding / corner / bg / calendar font / calendar color.
 
-**Phase 4a (Calendar grid + events) — complete.** Calendar pages render an actual month grid (day headers + dates aligned to weekday, Mon/Sun toggle per project). Per-project events table with birthday/anniversary/event/holiday kinds, yearly-recurring or one-off. Inline events panel on the project page; one-click presets for Estonian + US holidays. Event marks show on the rendered grid color-coded by kind.
+**Export**
 
-**Phase 4b (Text layers + Google Fonts) — complete.** Place text overlays anywhere on any page (album or calendar). Drag to reposition, drag the corner to resize, in-place edit content + style (font family, size, weight, italic, color, alignment). Curated catalog of ~20 Google Fonts loaded on-demand via a `<link>` tag.
+- Per-output PDF export at a chosen target DPI (170 / 255 / 340). The scale
+  multiplier is computed at capture time from the chosen DPI + paper size, so
+  the label is honest regardless of preview thumbnail size.
+- One PDF per output, written to a user-chosen path via the native save dialog.
 
-**Phase 4c (Slot polish) — complete.** Hover a photo slot to swap (🖼), adjust (✥), or remove the photo entirely (🗑). The crop editor exposes brightness, contrast, and saturation sliders that render via CSS `filter` for live preview.
+## Tech stack
 
-**Phase 4d (Page + text backgrounds) — complete.** Per-project page background color (default white) — applies to every page in album and calendar. Per-text overlay background fill with adjustable padding — toggle on, pick a color, set the padding, useful for readable captions over photos.
-
-**Phase 4e (PDF export) — complete.** Per-kind export routes (`/album/export`, `/calendar/export`) stack every page at the chosen paper size; "Save as PDF" awaits font + image readiness, then triggers the browser's print dialog. Album: A4-square / Letter-square. Calendar: A4-landscape / Letter-landscape. Vector text, raster photos, sRGB.
-
-LLM-generated captions — planned but not yet implemented.
-
-See `docs/superpowers/specs/2026-05-14-family-album-builder-design.md` for the design.
+Tauri v2 shell · SvelteKit (Svelte 5) renderer · SQLite via `tauri-plugin-sql`
+· Node sidecar (Sharp + exiftool-vendored) · Python sidecar (FastAPI + OpenCV
++ OpenCLIP + imagehash) · jsPDF + modern-screenshot for PDF capture.
 
 ## Development
 
-Requires: Node ≥ 20, Rust toolchain (for Tauri v2), Python ≥ 3.11, `uv` (https://docs.astral.sh/uv/), `libheif` if you want HEIC support (`brew install libheif` on macOS).
+Requires Node ≥ 20, Rust toolchain (Tauri v2), Python ≥ 3.11, [uv](https://docs.astral.sh/uv/),
+and `libheif` for HEIC support (`brew install libheif` on macOS; bundled in
+the Windows distribution).
 
 ```bash
 npm install
@@ -47,34 +79,33 @@ cd py-sidecar && uv sync && cd ..
 npm run tauri dev
 ```
 
-**First run note:** The first time Tauri spawns the Python sidecar after `uv sync`, OpenCLIP downloads the ViT-B/32 weights (~150 MB) to `~/.cache/torch/hub/checkpoints/`. Allow a couple of minutes for the first `/embed` or `/tags` call to complete; subsequent runs are fast.
+**First run note:** the first time the Python sidecar starts after `uv sync`,
+OpenCLIP downloads the ViT-B/32 weights (~150 MB) to
+`~/.cache/torch/hub/checkpoints/`. The first `/embed` or `/tags` call takes a
+couple of minutes; subsequent runs are fast.
 
-Run sidecar tests:
-
-```bash
-cd sidecar && npm test
-```
-
-Run Python sidecar tests:
+### Tests
 
 ```bash
-cd py-sidecar && uv run pytest
+cd sidecar && npm test            # Node sidecar (Vitest)
+cd py-sidecar && uv run pytest    # Python sidecar
+cd src-tauri && cargo test        # Rust
+npx playwright test               # UI smoke (non-Tauri)
 ```
 
-Run Rust tests:
+### Fixture generator
 
-```bash
-cd src-tauri && cargo test
-```
-
-UI smoke (non-Tauri):
-
-```bash
-npx playwright test
-```
+`tools/fixtures/` produces a synthetic family-of-four photo set via ComfyUI
+(FLUX.1-dev) + ExifTool, for testing the index/CV/selection pipeline against
+realistic-but-controllable data. See `tools/fixtures/README.md`.
 
 ## Architecture
 
-See `docs/superpowers/specs/2026-05-14-family-album-builder-design.md`.
+See `docs/superpowers/specs/2026-05-14-family-album-builder-design.md` for the
+original design doc. The app has grown beyond that spec — the source is now
+the truth — but the high-level shape is unchanged: Tauri shell, SvelteKit UI,
+SQLite for project + photo state, two sidecars (Node for fast EXIF/Sharp work,
+Python for CV models that need PyTorch/OpenCV).
 
-Short version: Tauri v2 shell + SvelteKit renderer + SQLite + Node sidecar (Sharp + ExifTool) + Python sidecar (OpenCV + imagehash). All data stays local.
+All photo data and ML inference is local. The Google Fonts CSS is the only
+outbound request, and only when a non-default font is used.
