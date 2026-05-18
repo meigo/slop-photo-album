@@ -115,7 +115,9 @@ button:not(:disabled) {
   background: transparent;
   color: var(--color-muted);
   padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
 }
+.btn-ghost:hover { background: var(--color-line); color: var(--color-fg); }
 
 .input-base {
   background: var(--color-surface);
@@ -269,12 +271,14 @@ button:not(:disabled) {
 
 /* Per-page template picker: small TemplateIcon as the trigger, a
    floating popover of larger icons as the menu. Replaces the legacy
-   text-only <select> on PageControls. */
+   text-only <select> on PageControls. Chrome matches .btn-ghost so
+   the picker sits coherently in the per-page action cluster
+   alongside the up/down/trash icons. */
 .template-picker-btn {
-  background: var(--color-surface);
-  border: 1px solid var(--color-line);
+  background: transparent;
+  border: none;
   border-radius: var(--radius-sm);
-  padding: 3px;
+  padding: 4px;
   line-height: 0;
   cursor: pointer;
 }
