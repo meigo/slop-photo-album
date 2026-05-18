@@ -7,7 +7,7 @@
   import TextEditor from '$lib/components/TextEditor.svelte';
   import { getTemplate } from '$lib/layout/templates';
   import { invalidateAll } from '$app/navigation';
-  import { updateSlotPhoto, clearSlotPhoto, insertBlankPage, updateProjectSlotGap, updateProjectPagePadding, updateProjectPageBgColor, updateProjectPageAspect, addPageText } from '$lib/db';
+  import { updateSlotPhoto, clearSlotPhoto, insertBlankPage, updateProjectSlotGap, updateProjectPagePadding, updateProjectPageBgColor, updateProjectPageAspect, updateProjectSlotCornerRadius, addPageText } from '$lib/db';
   import { DEFAULT_TEXT_STYLE, serializeStyle } from '$lib/text/style';
 
   let { data } = $props();
@@ -24,6 +24,8 @@
       ? data.project.page_aspect
       : null
   );
+  // svelte-ignore state_referenced_locally
+  let slotCornerRadiusPx = $state(data.project.slot_corner_radius_px);
 
   async function onPageBgChange(e: Event) {
     const v = (e.currentTarget as HTMLInputElement).value;
@@ -53,6 +55,16 @@
     if (padSavingTimer) clearTimeout(padSavingTimer);
     padSavingTimer = setTimeout(async () => {
       await updateProjectPagePadding(data.project.id, v);
+    }, 250);
+  }
+
+  let cornerSavingTimer: ReturnType<typeof setTimeout> | null = null;
+  function onCornerChange(e: Event) {
+    const v = Number((e.currentTarget as HTMLInputElement).value);
+    slotCornerRadiusPx = v;
+    if (cornerSavingTimer) clearTimeout(cornerSavingTimer);
+    cornerSavingTimer = setTimeout(async () => {
+      await updateProjectSlotCornerRadius(data.project.id, v);
     }, 250);
   }
 
@@ -163,6 +175,11 @@
       <span style="font-variant-numeric: tabular-nums; min-width: 3ch;">{pagePaddingPx}px</span>
     </label>
     <label class="text-sm mt-1 flex items-center gap-2" style="color: var(--color-muted)">
+      slot corner radius:
+      <input type="range" min="0" max="40" step="1" value={slotCornerRadiusPx} oninput={onCornerChange} style="width: 160px;" />
+      <span style="font-variant-numeric: tabular-nums; min-width: 3ch;">{slotCornerRadiusPx}px</span>
+    </label>
+    <label class="text-sm mt-1 flex items-center gap-2" style="color: var(--color-muted)">
       page background:
       <input type="color" bind:value={pageBgColor} oninput={onPageBgChange} style="width: 32px; height: 24px; border: 1px solid var(--color-line); border-radius: 3px;" />
       <span style="font-family: var(--font-mono); font-size: 0.75rem;">{pageBgColor}</span>
@@ -220,6 +237,7 @@
               {pagePaddingPx}
               {pageBgColor}
               {pageAspect}
+              {slotCornerRadiusPx}
               texts={data.textsByPage.get(page.id) ?? []}
               editingTextId={editingTextId?.pageId === page.id ? editingTextId.textId : null}
               onEditText={(textId) => openTextEditor(page.id, textId)}

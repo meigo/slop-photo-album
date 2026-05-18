@@ -55,8 +55,11 @@
     /** When true, suppress all interactive chrome (hover icons, click
      *  overlay, border) so the page renders as it should appear in print. */
     printMode?: boolean;
+    /** Corner radius (px) for each slot image. 0 = square slots (default).
+     *  The page itself is always rectangular; only the slot images round. */
+    slotCornerRadiusPx?: number;
   }
-  let { templateId, slots, onSlotClick, onSwapPhoto, onAdjustCrop, onRemovePhoto, editingSlotIndex = null, slotGapPx = 2, pagePaddingPx = 0, pageTitle = null, events = [], weekStart = 1, texts = [], editingTextId = null, onEditText, pageBgColor = '#ffffff', pageAspect = null, printMode = false }: Props = $props();
+  let { templateId, slots, onSlotClick, onSwapPhoto, onAdjustCrop, onRemovePhoto, editingSlotIndex = null, slotGapPx = 2, pagePaddingPx = 0, pageTitle = null, events = [], weekStart = 1, texts = [], editingTextId = null, onEditText, pageBgColor = '#ffffff', pageAspect = null, printMode = false, slotCornerRadiusPx = 0 }: Props = $props();
 
   let tpl = $derived<Template>(getTemplate(templateId));
   let aspectRatio = $derived.by(() => {
@@ -90,8 +93,8 @@
 </script>
 
 <div
-  class="relative w-full surface-card p-0 overflow-hidden"
-  style="aspect-ratio: {aspectRatio}; border: {printMode ? 'none' : '1px solid var(--color-line)'}; background: {pageBgColor};"
+  class="relative w-full overflow-hidden"
+  style="aspect-ratio: {aspectRatio}; border: {printMode ? 'none' : '1px solid var(--color-line)'}; background: {pageBgColor}; border-radius: 0;"
 >
   {#each tpl.slots as slotLayout, i}
     {@const slot = orderedSlots[i]}
@@ -113,7 +116,7 @@
         padding: {padTop}px {padRight}px {padBottom}px {padLeft}px;
       "
     >
-      <div class="relative w-full h-full overflow-hidden">
+      <div class="relative w-full h-full overflow-hidden" style="border-radius: {slotCornerRadiusPx}px;">
         {#if slot?.path}
           <img
             src={convertFileSrc(slot.path)}

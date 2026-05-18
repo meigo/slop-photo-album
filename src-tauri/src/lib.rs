@@ -142,5 +142,11 @@ fn migrations() -> Vec<tauri_plugin_sql::Migration> {
       sql: include_str!("../migrations/014_album_max_pages.sql"),
       kind: tauri_plugin_sql::MigrationKind::Up,
     },
+    tauri_plugin_sql::Migration {
+      version: 15,
+      description: "project_slot_corner_radius",
+      sql: include_str!("../migrations/015_slot_corner_radius.sql"),
+      kind: tauri_plugin_sql::MigrationKind::Up,
+    },
   ]
 }

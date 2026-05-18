@@ -129,6 +129,7 @@
         slotGapPx={data.project.slot_gap_px}
         pagePaddingPx={data.project.page_padding_px}
         pageBgColor={data.project.page_bg_color}
+        slotCornerRadiusPx={data.project.slot_corner_radius_px}
         {pageAspect}
         texts={data.textsByPage.get(page.id) ?? []}
         printMode

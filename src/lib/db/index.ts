@@ -82,6 +82,13 @@ export async function updateProjectAlbumMaxPages(
   await d.execute('UPDATE project SET album_max_pages = ? WHERE id = ?', [value, id]);
 }
 
+/** 0 = square slots (default). >0 = px corner radius on each slot's image. */
+export async function updateProjectSlotCornerRadius(id: number, radiusPx: number): Promise<void> {
+  const d = await db();
+  const clamped = Math.max(0, Math.min(40, Math.round(radiusPx)));
+  await d.execute('UPDATE project SET slot_corner_radius_px = ? WHERE id = ?', [clamped, id]);
+}
+
 export async function upsertPhoto(p: PhotoInsert): Promise<void> {
   const d = await db();
   await d.execute(

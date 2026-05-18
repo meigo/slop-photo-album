@@ -230,6 +230,7 @@
               {pagePaddingPx}
               {pageBgColor}
               {pageAspect}
+              slotCornerRadiusPx={data.project.slot_corner_radius_px}
               pageTitle={page.title}
               events={data.events}
               {weekStart}

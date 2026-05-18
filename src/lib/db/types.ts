@@ -11,6 +11,7 @@ export interface ProjectRow {
   page_bg_color: string;
   page_aspect: string | null;
   album_max_pages: number | null;
+  slot_corner_radius_px: number;
 }
 
 export interface CalendarEventRow {
