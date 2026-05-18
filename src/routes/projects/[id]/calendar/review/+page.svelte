@@ -234,7 +234,7 @@
       </div>
     </details>
 
-    <details class="mt-3 settings-section">
+    <details class="mt-4 settings-section">
       <summary>Calendar grid</summary>
       <div class="settings-body">
         <label class="text-sm flex items-center gap-2" style="color: var(--color-muted)">
@@ -275,7 +275,7 @@
       </div>
     </details>
 
-    <div class="flex flex-col gap-12 mt-4">
+    <div class="flex flex-col gap-12 mt-12">
       {#each data.pages as page, idx (page.id)}
         <section>
           <div class="flex items-center justify-between gap-2 mb-2">
