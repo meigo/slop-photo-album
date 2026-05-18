@@ -75,13 +75,14 @@
       aria-haspopup="true"
       aria-expanded={pickerOpen}
     >
-      <TemplateIcon templateId={currentTemplateId} width={kind === 'album' ? 32 : 44} />
+      <TemplateIcon templateId={currentTemplateId} width={kind === 'album' ? 22 : 30} />
     </button>
     {#if pickerOpen}
       <div
         class="template-picker-popover"
         role="dialog"
         aria-label="Choose page layout"
+        style="grid-template-columns: repeat(auto-fill, minmax({kind === 'album' ? 44 : 60}px, 1fr));"
       >
         {#each templates as t}
           <button
@@ -91,7 +92,7 @@
             onclick={() => pickTemplate(t)}
             title={t.label}
           >
-            <TemplateIcon templateId={t.id} width={kind === 'album' ? 56 : 76} />
+            <TemplateIcon templateId={t.id} width={kind === 'album' ? 40 : 56} />
           </button>
         {/each}
       </div>

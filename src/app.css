@@ -289,10 +289,12 @@ button:not(:disabled) {
   border: 1px solid var(--color-line);
   border-radius: var(--radius-md);
   padding: var(--space-2);
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: var(--space-2);
-  max-width: 520px;
+  /* Width set so several columns fit; columns themselves are
+     min-px-wide via grid-template-columns on the element style. */
+  width: max-content;
+  max-width: 480px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 .template-picker-option {
