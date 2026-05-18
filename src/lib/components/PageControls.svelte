@@ -90,7 +90,7 @@
       aria-haspopup="true"
       aria-expanded={pickerOpen}
     >
-      <TemplateIcon templateId={currentTemplateId} width={kind === 'album' ? 22 : 30} />
+      <TemplateIcon templateId={currentTemplateId} width={20} />
     </button>
     {#if pickerOpen}
       {@const cols = Math.ceil(Math.sqrt(templates.length))}
@@ -121,23 +121,23 @@
          for calendar; only album pages can be reordered. -->
     <button
       type="button"
-      class="btn-ghost"
+      class="btn-icon"
       onclick={moveUp}
       disabled={busy || isFirst}
       title="Move page up"
       aria-label="Move page up"
     >
-      <ArrowUp size={16} />
+      <ArrowUp size={18} />
     </button>
     <button
       type="button"
-      class="btn-ghost"
+      class="btn-icon"
       onclick={moveDown}
       disabled={busy || isLast}
       title="Move page down"
       aria-label="Move page down"
     >
-      <ArrowDown size={16} />
+      <ArrowDown size={18} />
     </button>
   {/if}
   {#if kind === 'album'}
@@ -145,14 +145,14 @@
          meaningful. Album pages remain freely deletable. -->
     <button
       type="button"
-      class="btn-ghost"
+      class="btn-icon"
       onclick={remove}
       disabled={busy}
       title="Delete this page"
       aria-label="Delete page"
       style="color: var(--color-danger);"
     >
-      <Trash2 size={16} />
+      <Trash2 size={18} />
     </button>
   {/if}
 </div>

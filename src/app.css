@@ -119,6 +119,27 @@ button:not(:disabled) {
 }
 .btn-ghost:hover { background: var(--color-line); color: var(--color-fg); }
 
+/* Square 32×32 icon button. Used inside per-page action clusters
+   (template picker trigger, reorder arrows, trash) for a uniform
+   toolbar feel. */
+.btn-icon {
+  background: transparent;
+  color: var(--color-muted);
+  border: none;
+  border-radius: var(--radius-sm);
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  cursor: pointer;
+  padding: 0;
+}
+.btn-icon:hover { background: var(--color-line); color: var(--color-fg); }
+.btn-icon[disabled] { opacity: 0.4; cursor: default; }
+.btn-icon[disabled]:hover { background: transparent; color: var(--color-muted); }
+
 .input-base {
   background: var(--color-surface);
   border: 1px solid var(--color-line);
@@ -271,16 +292,21 @@ button:not(:disabled) {
 
 /* Per-page template picker: small TemplateIcon as the trigger, a
    floating popover of larger icons as the menu. Replaces the legacy
-   text-only <select> on PageControls. Chrome matches .btn-ghost so
-   the picker sits coherently in the per-page action cluster
-   alongside the up/down/trash icons. */
+   text-only <select> on PageControls. Same chrome as .btn-icon
+   (32×32 ghost square) so the picker sits coherently in the
+   per-page action cluster alongside the up/down/trash icons. */
 .template-picker-btn {
   background: transparent;
   border: none;
   border-radius: var(--radius-sm);
-  padding: 4px;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   line-height: 0;
   cursor: pointer;
+  padding: 0;
 }
 .template-picker-btn:hover { background: var(--color-line); }
 .template-picker-popover {

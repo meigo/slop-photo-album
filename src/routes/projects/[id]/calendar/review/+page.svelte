@@ -367,7 +367,7 @@
             <button
               type="button"
               class="btn-secondary"
-              style="font-size: 0.75rem; padding: 0.25rem 0.5rem;"
+              style="font-size: 0.8rem; padding: 0.5rem 0.875rem;"
               onclick={() => addText(page.id)}
             >+ add text</button>
           </div>

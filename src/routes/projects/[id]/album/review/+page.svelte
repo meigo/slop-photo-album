@@ -215,7 +215,7 @@
       <button
         type="button"
         class="btn-secondary self-center mb-2"
-        style="font-size: 0.75rem; padding: 0.25rem 0.5rem;"
+        style="font-size: 0.8rem; padding: 0.5rem 0.875rem;"
         onclick={() => insertBlankBelow(-1)}
         disabled={inserting}
         title="Insert a blank hero-1 page at the start"
@@ -232,7 +232,7 @@
               <button
                 type="button"
                 class="btn-secondary"
-                style="font-size: 0.75rem; padding: 0.25rem 0.5rem;"
+                style="font-size: 0.8rem; padding: 0.5rem 0.875rem;"
                 onclick={() => addText(page.id)}
               >+ add text</button>
               <PageControls
@@ -316,7 +316,7 @@
         <button
           type="button"
           class="btn-secondary self-center"
-          style="font-size: 0.75rem; padding: 0.25rem 0.5rem;"
+          style="font-size: 0.8rem; padding: 0.5rem 0.875rem;"
           onclick={() => insertBlankBelow(idx)}
           disabled={inserting}
           title="Insert a blank hero-1 page after page {idx + 1}"
