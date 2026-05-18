@@ -94,7 +94,7 @@
 
 <div
   class="relative w-full overflow-hidden"
-  style="aspect-ratio: {aspectRatio}; border: {printMode ? 'none' : '1px solid var(--color-line)'}; background: {pageBgColor}; border-radius: 0;"
+  style="aspect-ratio: {aspectRatio}; background: {pageBgColor}; border-radius: 0; box-shadow: {printMode ? 'none' : '0 1px 3px rgba(0, 0, 0, 0.18)'};"
 >
   {#each tpl.slots as slotLayout, i}
     {@const slot = orderedSlots[i]}
