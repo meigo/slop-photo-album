@@ -278,9 +278,26 @@
     <div class="flex flex-col gap-6 mt-4">
       {#each data.pages as page, idx (page.id)}
         <section>
-          <h2 class="text-sm font-medium mb-1" style="color: var(--color-muted)">
-            {monthLabel(page.title)}
-          </h2>
+          <div class="flex items-center justify-between gap-2 mb-2">
+            <h2 class="text-sm font-medium" style="color: var(--color-muted)">
+              {monthLabel(page.title)}
+            </h2>
+            <div class="flex items-center gap-2">
+              <button
+                type="button"
+                class="btn-secondary"
+                style="font-size: 0.8rem; padding: 0.5rem 0.875rem;"
+                onclick={() => addText(page.id)}
+              >+ add text</button>
+              <PageControls
+                pageId={page.id}
+                currentTemplateId={page.template_id}
+                kind="calendar"
+                isFirst={idx === 0}
+                isLast={idx === data.pages.length - 1}
+              />
+            </div>
+          </div>
           <div class="relative">
             <PageView
               templateId={page.template_id}
@@ -355,21 +372,6 @@
                 />
               {/if}
             {/if}
-          </div>
-          <div class="mt-1 flex items-center gap-2">
-            <PageControls
-              pageId={page.id}
-              currentTemplateId={page.template_id}
-              kind="calendar"
-              isFirst={idx === 0}
-              isLast={idx === data.pages.length - 1}
-            />
-            <button
-              type="button"
-              class="btn-secondary"
-              style="font-size: 0.8rem; padding: 0.5rem 0.875rem;"
-              onclick={() => addText(page.id)}
-            >+ add text</button>
           </div>
         </section>
       {/each}
