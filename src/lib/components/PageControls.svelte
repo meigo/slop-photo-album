@@ -16,6 +16,19 @@
 
   let busy = $state(false);
   let pickerOpen = $state(false);
+  let pickerRoot: HTMLElement | undefined = $state();
+
+  // Close on outside click or Escape. The trigger button is inside
+  // pickerRoot so its own click doesn't close (good — it's the toggle).
+  function onDocClick(e: MouseEvent) {
+    if (!pickerOpen) return;
+    if (pickerRoot && !pickerRoot.contains(e.target as Node)) {
+      pickerOpen = false;
+    }
+  }
+  function onDocKey(e: KeyboardEvent) {
+    if (pickerOpen && e.key === 'Escape') pickerOpen = false;
+  }
 
   let templates = $derived<Template[]>(kind === 'album' ? albumTemplates() : calendarTemplates());
 
@@ -63,8 +76,10 @@
   }
 </script>
 
+<svelte:window onclick={onDocClick} onkeydown={onDocKey} />
+
 <div class="flex flex-wrap items-center gap-2 text-sm">
-  <div class="relative">
+  <div class="relative" bind:this={pickerRoot}>
     <button
       type="button"
       class="template-picker-btn"
