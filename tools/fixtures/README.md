@@ -58,7 +58,7 @@ Run from `tools/fixtures/`:
 
 ```bash
 # 1. Generate the manifest (deterministic, seeded)
-npm run manifest -- --year 2025 --count 80 --seed 1 --name family-2025
+npm run manifest -- --year 2025 --count 50 --seed 1 --name family-2025
 
 # 2. Render via ComfyUI → raw PNGs (kept as a sibling, not inside the album folder)
 npm run comfy -- --manifest manifests/family-2025.json --workflow workflow.json --overrides workflow.overrides.json --out ../../sample-albums/family-2025-raw

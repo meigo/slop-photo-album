@@ -2,7 +2,7 @@ import { writeFile, mkdir } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { parseArgs } from "node:util";
 import { AlbumManifest, type PhotoEntry, type PhotoStyle } from "./manifest.ts";
-import { EVENTS, MONTH_WEIGHTS, NEGATIVE_PROMPT, CAMERA_PROFILES } from "./events.ts";
+import { EVENTS, MONTH_WEIGHTS, NEGATIVE_PROMPT, PUPPET_NEGATIVE_PROMPT, PUPPET_FAMILY_PREAMBLE, CAMERA_PROFILES } from "./events.ts";
 import { makeRng, pick, pickWeighted, randInt, randSeed } from "./rng.ts";
 
 function daysInMonth(year: number, month: number): number {
@@ -24,7 +24,7 @@ function formatFilename(year: number, month: number, day: number, hour: number, 
 const { values } = parseArgs({
   options: {
     year: { type: "string", default: String(new Date().getFullYear()) },
-    count: { type: "string", default: "80" },
+    count: { type: "string", default: "50" },
     seed: { type: "string", default: "1" },
     style: { type: "string", default: "realistic" },
     name: { type: "string" },
@@ -83,6 +83,12 @@ for (let month = 1; month <= 12; month++) {
     const minute = randInt(rng, 0, 59);
     const second = randInt(rng, 0, 59);
 
+    const isPuppet = style === "puppet";
+    const prompt = isPuppet
+      ? `${PUPPET_FAMILY_PREAMBLE}\n\n${pick(rng, event.puppetSceneVariants)}`
+      : pick(rng, event.promptVariants);
+    const negativePrompt = isPuppet ? PUPPET_NEGATIVE_PROMPT : NEGATIVE_PROMPT;
+
     photos.push({
       id: `${year}_${event.key}_${pad(serial++, 4)}`,
       filename: formatFilename(year, month, day, hour, minute, second),
@@ -95,8 +101,8 @@ for (let month = 1; month <= 12; month++) {
       camera,
       style,
       quality: ["good"],
-      prompt: pick(rng, event.promptVariants),
-      negativePrompt: NEGATIVE_PROMPT,
+      prompt,
+      negativePrompt,
       width: 1216,
       height: 832,
       seed: randSeed(rng),

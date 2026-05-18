@@ -1,0 +1,1348 @@
+{
+  "schemaVersion": 1,
+  "name": "family-2025-puppet",
+  "year": 2025,
+  "generatedAt": "2026-05-18T05:27:54.690Z",
+  "generatorSeed": 1,
+  "defaults": {
+    "timezone": "+03:00",
+    "camera": {
+      "make": "Apple",
+      "model": "iPhone 13",
+      "lensModel": "iPhone 13 back dual wide camera"
+    }
+  },
+  "photos": [
+    {
+      "id": "2025_birthday_party_0001",
+      "filename": "IMG_20250113_150929.jpg",
+      "date": "2025:01:13 15:09:29",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "birthday_party",
+      "peopleCount": 3,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 14 Pro",
+        "lensModel": "iPhone 14 Pro back triple camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: the family puppets around a clay birthday cake with tiny matchstick candles, paper streamers above, wrapping paper made of scrap fabric. Younger child puppet leaning in to blow out the candles.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3294703883
+    },
+    {
+      "id": "2025_pet_photo_0000",
+      "filename": "IMG_20250131_221636.jpg",
+      "date": "2025:01:31 22:16:36",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 1,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: younger child puppet hugging the felt cat on a knitted couch, mother puppet visible in the background out of focus.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 4272732016
+    },
+    {
+      "id": "2025_school_morning_0002",
+      "filename": "IMG_20250212_084717.jpg",
+      "date": "2025:02:12 08:47:17",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "school_morning",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: older child puppet at a hand-built kitchen table, tiny clay bowl of cereal, mother puppet in the background holding a clay coffee mug, soft morning light.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 2345405883
+    },
+    {
+      "id": "2025_family_dinner_0003",
+      "filename": "IMG_20250213_215914.jpg",
+      "date": "2025:02:13 21:59:14",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "family_dinner",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: mother puppet leaning over to help younger child puppet with a clay bowl of pasta, father and older child puppets eating across the table, slightly cluttered dinner scene.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1388698731
+    },
+    {
+      "id": "2025_family_dinner_0006",
+      "filename": "IMG_20250302_211752.jpg",
+      "date": "2025:03:02 21:17:52",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "family_dinner",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: mother puppet leaning over to help younger child puppet with a clay bowl of pasta, father and older child puppets eating across the table, slightly cluttered dinner scene.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3025355065
+    },
+    {
+      "id": "2025_spring_outdoor_0005",
+      "filename": "IMG_20250313_124057.jpg",
+      "date": "2025:03:13 12:40:57",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "spring_outdoor",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: family puppets walking past a fence on a path of brown felt, paper budding branches overhead, light gauze sunlight from one side.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3946575760
+    },
+    {
+      "id": "2025_school_morning_0004",
+      "filename": "IMG_20250323_080715.jpg",
+      "date": "2025:03:23 08:07:15",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "school_morning",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: older child puppet at a hand-built kitchen table, tiny clay bowl of cereal, mother puppet in the background holding a clay coffee mug, soft morning light.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3718462708
+    },
+    {
+      "id": "2025_pet_photo_0008",
+      "filename": "IMG_20250403_205116.jpg",
+      "date": "2025:04:03 20:51:16",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 0,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 14 Pro",
+        "lensModel": "iPhone 14 Pro back triple camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: a stop-motion felt cat with button eyes curled up on a tiny knitted couch blanket, no puppets present, warm side-lamp light.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3839589784
+    },
+    {
+      "id": "2025_spring_outdoor_0007",
+      "filename": "IMG_20250404_180923.jpg",
+      "date": "2025:04:04 18:09:23",
+      "timezone": "+03:00",
+      "gps": [
+        58.0588,
+        26.4969
+      ],
+      "locationLabel": "Otepää, Estonia",
+      "event": "spring_outdoor",
+      "peopleCount": 3,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: the puppets crouching in a hand-built spring garden, paper daffodils with painted yellow petals, tiny clay tulips, mother puppet pointing at a bee made of yellow felt.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1392964936
+    },
+    {
+      "id": "2025_playground_0010",
+      "filename": "IMG_20250416_124715.jpg",
+      "date": "2025:04:16 12:47:15",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "playground",
+      "peopleCount": 3,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: both child puppets at the top of a cardboard slide, mother puppet visible at the bottom holding her arms out, paper trees in the background.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3736664104
+    },
+    {
+      "id": "2025_school_morning_0009",
+      "filename": "IMG_20250417_070708.jpg",
+      "date": "2025:04:17 07:07:08",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "school_morning",
+      "peopleCount": 1,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: older child puppet at a hand-built kitchen table, tiny clay bowl of cereal, mother puppet in the background holding a clay coffee mug, soft morning light.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 2901714288
+    },
+    {
+      "id": "2025_messy_kitchen_0014",
+      "filename": "IMG_20250503_084723.jpg",
+      "date": "2025:05:03 08:47:23",
+      "timezone": "+03:00",
+      "gps": [
+        58.3776,
+        26.729
+      ],
+      "locationLabel": "Tartu, Estonia",
+      "event": "messy_kitchen",
+      "peopleCount": 0,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: the hand-built puppet kitchen empty of people but covered in tiny clay dishes, paper cereal box knocked over, scattered painted-cereal flakes on a wooden counter, morning light.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3526941841
+    },
+    {
+      "id": "2025_family_dinner_0012",
+      "filename": "IMG_20250503_182432.jpg",
+      "date": "2025:05:03 18:24:32",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "family_dinner",
+      "peopleCount": 4,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: the four puppets around a hand-built wooden dinner table, clay food on tiny ceramic plates, warm tungsten ceiling lamp casting a circle of light, wallpapered walls in the background.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1340886621
+    },
+    {
+      "id": "2025_family_dinner_0013",
+      "filename": "IMG_20250521_182318.jpg",
+      "date": "2025:05:21 18:23:18",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "family_dinner",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: the four puppets around a hand-built wooden dinner table, clay food on tiny ceramic plates, warm tungsten ceiling lamp casting a circle of light, wallpapered walls in the background.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3998495418
+    },
+    {
+      "id": "2025_spring_outdoor_0011",
+      "filename": "IMG_20250531_124351.jpg",
+      "date": "2025:05:31 12:43:51",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "spring_outdoor",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: the puppets crouching in a hand-built spring garden, paper daffodils with painted yellow petals, tiny clay tulips, mother puppet pointing at a bee made of yellow felt.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3735629950
+    },
+    {
+      "id": "2025_playground_0019",
+      "filename": "IMG_20250612_171505.jpg",
+      "date": "2025:06:12 17:15:05",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "playground",
+      "peopleCount": 3,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: both child puppets at the top of a cardboard slide, mother puppet visible at the bottom holding her arms out, paper trees in the background.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 63075629
+    },
+    {
+      "id": "2025_beach_day_0015",
+      "filename": "IMG_20250613_152014.jpg",
+      "date": "2025:06:13 15:20:14",
+      "timezone": "+03:00",
+      "gps": [
+        58.3796,
+        24.5043
+      ],
+      "locationLabel": "Pärnu beach, Estonia",
+      "event": "beach_day",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: mother puppet sitting on a striped felt towel, children puppets running toward a cellophane wave, father puppet in the background under a paper sun.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3411641395
+    },
+    {
+      "id": "2025_family_dinner_0020",
+      "filename": "IMG_20250619_202342.jpg",
+      "date": "2025:06:19 20:23:42",
+      "timezone": "+03:00",
+      "gps": [
+        58.3776,
+        26.729
+      ],
+      "locationLabel": "Tartu, Estonia",
+      "event": "family_dinner",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: the four puppets around a hand-built wooden dinner table, clay food on tiny ceramic plates, warm tungsten ceiling lamp casting a circle of light, wallpapered walls in the background.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 4148492471
+    },
+    {
+      "id": "2025_summer_trip_0016",
+      "filename": "IMG_20250620_101925.jpg",
+      "date": "2025:06:20 10:19:25",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "summer_trip",
+      "peopleCount": 3,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: father and mother puppets walking down a forest path of brown felt with cardboard pine trees on either side, dappled summer light filtered through paper leaves.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1540855189
+    },
+    {
+      "id": "2025_summer_trip_0018",
+      "filename": "IMG_20250620_123255.jpg",
+      "date": "2025:06:20 12:32:55",
+      "timezone": "+03:00",
+      "gps": [
+        58.3776,
+        26.729
+      ],
+      "locationLabel": "Tartu, Estonia",
+      "event": "summer_trip",
+      "peopleCount": 2,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: the puppet family on a hand-built river bank, blue cellophane water with painted ripples, green felt grass, the children puppets wearing tiny shorts and t-shirts.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 744464782
+    },
+    {
+      "id": "2025_beach_day_0017",
+      "filename": "IMG_20250628_143438.jpg",
+      "date": "2025:06:28 14:34:38",
+      "timezone": "+03:00",
+      "gps": [
+        58.3796,
+        24.5043
+      ],
+      "locationLabel": "Pärnu beach, Estonia",
+      "event": "beach_day",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 14 Pro",
+        "lensModel": "iPhone 14 Pro back triple camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: the four puppets on a hand-built beach with sandpaper sand and a blue cloth sea, younger child puppet building a clay sandcastle, harsh top-down warm lighting.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3497143506
+    },
+    {
+      "id": "2025_playground_0021",
+      "filename": "IMG_20250706_151409.jpg",
+      "date": "2025:07:06 15:14:09",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "playground",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 14 Pro",
+        "lensModel": "iPhone 14 Pro back triple camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: both child puppets at the top of a cardboard slide, mother puppet visible at the bottom holding her arms out, paper trees in the background.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 82517148
+    },
+    {
+      "id": "2025_beach_day_0024",
+      "filename": "IMG_20250718_155129.jpg",
+      "date": "2025:07:18 15:51:29",
+      "timezone": "+03:00",
+      "gps": [
+        58.3796,
+        24.5043
+      ],
+      "locationLabel": "Pärnu beach, Estonia",
+      "event": "beach_day",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: mother puppet sitting on a striped felt towel, children puppets running toward a cellophane wave, father puppet in the background under a paper sun.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1714104560
+    },
+    {
+      "id": "2025_playground_0027",
+      "filename": "IMG_20250719_120957.jpg",
+      "date": "2025:07:19 12:09:57",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "playground",
+      "peopleCount": 1,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: younger child puppet on a hand-built wooden swing with twine ropes, father puppet pushing from behind, green felt grass underneath.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 2125797562
+    },
+    {
+      "id": "2025_beach_day_0026",
+      "filename": "IMG_20250720_143526.jpg",
+      "date": "2025:07:20 14:35:26",
+      "timezone": "+03:00",
+      "gps": [
+        58.3796,
+        24.5043
+      ],
+      "locationLabel": "Pärnu beach, Estonia",
+      "event": "beach_day",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: the four puppets on a hand-built beach with sandpaper sand and a blue cloth sea, younger child puppet building a clay sandcastle, harsh top-down warm lighting.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 4030379664
+    },
+    {
+      "id": "2025_summer_trip_0022",
+      "filename": "IMG_20250721_164738.jpg",
+      "date": "2025:07:21 16:47:38",
+      "timezone": "+03:00",
+      "gps": [
+        58.3776,
+        26.729
+      ],
+      "locationLabel": "Tartu, Estonia",
+      "event": "summer_trip",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: father and mother puppets walking down a forest path of brown felt with cardboard pine trees on either side, dappled summer light filtered through paper leaves.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 96593750
+    },
+    {
+      "id": "2025_pet_photo_0025",
+      "filename": "IMG_20250725_091142.jpg",
+      "date": "2025:07:25 09:11:42",
+      "timezone": "+03:00",
+      "gps": [
+        58.0588,
+        26.4969
+      ],
+      "locationLabel": "Otepää, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: a stop-motion felt cat with button eyes curled up on a tiny knitted couch blanket, no puppets present, warm side-lamp light.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 4111692375
+    },
+    {
+      "id": "2025_family_dinner_0023",
+      "filename": "IMG_20250726_203322.jpg",
+      "date": "2025:07:26 20:33:22",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "family_dinner",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: the four puppets around a hand-built wooden dinner table, clay food on tiny ceramic plates, warm tungsten ceiling lamp casting a circle of light, wallpapered walls in the background.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 2939553923
+    },
+    {
+      "id": "2025_pet_photo_0032",
+      "filename": "IMG_20250802_125618.jpg",
+      "date": "2025:08:02 12:56:18",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: a clay-and-wool dog puppet standing in a hand-built kitchen, looking up at the camera, soft natural light from a paper window.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 620033969
+    },
+    {
+      "id": "2025_pet_photo_0030",
+      "filename": "IMG_20250805_212357.jpg",
+      "date": "2025:08:05 21:23:57",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 1,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: a clay-and-wool dog puppet standing in a hand-built kitchen, looking up at the camera, soft natural light from a paper window.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1846110825
+    },
+    {
+      "id": "2025_playground_0033",
+      "filename": "IMG_20250815_112454.jpg",
+      "date": "2025:08:15 11:24:54",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "playground",
+      "peopleCount": 3,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: younger child puppet on a hand-built wooden swing with twine ropes, father puppet pushing from behind, green felt grass underneath.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 4280778560
+    },
+    {
+      "id": "2025_beach_day_0028",
+      "filename": "IMG_20250815_113701.jpg",
+      "date": "2025:08:15 11:37:01",
+      "timezone": "+03:00",
+      "gps": [
+        58.3796,
+        24.5043
+      ],
+      "locationLabel": "Pärnu beach, Estonia",
+      "event": "beach_day",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: mother puppet sitting on a striped felt towel, children puppets running toward a cellophane wave, father puppet in the background under a paper sun.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 769687593
+    },
+    {
+      "id": "2025_playground_0029",
+      "filename": "IMG_20250819_143634.jpg",
+      "date": "2025:08:19 14:36:34",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "playground",
+      "peopleCount": 3,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: both child puppets at the top of a cardboard slide, mother puppet visible at the bottom holding her arms out, paper trees in the background.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1684245011
+    },
+    {
+      "id": "2025_summer_trip_0031",
+      "filename": "IMG_20250824_110047.jpg",
+      "date": "2025:08:24 11:00:47",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "summer_trip",
+      "peopleCount": 2,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: father and mother puppets walking down a forest path of brown felt with cardboard pine trees on either side, dappled summer light filtered through paper leaves.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1370108971
+    },
+    {
+      "id": "2025_playground_0037",
+      "filename": "IMG_20250911_151308.jpg",
+      "date": "2025:09:11 15:13:08",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "playground",
+      "peopleCount": 1,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: younger child puppet on a hand-built wooden swing with twine ropes, father puppet pushing from behind, green felt grass underneath.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1249623352
+    },
+    {
+      "id": "2025_first_day_of_school_0035",
+      "filename": "IMG_20250914_091848.jpg",
+      "date": "2025:09:14 09:18:48",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "first_day_of_school",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: the older child puppet stiffly posed holding a tiny bouquet of paper gerberas, brand-new felt backpack, parents puppets standing on either side, hand-built school doorway in the background.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 805070556
+    },
+    {
+      "id": "2025_playground_0034",
+      "filename": "IMG_20250919_155422.jpg",
+      "date": "2025:09:19 15:54:22",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "playground",
+      "peopleCount": 1,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: both child puppets at the top of a cardboard slide, mother puppet visible at the bottom holding her arms out, paper trees in the background.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1931357778
+    },
+    {
+      "id": "2025_playground_0036",
+      "filename": "IMG_20250929_163029.jpg",
+      "date": "2025:09:29 16:30:29",
+      "timezone": "+03:00",
+      "gps": [
+        58.3776,
+        26.729
+      ],
+      "locationLabel": "Tartu, Estonia",
+      "event": "playground",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 14 Pro",
+        "lensModel": "iPhone 14 Pro back triple camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: younger child puppet on a hand-built wooden swing with twine ropes, father puppet pushing from behind, green felt grass underneath.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 835258271
+    },
+    {
+      "id": "2025_pet_photo_0040",
+      "filename": "IMG_20251002_120537.jpg",
+      "date": "2025:10:02 12:05:37",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 2,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: younger child puppet hugging the felt cat on a knitted couch, mother puppet visible in the background out of focus.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 2081427230
+    },
+    {
+      "id": "2025_family_dinner_0041",
+      "filename": "IMG_20251009_210220.jpg",
+      "date": "2025:10:09 21:02:20",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "family_dinner",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 14 Pro",
+        "lensModel": "iPhone 14 Pro back triple camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: mother puppet leaning over to help younger child puppet with a clay bowl of pasta, father and older child puppets eating across the table, slightly cluttered dinner scene.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1694361623
+    },
+    {
+      "id": "2025_pet_photo_0038",
+      "filename": "IMG_20251013_104632.jpg",
+      "date": "2025:10:13 10:46:32",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 1,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 14 Pro",
+        "lensModel": "iPhone 14 Pro back triple camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: a stop-motion felt cat with button eyes curled up on a tiny knitted couch blanket, no puppets present, warm side-lamp light.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 20355530
+    },
+    {
+      "id": "2025_autumn_walk_0039",
+      "filename": "IMG_20251031_133631.jpg",
+      "date": "2025:10:31 13:36:31",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "autumn_walk",
+      "peopleCount": 3,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: the puppet family standing in a pile of paper autumn leaves cut from orange and yellow construction paper, knitted woolen hats on every head, low golden side-lighting.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 292140649
+    },
+    {
+      "id": "2025_family_dinner_0042",
+      "filename": "IMG_20251106_181037.jpg",
+      "date": "2025:11:06 18:10:37",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "family_dinner",
+      "peopleCount": 3,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: the four puppets around a hand-built wooden dinner table, clay food on tiny ceramic plates, warm tungsten ceiling lamp casting a circle of light, wallpapered walls in the background.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1947277151
+    },
+    {
+      "id": "2025_birthday_party_0043",
+      "filename": "IMG_20251125_145232.jpg",
+      "date": "2025:11:25 14:52:32",
+      "timezone": "+03:00",
+      "gps": [
+        58.0588,
+        26.4969
+      ],
+      "locationLabel": "Otepää, Estonia",
+      "event": "birthday_party",
+      "peopleCount": 4,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: the family puppets around a clay birthday cake with tiny matchstick candles, paper streamers above, wrapping paper made of scrap fabric. Younger child puppet leaning in to blow out the candles.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 2197028564
+    },
+    {
+      "id": "2025_family_dinner_0049",
+      "filename": "IMG_20251203_202115.jpg",
+      "date": "2025:12:03 20:21:15",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "family_dinner",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 14 Pro",
+        "lensModel": "iPhone 14 Pro back triple camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: mother puppet leaning over to help younger child puppet with a clay bowl of pasta, father and older child puppets eating across the table, slightly cluttered dinner scene.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1433000954
+    },
+    {
+      "id": "2025_birthday_party_0046",
+      "filename": "IMG_20251204_163923.jpg",
+      "date": "2025:12:04 16:39:23",
+      "timezone": "+03:00",
+      "gps": [
+        58.3776,
+        26.729
+      ],
+      "locationLabel": "Tartu, Estonia",
+      "event": "birthday_party",
+      "peopleCount": 3,
+      "camera": {
+        "make": "Google",
+        "model": "Pixel 7"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: older child puppet blowing out birthday candles on a clay cake, the others puppets clapping behind, warm tungsten table-lamp light.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 3040377671
+    },
+    {
+      "id": "2025_family_dinner_0048",
+      "filename": "IMG_20251208_183933.jpg",
+      "date": "2025:12:08 18:39:33",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "family_dinner",
+      "peopleCount": 4,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: mother puppet leaning over to help younger child puppet with a clay bowl of pasta, father and older child puppets eating across the table, slightly cluttered dinner scene.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1666264794
+    },
+    {
+      "id": "2025_christmas_evening_0047",
+      "filename": "IMG_20251211_181031.jpg",
+      "date": "2025:12:11 18:10:31",
+      "timezone": "+03:00",
+      "gps": [
+        59.437,
+        24.7536
+      ],
+      "locationLabel": "Tallinn, Estonia",
+      "event": "christmas_evening",
+      "peopleCount": 2,
+      "camera": {
+        "make": "samsung",
+        "model": "SM-S911B"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: the puppet family gathered near a hand-built Christmas tree made of felt and cardboard, tiny paper ornaments and a string of LED grain-of-wheat lights, wrapped clay presents underneath, warm orange tungsten light from a paper-shaded lamp.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 1413900033
+    },
+    {
+      "id": "2025_pet_photo_0045",
+      "filename": "IMG_20251212_152820.jpg",
+      "date": "2025:12:12 15:28:20",
+      "timezone": "+03:00",
+      "gps": [
+        58.3859,
+        24.4971
+      ],
+      "locationLabel": "Pärnu, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: younger child puppet hugging the felt cat on a knitted couch, mother puppet visible in the background out of focus.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 4216886642
+    },
+    {
+      "id": "2025_pet_photo_0044",
+      "filename": "IMG_20251218_201353.jpg",
+      "date": "2025:12:18 20:13:53",
+      "timezone": "+03:00",
+      "gps": [
+        58.0588,
+        26.4969
+      ],
+      "locationLabel": "Otepää, Estonia",
+      "event": "pet_photo",
+      "peopleCount": 2,
+      "camera": {
+        "make": "Apple",
+        "model": "iPhone 13",
+        "lensModel": "iPhone 13 back dual wide camera"
+      },
+      "style": "puppet",
+      "quality": [
+        "good"
+      ],
+      "prompt": "Stop-motion clay puppet family photographed at character scale, NOT a miniature diorama, NOT a doll-house, NOT a model viewed from outside — the camera is INSIDE the scene at puppet-eye level. Soft warm tungsten light, shallow depth of field. Visible fingerprints on every clay surface, slight handmade wonkiness, replacement-eye animation with eyes painted directly onto clay faces. The four family puppets, recurring across every photo:\n- Father puppet: mid-thirties, dark stubble made of felt, dark hair sculpted from clay, plaid flannel shirt sewn from fabric scraps, slightly thicker build.\n- Mother puppet: mid-thirties, curly red yarn hair, freckles painted on clay cheeks, knitted wool cardigan, slight smile.\n- Older child puppet: about age 8, curly red yarn hair matching the mother, striped t-shirt sewn from cotton, missing front tooth painted on.\n- Younger child puppet: about age 4, blonde wool hair, blue corduroy overalls with felt patches on the knees, round clay cheeks.\nHand-built sets with wallpapered walls, wooden floorboards, ordinary household objects rendered in clay and cardboard.\n\nScene: a clay-and-wool dog puppet standing in a hand-built kitchen, looking up at the camera, soft natural light from a paper window.",
+      "negativePrompt": "real photo of humans, live actors, real people, realistic skin, studio portrait, fashion shoot, photoreal, CGI render, 3D render, smooth animation, motion blur, watermark, text",
+      "width": 1216,
+      "height": 832,
+      "seed": 572289314
+    }
+  ]
+}
