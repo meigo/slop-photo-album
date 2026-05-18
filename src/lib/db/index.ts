@@ -71,6 +71,17 @@ export async function updateProjectPageAspect(
   await d.execute('UPDATE project SET page_aspect = ? WHERE id = ?', [aspect, id]);
 }
 
+/** null = use ALBUM_DEFAULTS.default_max_pages; otherwise clamped to [4, 80]
+ *  so the assembler always has a reasonable budget. */
+export async function updateProjectAlbumMaxPages(
+  id: number,
+  maxPages: number | null,
+): Promise<void> {
+  const d = await db();
+  const value = maxPages === null ? null : Math.max(4, Math.min(80, Math.round(maxPages)));
+  await d.execute('UPDATE project SET album_max_pages = ? WHERE id = ?', [value, id]);
+}
+
 export async function upsertPhoto(p: PhotoInsert): Promise<void> {
   const d = await db();
   await d.execute(

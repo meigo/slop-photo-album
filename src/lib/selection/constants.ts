@@ -27,6 +27,10 @@ export const ALBUM_DEFAULTS = {
   // photos, drop the lowest-scoring entries until at or below the cap.
   // Prevents one vacation month from dominating the album.
   per_month_cap: 12,
+  // Default target page count for the auto-assembler. Used when a project
+  // hasn't overridden album_max_pages. Drives slot density via
+  // total_photos / default_max_pages and the rotation bracket in picker.ts.
+  default_max_pages: 24,
 };
 
 export const CALENDAR_DEFAULTS = {

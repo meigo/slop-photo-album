@@ -1,67 +1,64 @@
 import {
-  listSelectedPhotos, listPhotos, getProject, getCurrentSelection,
+  listSelectedPhotos, getProject, getCurrentSelection,
   insertPage, insertPageSlot, clearPagesForSelection,
 } from '$lib/db';
-import { pickAlbumTemplate, pickCalendarTemplate } from './picker';
+import { ALBUM_DEFAULTS } from '$lib/selection/constants';
+import { pickRotation, pickNextAlbumTemplate, pickCalendarTemplate } from './picker';
 
 /**
- * Build pages for the current album selection of a project. Replaces
- * any existing pages.
+ * Build pages for the current album selection of a project. Replaces any
+ * existing pages.
  *
- * Each date bucket from the selection becomes one page (chunked into
- * trio-asym + hero-1 overflow if >3 photos in a day, though Phase 3a's
- * per_day_cap = 3 means this rarely matters).
+ * Strategy: pack the chronologically-ordered selection into at most
+ * `project.album_max_pages` pages (default 24) by cycling through a
+ * template rotation whose average slot count matches `total_photos /
+ * max_pages`. This produces varied layouts rather than one page per day
+ * — without it, a year of mostly-1-photo days collapses to a long album
+ * of identical hero-1 pages.
  */
 export async function assembleAlbumPages(projectId: number): Promise<void> {
+  const project = await getProject(projectId);
+  if (!project) throw new Error(`Project ${projectId} not found`);
   const selection = await getCurrentSelection(projectId, 'album');
   if (!selection) throw new Error(`No current album selection for project ${projectId}`);
   await clearPagesForSelection(selection.id);
 
-  const allPhotos = await listPhotos(projectId);
-  const photoById = new Map(allPhotos.map((p) => [p.id, p]));
-
   const sel = await listSelectedPhotos(selection.id);
+  if (sel.length === 0) return;
 
-  const byDay = new Map<string, typeof sel>();
-  for (const s of sel) {
-    const arr = byDay.get(s.bucket_key) ?? [];
-    arr.push(s);
-    byDay.set(s.bucket_key, arr);
-  }
+  const maxPages = project.album_max_pages ?? ALBUM_DEFAULTS.default_max_pages;
+  const targetPages = Math.min(maxPages, sel.length);
+  const avgSlots = sel.length / targetPages;
+  const rotation = pickRotation(avgSlots);
 
+  // sel is already ordered by bucket_key ASC (chronological) from
+  // listSelectedPhotos; we don't re-sort here so the page order tracks time.
+  let queue = [...sel];
   let pageIndex = 0;
-  // listSelectedPhotos returns rows ordered by bucket_key ASC, so the
-  // Map iteration order preserves chronological order.
-  for (const day of byDay.keys()) {
-    const dayPhotos = byDay.get(day)!;
-    const orientations = dayPhotos.map((sp): 'portrait' | 'landscape' => {
-      const ph = photoById.get(sp.photo_id);
-      if (!ph || !ph.width || !ph.height) return 'landscape';
-      return ph.height >= ph.width ? 'portrait' : 'landscape';
+  let rotationIndex = 0;
+  let previousTemplateId: string | null = null;
+
+  while (queue.length > 0 && pageIndex < maxPages) {
+    const template = pickNextAlbumTemplate(rotation, rotationIndex, queue.length, previousTemplateId);
+    const chunk = queue.slice(0, template.slot_count);
+    queue = queue.slice(template.slot_count);
+
+    const pageId = await insertPage({
+      selection_id: selection.id,
+      index_in_book: pageIndex,
+      template_id: template.id,
+      title: chunk[0].bucket_key,
     });
-    let i = 0;
-    while (i < dayPhotos.length) {
-      const remaining = dayPhotos.length - i;
-      const take = remaining >= 3 ? 3 : remaining;
-      const chunk = dayPhotos.slice(i, i + take);
-      const chunkOrient = orientations.slice(i, i + take);
-      const template = pickAlbumTemplate(take, chunkOrient);
-      const pageId = await insertPage({
-        selection_id: selection.id,
-        index_in_book: pageIndex,
-        template_id: template.id,
-        title: day,
+    for (let s = 0; s < chunk.length; s++) {
+      await insertPageSlot({
+        page_id: pageId,
+        slot_index: s,
+        photo_id: chunk[s].photo_id,
       });
-      for (let s = 0; s < chunk.length; s++) {
-        await insertPageSlot({
-          page_id: pageId,
-          slot_index: s,
-          photo_id: chunk[s].photo_id,
-        });
-      }
-      pageIndex++;
-      i += take;
     }
+    previousTemplateId = template.id;
+    pageIndex++;
+    rotationIndex++;
   }
 }
 

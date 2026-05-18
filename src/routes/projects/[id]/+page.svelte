@@ -8,7 +8,8 @@
   import { generateAlbumSelection } from '$lib/selection/album';
   import { generateCalendarSelection } from '$lib/selection/calendar';
   import { assembleAlbumPages, assembleCalendarPages } from '$lib/layout/assembly';
-  import { seedHolidays } from '$lib/db';
+  import { seedHolidays, updateProjectAlbumMaxPages } from '$lib/db';
+  import { ALBUM_DEFAULTS } from '$lib/selection/constants';
 
   let { data } = $props();
 
@@ -46,6 +47,18 @@
   }
 
   let generating = $state<null | 'album' | 'calendar'>(null);
+  // The input is an edit buffer; we don't want server invalidations clobbering
+  // an in-progress edit, so the initial value is captured once at mount.
+  // Svelte's `state_referenced_locally` warning flags this pattern but it's
+  // intentional here.
+  let maxPagesInput = $state<number>(data.project.album_max_pages ?? ALBUM_DEFAULTS.default_max_pages);
+
+  async function saveMaxPages() {
+    const clamped = Math.max(4, Math.min(80, Math.round(maxPagesInput)));
+    maxPagesInput = clamped;
+    await updateProjectAlbumMaxPages(data.project.id, clamped);
+    await invalidateAll();
+  }
 
   async function runGenerateAlbum() {
     if (data.albumSelection && !confirm('Regenerate the album from scratch? Your manual page edits will be lost.')) return;
@@ -87,6 +100,19 @@
     <p class="text-sm mt-1" style="color: var(--color-muted)">
       Year: {data.project.album_year} → calendar {data.project.calendar_year}
     </p>
+    <label class="flex items-center gap-2 mt-2 text-sm" style="color: var(--color-muted)">
+      Album max pages:
+      <input
+        type="number"
+        min="4"
+        max="80"
+        step="1"
+        bind:value={maxPagesInput}
+        onchange={saveMaxPages}
+        class="w-20 px-2 py-1 border rounded"
+        title="Cap on auto-generated pages. The assembler packs photos to roughly total/max-pages slots per page."
+      />
+    </label>
     <p class="mt-3">
       Indexed: <strong>{data.count}</strong> photos
       {#if data.lastIndexedAt !== null}

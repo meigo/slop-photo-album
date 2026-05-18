@@ -10,6 +10,7 @@ export interface ProjectRow {
   week_start: number;
   page_bg_color: string;
   page_aspect: string | null;
+  album_max_pages: number | null;
 }
 
 export interface CalendarEventRow {
