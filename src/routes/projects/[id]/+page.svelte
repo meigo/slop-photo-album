@@ -130,39 +130,54 @@
       </button>
       <a class="btn-secondary" href={`/projects/${data.project.id}/library`}>Open library</a>
     </div>
-    {#if data.albumSelection}
-      <p class="mt-3 text-sm" style="color: var(--color-muted)">
-        Album: {data.albumPageCount} {data.albumPageCount === 1 ? 'page' : 'pages'} · last edited {formatRelativeTime(data.albumSelection.updated_at ?? data.albumSelection.generated_at)}
-      </p>
-    {/if}
-    {#if data.calendarSelection}
-      <p class="text-sm" style="color: var(--color-muted)">
-        Calendar: {data.calendarPageCount} {data.calendarPageCount === 1 ? 'page' : 'pages'} · last edited {formatRelativeTime(data.calendarSelection.updated_at ?? data.calendarSelection.generated_at)}
-      </p>
-    {/if}
-    <div class="flex flex-wrap gap-2 mt-3">
-      {#if data.albumSelection}
-        <a class="btn-primary" href={`/projects/${data.project.id}/album/review`}>Open album</a>
-        <a class="btn-secondary" href={`/projects/${data.project.id}/album/export`} title="Save the album as a PDF">Export album PDF</a>
-        <button type="button" class="btn-secondary" onclick={runGenerateAlbum} disabled={generating !== null} title="Discard edits and rebuild from current scoring">
-          {generating === 'album' ? 'Regenerating album…' : 'Regenerate album'}
-        </button>
-      {:else}
-        <button type="button" class="btn-primary" onclick={runGenerateAlbum} disabled={generating !== null}>
-          {generating === 'album' ? 'Generating album…' : 'Generate album'}
-        </button>
-      {/if}
-      {#if data.calendarSelection}
-        <a class="btn-primary" href={`/projects/${data.project.id}/calendar/review`}>Open calendar</a>
-        <a class="btn-secondary" href={`/projects/${data.project.id}/calendar/export`} title="Save the calendar as a PDF">Export calendar PDF</a>
-        <button type="button" class="btn-secondary" onclick={runGenerateCalendar} disabled={generating !== null} title="Discard edits and rebuild from current scoring">
-          {generating === 'calendar' ? 'Regenerating calendar…' : 'Regenerate calendar'}
-        </button>
-      {:else}
-        <button type="button" class="btn-primary" onclick={runGenerateCalendar} disabled={generating !== null}>
-          {generating === 'calendar' ? 'Generating calendar…' : 'Generate calendar'}
-        </button>
-      {/if}
+    <div class="grid gap-4 lg:grid-cols-2 mt-4">
+      <div class="output-group">
+        <h3 class="text-sm font-medium mb-2">Album</h3>
+        {#if data.albumSelection}
+          <p class="text-xs mb-2" style="color: var(--color-muted)">
+            {data.albumPageCount} {data.albumPageCount === 1 ? 'page' : 'pages'} · last edited {formatRelativeTime(data.albumSelection.updated_at ?? data.albumSelection.generated_at)}
+          </p>
+        {:else}
+          <p class="text-xs mb-2" style="color: var(--color-muted)">Not yet generated.</p>
+        {/if}
+        <div class="flex flex-wrap gap-2">
+          {#if data.albumSelection}
+            <a class="btn-primary" href={`/projects/${data.project.id}/album/review`}>Open</a>
+            <a class="btn-secondary" href={`/projects/${data.project.id}/album/export`} title="Save the album as a PDF">Export PDF</a>
+            <button type="button" class="btn-secondary" onclick={runGenerateAlbum} disabled={generating !== null} title="Discard edits and rebuild from current scoring">
+              {generating === 'album' ? 'Regenerating…' : 'Regenerate'}
+            </button>
+          {:else}
+            <button type="button" class="btn-primary" onclick={runGenerateAlbum} disabled={generating !== null}>
+              {generating === 'album' ? 'Generating…' : 'Generate album'}
+            </button>
+          {/if}
+        </div>
+      </div>
+
+      <div class="output-group">
+        <h3 class="text-sm font-medium mb-2">Calendar</h3>
+        {#if data.calendarSelection}
+          <p class="text-xs mb-2" style="color: var(--color-muted)">
+            {data.calendarPageCount} {data.calendarPageCount === 1 ? 'page' : 'pages'} · last edited {formatRelativeTime(data.calendarSelection.updated_at ?? data.calendarSelection.generated_at)}
+          </p>
+        {:else}
+          <p class="text-xs mb-2" style="color: var(--color-muted)">Not yet generated.</p>
+        {/if}
+        <div class="flex flex-wrap gap-2">
+          {#if data.calendarSelection}
+            <a class="btn-primary" href={`/projects/${data.project.id}/calendar/review`}>Open</a>
+            <a class="btn-secondary" href={`/projects/${data.project.id}/calendar/export`} title="Save the calendar as a PDF">Export PDF</a>
+            <button type="button" class="btn-secondary" onclick={runGenerateCalendar} disabled={generating !== null} title="Discard edits and rebuild from current scoring">
+              {generating === 'calendar' ? 'Regenerating…' : 'Regenerate'}
+            </button>
+          {:else}
+            <button type="button" class="btn-primary" onclick={runGenerateCalendar} disabled={generating !== null}>
+              {generating === 'calendar' ? 'Generating…' : 'Generate calendar'}
+            </button>
+          {/if}
+        </div>
+      </div>
     </div>
     {#if mine && pStateLocal.phase === 'walking'}
       <p class="mt-3 text-sm" style="color: var(--color-muted)">Walking folder…</p>

@@ -257,6 +257,16 @@ button:not(:disabled) {
 }
 .toolbar-icon-btn:hover { background: var(--toolbar-active); }
 
+/* Per-output (album / calendar) group on the project page. Subtle
+   inset rectangle, less prominent than .surface-card, so the two
+   groups sit side-by-side inside the parent card. */
+.output-group {
+  background: var(--color-bg);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+}
+
 /* Centered modal scaffolding. Used by ConfirmDialog and any other
    inline modal (e.g. the New Project form on the home page). */
 .modal-backdrop {
