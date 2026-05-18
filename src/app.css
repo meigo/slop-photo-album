@@ -324,6 +324,10 @@ button:not(:disabled) {
   padding: var(--space-2);
   display: grid;
   gap: var(--space-2);
+  /* Center each option in its cell rather than stretching — stretching
+     pulls buttons to the 50px column width but leaves height auto, so
+     the highlight border ends up wider than tall. */
+  place-items: center;
   /* Width set so several columns fit; columns themselves are
      min-px-wide via grid-template-columns on the element style. */
   width: max-content;
@@ -334,12 +338,10 @@ button:not(:disabled) {
   background: transparent;
   border: 2px solid transparent;
   border-radius: var(--radius-sm);
-  padding: 2px;
+  padding: 0;
   line-height: 0;
   cursor: pointer;
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
 }
 .template-picker-option:hover { border-color: var(--color-muted); }
 .template-picker-option.is-current { border-color: var(--color-fg); }

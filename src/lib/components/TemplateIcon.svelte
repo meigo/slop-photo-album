@@ -56,7 +56,9 @@
     {@const gTop = snap(cg.y)}
     {@const gRight = snap(cg.x + cg.w)}
     {@const gBottom = snap(cg.y + cg.h)}
-    {@const insetPx = Math.max(2, Math.round(width * 0.1))}
+    <!-- 1px inset on edges adjacent to a photo block, matching the
+         slot-to-slot inset, so every gap inside the icon is 2px. -->
+    {@const insetPx = 1}
     {@const cInT = gTop > 0 ? insetPx : 0}
     {@const cInL = gLeft > 0 ? insetPx : 0}
     {@const cInB = gBottom < width ? insetPx : 0}
