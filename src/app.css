@@ -267,6 +267,23 @@ button:not(:disabled) {
   color: var(--color-fg);
 }
 
+/* Tiny round swap button placed at the midpoint of shared edges between
+   adjacent slots in multi-slot album templates. Sits centered over the
+   edge — `translate(-50%, -50%)` because the edge midpoint is computed
+   in unit coords on the upper-left corner of where the button needs to
+   be centered. Same dark pill chrome as the other in-page actions. */
+.swap-edge-btn {
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 999px;
+  padding: 4px;
+  line-height: 0;
+  z-index: var(--z-overlay);
+}
+.swap-edge-btn:hover { background: rgba(0, 0, 0, 0.9); }
+
 /* Hover-action icons on photo slots (swap/adjust/remove). Same dark pill
    as the toolbar but sized smaller for stamping over a photo. */
 .slot-action-btn {

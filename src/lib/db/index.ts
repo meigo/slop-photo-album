@@ -487,6 +487,35 @@ export async function updateSlotPhoto(pageId: number, slotIndex: number, photoId
   await bumpSelectionFromPage(pageId);
 }
 
+/** Swap the photo_id + transform_json between two slots on the same page.
+ *  Used by the mid-edge swap buttons on multi-slot templates so a user can
+ *  trade adjacent photos without going through the picker. The per-slot
+ *  crop transform travels with the photo. */
+export async function swapPageSlots(pageId: number, slotA: number, slotB: number): Promise<void> {
+  const d = await db();
+  const rows = await d.select<{ slot_index: number; photo_id: number | null; transform_json: string | null }[]>(
+    `SELECT slot_index, photo_id, transform_json FROM page_slot
+     WHERE page_id = ? AND slot_index IN (?, ?)`,
+    [pageId, slotA, slotB]
+  );
+  const byIdx = new Map(rows.map((r) => [r.slot_index, r]));
+  const a = byIdx.get(slotA) ?? { slot_index: slotA, photo_id: null, transform_json: null };
+  const b = byIdx.get(slotB) ?? { slot_index: slotB, photo_id: null, transform_json: null };
+  // Upsert both with swapped values. Empty slots become NULL/NULL on the
+  // other side; filled slots carry photo + transform across.
+  for (const [idx, src] of [[slotA, b], [slotB, a]] as const) {
+    await d.execute(
+      `INSERT INTO page_slot (page_id, slot_index, photo_id, transform_json)
+       VALUES (?, ?, ?, ?)
+       ON CONFLICT (page_id, slot_index) DO UPDATE SET
+         photo_id = excluded.photo_id,
+         transform_json = excluded.transform_json`,
+      [pageId, idx, src.photo_id, src.transform_json]
+    );
+  }
+  await bumpSelectionFromPage(pageId);
+}
+
 /** Clear a slot: sets photo_id to NULL and resets transform_json. Used by
  *  the "remove photo" affordance on filled slots. Idempotent. */
 export async function clearSlotPhoto(pageId: number, slotIndex: number): Promise<void> {

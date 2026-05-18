@@ -197,3 +197,61 @@ export function getTemplate(id: string): Template {
   if (!t) throw new Error(`Unknown template: ${id}`);
   return t;
 }
+
+/** Two slots whose rectangles share an edge — used to draw mid-edge swap
+ *  buttons on multi-slot templates. Coordinates are in the same 0..1 unit
+ *  square as `SlotLayout`. */
+export interface SharedEdge {
+  slotA: number;
+  slotB: number;
+  orientation: 'vertical' | 'horizontal';
+  /** Midpoint of the shared edge in unit coords. */
+  x: number;
+  y: number;
+}
+
+const EPS = 0.001;
+
+export function computeSharedEdges(template: Template): SharedEdge[] {
+  const edges: SharedEdge[] = [];
+  const slots = template.slots;
+  for (let i = 0; i < slots.length; i++) {
+    for (let j = i + 1; j < slots.length; j++) {
+      const a = slots[i];
+      const b = slots[j];
+      // Vertical shared edge: a's right or b's right meets the other's left.
+      for (const [left, right] of [[a, b], [b, a]] as const) {
+        if (Math.abs(left.x + left.w - right.x) < EPS) {
+          const yStart = Math.max(left.y, right.y);
+          const yEnd = Math.min(left.y + left.h, right.y + right.h);
+          if (yEnd - yStart > EPS) {
+            edges.push({
+              slotA: i,
+              slotB: j,
+              orientation: 'vertical',
+              x: right.x,
+              y: yStart + (yEnd - yStart) / 2,
+            });
+          }
+        }
+      }
+      // Horizontal shared edge: a's bottom or b's bottom meets the other's top.
+      for (const [top, bottom] of [[a, b], [b, a]] as const) {
+        if (Math.abs(top.y + top.h - bottom.y) < EPS) {
+          const xStart = Math.max(top.x, bottom.x);
+          const xEnd = Math.min(top.x + top.w, bottom.x + bottom.w);
+          if (xEnd - xStart > EPS) {
+            edges.push({
+              slotA: i,
+              slotB: j,
+              orientation: 'horizontal',
+              x: xStart + (xEnd - xStart) / 2,
+              y: bottom.y,
+            });
+          }
+        }
+      }
+    }
+  }
+  return edges;
+}

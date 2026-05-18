@@ -7,7 +7,7 @@
   import TextEditor from '$lib/components/TextEditor.svelte';
   import { getTemplate } from '$lib/layout/templates';
   import { invalidateAll } from '$app/navigation';
-  import { updateSlotPhoto, clearSlotPhoto, updateProjectSlotGap, updateProjectPagePadding, updateProjectPageBgColor, updateProjectPageSize, updateProjectWeekStart, updateProjectCalendarFontFamily, updateProjectCalendarColor, updateProjectCalendarGridStyle, updateProjectCalendarWeekendColor, type CalendarGridStyle, addPageText } from '$lib/db';
+  import { updateSlotPhoto, clearSlotPhoto, swapPageSlots, updateProjectSlotGap, updateProjectPagePadding, updateProjectPageBgColor, updateProjectPageSize, updateProjectWeekStart, updateProjectCalendarFontFamily, updateProjectCalendarColor, updateProjectCalendarGridStyle, updateProjectCalendarWeekendColor, type CalendarGridStyle, addPageText } from '$lib/db';
   import { DEFAULT_TEXT_STYLE, serializeStyle } from '$lib/text/style';
   import { PAPER_PRESETS } from '$lib/print/presets';
   import { FONT_CATALOG } from '$lib/text/catalog';
@@ -141,6 +141,11 @@
     if (!pickerOpen) return;
     await updateSlotPhoto(pickerOpen.pageId, pickerOpen.slotIndex, photoId);
     pickerOpen = null;
+    await invalidateAll();
+  }
+
+  async function swapSlots(pageId: number, slotA: number, slotB: number) {
+    await swapPageSlots(pageId, slotA, slotB);
     await invalidateAll();
   }
 
@@ -284,6 +289,7 @@
               onSwapPhoto={(i) => openPicker(page.id, i, page.title ?? '')}
               onAdjustCrop={(i) => openEditor(page.id, i)}
               onRemovePhoto={(i) => removePhoto(page.id, i)}
+              onSwapSlots={(a, b) => swapSlots(page.id, a, b)}
               editingSlotIndex={editorOpen?.pageId === page.id ? editorOpen!.slotIndex : null}
               {slotGapPx}
               {pagePaddingPx}

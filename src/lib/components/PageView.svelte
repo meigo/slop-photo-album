@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getTemplate, type Template } from '$lib/layout/templates';
+  import { getTemplate, computeSharedEdges, type Template } from '$lib/layout/templates';
   import { convertFileSrc } from '@tauri-apps/api/core';
   import { parseTransform, cssForTransform, hasColorShift, svgColorMatrix, type SlotTransform, IDENTITY_TRANSFORM } from '$lib/layout/transform';
   import { autoPositionTransform } from '$lib/layout/autoposition';
@@ -7,7 +7,7 @@
   import CalendarGrid from './CalendarGrid.svelte';
   import TextOverlay from './TextOverlay.svelte';
   import type { CalendarEventRow, PageTextRow } from '$lib/db/types';
-  import { Replace, Sliders, Trash2 } from '@lucide/svelte';
+  import { Replace, Sliders, Trash2, ArrowLeftRight, ArrowUpDown } from '@lucide/svelte';
 
   interface Slot {
     slot_index: number;
@@ -28,6 +28,9 @@
     onSwapPhoto?: (slotIndex: number) => void;
     onAdjustCrop?: (slotIndex: number) => void;
     onRemovePhoto?: (slotIndex: number) => void;
+    /** Swap the photos in two adjacent slots. Triggered by the small
+     *  swap buttons rendered on shared edges in multi-slot templates. */
+    onSwapSlots?: (slotA: number, slotB: number) => void;
     editingSlotIndex?: number | null;
     /** Visible gap (px) between adjacent slot images. Each slot contributes
      *  half of this as internal padding, so two adjacent slots produce
@@ -69,9 +72,10 @@
     /** Calendar grid rule style. */
     calendarGridStyle?: 'boxed' | 'grid' | 'lines' | 'none';
   }
-  let { templateId, slots, onSlotClick, onSwapPhoto, onAdjustCrop, onRemovePhoto, editingSlotIndex = null, slotGapPx = 2, pagePaddingPx = 0, pageTitle = null, events = [], weekStart = 1, texts = [], editingTextId = null, onEditText, pageBgColor = '#ffffff', pageWidthMm = 297, pageHeightMm = 210, printMode = false, slotCornerRadiusPx = 0, calendarFontFamily = null, calendarColor = '#000000', calendarWeekendColor = '#dc2626', calendarGridStyle = 'boxed' }: Props = $props();
+  let { templateId, slots, onSlotClick, onSwapPhoto, onAdjustCrop, onRemovePhoto, onSwapSlots, editingSlotIndex = null, slotGapPx = 2, pagePaddingPx = 0, pageTitle = null, events = [], weekStart = 1, texts = [], editingTextId = null, onEditText, pageBgColor = '#ffffff', pageWidthMm = 297, pageHeightMm = 210, printMode = false, slotCornerRadiusPx = 0, calendarFontFamily = null, calendarColor = '#000000', calendarWeekendColor = '#dc2626', calendarGridStyle = 'boxed' }: Props = $props();
 
   let tpl = $derived<Template>(getTemplate(templateId));
+  let sharedEdges = $derived(printMode || !onSwapSlots ? [] : computeSharedEdges(tpl));
   let aspectRatio = $derived(`${pageWidthMm} / ${pageHeightMm}`);
   let orderedSlots = $derived([...slots].sort((a, b) => a.slot_index - b.slot_index));
 
@@ -96,7 +100,7 @@
 </script>
 
 <div
-  class="relative w-full overflow-hidden"
+  class="relative w-full overflow-hidden group"
   style="aspect-ratio: {aspectRatio}; background: {pageBgColor}; border-radius: 0; box-shadow: {printMode ? 'none' : '0 0 6px rgba(0, 0, 0, 0.08)'}; user-select: none; -webkit-user-select: none;"
 >
   {#each tpl.slots as slotLayout, i}
@@ -186,6 +190,26 @@
         {/if}
       </div>
     </div>
+  {/each}
+
+  {#each sharedEdges as edge}
+    <button
+      type="button"
+      class="absolute swap-edge-btn opacity-0 group-hover:opacity-100 transition-opacity"
+      style="
+        left: calc({pagePaddingPx}px + {edge.x} * (100% - {2 * pagePaddingPx}px));
+        top: calc({pagePaddingPx}px + {edge.y} * (100% - {2 * pagePaddingPx}px));
+      "
+      onclick={(e) => { e.stopPropagation(); onSwapSlots?.(edge.slotA, edge.slotB); }}
+      title="Swap these two photos"
+      aria-label="Swap adjacent photos"
+    >
+      {#if edge.orientation === 'vertical'}
+        <ArrowLeftRight size={14} />
+      {:else}
+        <ArrowUpDown size={14} />
+      {/if}
+    </button>
   {/each}
 
   {#if tpl.calendarGrid}
