@@ -91,31 +91,22 @@
     <h1 class="text-xl font-medium">{data.project.name}</h1>
   </PageHeader>
 
+  <p class="text-sm mt-1" style="color: var(--color-muted)">
+    <span title="Source folder">{data.project.source_dir}</span>
+    <span class="mx-2">·</span>
+    <span>Album {data.project.album_year} → Calendar {data.project.calendar_year}</span>
+  </p>
+
+  <!-- Photo library: index + maintenance actions on the source folder -->
   <section class="surface-card mt-4">
-    <p class="text-sm" style="color: var(--color-muted)">Source: {data.project.source_dir}</p>
-    <p class="text-sm mt-1" style="color: var(--color-muted)">
-      Year: {data.project.album_year} → calendar {data.project.calendar_year}
-    </p>
-    <label class="flex items-center gap-2 mt-2 text-sm" style="color: var(--color-muted)">
-      Album max pages:
-      <input
-        type="number"
-        min="4"
-        max="80"
-        step="1"
-        bind:value={maxPagesInput}
-        onchange={saveMaxPages}
-        class="w-20 px-2 py-1 border rounded"
-        title="Cap on auto-generated pages. The assembler packs photos to roughly total/max-pages slots per page."
-      />
-    </label>
-    <p class="mt-3">
+    <h2 class="text-lg font-medium mb-2">Photo library</h2>
+    <p>
       Indexed: <strong>{data.count}</strong> photos
       {#if data.lastIndexedAt !== null}
         <span style="color: var(--color-muted)" class="text-sm"> · last index {formatRelativeTime(data.lastIndexedAt)}</span>
       {/if}
     </p>
-    <div class="flex gap-2 mt-3">
+    <div class="flex flex-wrap gap-2 mt-3">
       <button type="button" class="btn-primary" onclick={runIndex} disabled={mine && (pStateLocal.phase === 'walking' || pStateLocal.phase === 'indexing')}>
         {(!mine || pStateLocal.phase === 'idle' || pStateLocal.phase === 'done') ? 'Index now' : 'Indexing…'}
       </button>
@@ -130,7 +121,42 @@
       </button>
       <a class="btn-secondary" href={`/projects/${data.project.id}/library`}>Open library</a>
     </div>
-    <div class="grid gap-4 lg:grid-cols-2 mt-4">
+    {#if mine && pStateLocal.phase === 'walking'}
+      <p class="mt-3 text-sm" style="color: var(--color-muted)">Walking folder…</p>
+    {:else if mine && pStateLocal.phase === 'indexing'}
+      <p class="mt-3 text-sm" style="color: var(--color-muted)">
+        {pStateLocal.scanned} / {pStateLocal.total} — {pStateLocal.current}
+      </p>
+    {:else if mine && pStateLocal.phase === 'done'}
+      <p class="mt-3 text-sm" style="color: var(--color-success)">Done.</p>
+    {/if}
+    {#if mine && pStateLocal.errors.length > 0}
+      <details class="mt-3">
+        <summary class="text-sm" style="color: var(--color-danger)">{pStateLocal.errors.length} errors</summary>
+        <ul class="text-xs mt-1">
+          {#each pStateLocal.errors.slice(0, 20) as e}<li>{e}</li>{/each}
+        </ul>
+      </details>
+    {/if}
+  </section>
+
+  <!-- Outputs: album book + wall calendar generated from the indexed photos -->
+  <section class="surface-card mt-4">
+    <h2 class="text-lg font-medium mb-2">Outputs</h2>
+    <label class="flex items-center gap-2 text-sm" style="color: var(--color-muted)">
+      Album max pages:
+      <input
+        type="number"
+        min="4"
+        max="80"
+        step="1"
+        bind:value={maxPagesInput}
+        onchange={saveMaxPages}
+        class="w-20 px-2 py-1 border rounded"
+        title="Cap on auto-generated album pages. The assembler packs photos to roughly total/max-pages slots per page."
+      />
+    </label>
+    <div class="grid gap-4 lg:grid-cols-2 mt-3">
       <div class="output-group">
         <h3 class="text-sm font-medium mb-2">Album</h3>
         {#if data.albumSelection}
@@ -179,23 +205,6 @@
         </div>
       </div>
     </div>
-    {#if mine && pStateLocal.phase === 'walking'}
-      <p class="mt-3 text-sm" style="color: var(--color-muted)">Walking folder…</p>
-    {:else if mine && pStateLocal.phase === 'indexing'}
-      <p class="mt-3 text-sm" style="color: var(--color-muted)">
-        {pStateLocal.scanned} / {pStateLocal.total} — {pStateLocal.current}
-      </p>
-    {:else if mine && pStateLocal.phase === 'done'}
-      <p class="mt-3 text-sm" style="color: var(--color-success)">Done.</p>
-    {/if}
-    {#if mine && pStateLocal.errors.length > 0}
-      <details class="mt-3">
-        <summary class="text-sm" style="color: var(--color-danger)">{pStateLocal.errors.length} errors</summary>
-        <ul class="text-xs mt-1">
-          {#each pStateLocal.errors.slice(0, 20) as e}<li>{e}</li>{/each}
-        </ul>
-      </details>
-    {/if}
   </section>
 
   <!-- Holiday presets + EventsPanel are hidden while the calendar grid
