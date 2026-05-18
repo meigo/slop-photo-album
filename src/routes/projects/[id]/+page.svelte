@@ -10,6 +10,7 @@
   import { assembleAlbumPages, assembleCalendarPages } from '$lib/layout/assembly';
   import { updateProjectAlbumMaxPages } from '$lib/db';
   import { ALBUM_DEFAULTS } from '$lib/selection/constants';
+  import ConfirmDialog from '$lib/components/ConfirmDialog.svelte';
 
   let { data } = $props();
 
@@ -61,8 +62,34 @@
   }
 
 
-  async function runGenerateAlbum() {
-    if (data.albumSelection && !confirm('Regenerate the album from scratch? Your manual page edits will be lost.')) return;
+  // Confirm overwrite only when a selection already exists. First-time
+  // generation has nothing to destroy and runs without prompting.
+  let pendingRegenerate = $state<null | 'album' | 'calendar'>(null);
+
+  function runGenerateAlbum() {
+    if (data.albumSelection) {
+      pendingRegenerate = 'album';
+    } else {
+      doGenerateAlbum();
+    }
+  }
+
+  function runGenerateCalendar() {
+    if (data.calendarSelection) {
+      pendingRegenerate = 'calendar';
+    } else {
+      doGenerateCalendar();
+    }
+  }
+
+  async function confirmRegenerate() {
+    const kind = pendingRegenerate;
+    pendingRegenerate = null;
+    if (kind === 'album') await doGenerateAlbum();
+    else if (kind === 'calendar') await doGenerateCalendar();
+  }
+
+  async function doGenerateAlbum() {
     generating = 'album';
     try {
       await generateAlbumSelection(data.project.id);
@@ -73,8 +100,7 @@
     }
   }
 
-  async function runGenerateCalendar() {
-    if (data.calendarSelection && !confirm('Regenerate the calendar from scratch? Your manual page edits will be lost.')) return;
+  async function doGenerateCalendar() {
     generating = 'calendar';
     try {
       await generateCalendarSelection(data.project.id);
@@ -251,4 +277,15 @@
   </section>
   <EventsPanel projectId={data.project.id} />
   -->
+
+  {#if pendingRegenerate}
+    <ConfirmDialog
+      title={pendingRegenerate === 'album' ? 'Regenerate album?' : 'Regenerate calendar?'}
+      message={`Manual page edits, photo swaps, crops, and text overlays for the current ${pendingRegenerate} will be replaced with a freshly auto-assembled version based on the latest scoring. Indexed photos and CV scores are untouched.`}
+      confirmLabel="Regenerate"
+      danger
+      onConfirm={confirmRegenerate}
+      onCancel={() => (pendingRegenerate = null)}
+    />
+  {/if}
 </div>
