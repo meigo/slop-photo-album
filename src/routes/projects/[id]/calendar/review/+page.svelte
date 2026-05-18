@@ -7,7 +7,7 @@
   import TextEditor from '$lib/components/TextEditor.svelte';
   import { getTemplate } from '$lib/layout/templates';
   import { invalidateAll } from '$app/navigation';
-  import { updateSlotPhoto, clearSlotPhoto, insertBlankPage, updateProjectSlotGap, updateProjectPagePadding, updateProjectPageBgColor, updateProjectPageSize, updateProjectWeekStart, updateProjectCalendarFontFamily, addPageText } from '$lib/db';
+  import { updateSlotPhoto, clearSlotPhoto, insertBlankPage, updateProjectSlotGap, updateProjectPagePadding, updateProjectPageBgColor, updateProjectPageSize, updateProjectWeekStart, updateProjectCalendarFontFamily, updateProjectCalendarColor, addPageText } from '$lib/db';
   import { DEFAULT_TEXT_STYLE, serializeStyle } from '$lib/text/style';
   import { PAPER_PRESETS } from '$lib/print/presets';
   import { FONT_CATALOG } from '$lib/text/catalog';
@@ -30,6 +30,8 @@
   let pageHeightMm = $state(data.project.page_size_h_mm);
   // svelte-ignore state_referenced_locally
   let calendarFontFamily = $state<string | null>(data.project.calendar_font_family);
+  // svelte-ignore state_referenced_locally
+  let calendarColor = $state(data.project.calendar_color);
 
   // Preload the saved font on mount so the first paint already has it.
   onMount(() => {
@@ -42,6 +44,12 @@
     if (next) loadGoogleFont(next);
     calendarFontFamily = next;
     await updateProjectCalendarFontFamily(data.project.id, next);
+  }
+
+  async function onCalendarColorChange(e: Event) {
+    const v = (e.currentTarget as HTMLInputElement).value;
+    calendarColor = v;
+    await updateProjectCalendarColor(data.project.id, v);
   }
 
   async function onPageBgChange(e: Event) {
@@ -213,6 +221,11 @@
       <span style="font-variant-numeric: tabular-nums;">{pageWidthMm}×{pageHeightMm}mm</span>
     </label>
     <label class="text-sm mt-1 flex items-center gap-2" style="color: var(--color-muted)">
+      calendar text/grid color:
+      <input type="color" bind:value={calendarColor} oninput={onCalendarColorChange} style="width: 32px; height: 24px; border: 1px solid var(--color-line); border-radius: 3px;" />
+      <span style="font-family: var(--font-mono); font-size: 0.75rem;">{calendarColor}</span>
+    </label>
+    <label class="text-sm mt-1 flex items-center gap-2" style="color: var(--color-muted)">
       calendar font:
       <select onchange={onCalendarFontChange} style="background: var(--color-surface); border: 1px solid var(--color-line); border-radius: 4px; padding: 2px 6px; font-size: 0.75rem;">
         <option value="" selected={calendarFontFamily === null}>App default (mono)</option>
@@ -272,6 +285,7 @@
               {pageWidthMm}
               {pageHeightMm}
               {calendarFontFamily}
+              {calendarColor}
               slotCornerRadiusPx={data.project.slot_corner_radius_px}
               pageTitle={page.title}
               events={data.events}

@@ -94,6 +94,14 @@ export async function updateProjectCalendarFontFamily(id: number, family: string
   await d.execute('UPDATE project SET calendar_font_family = ? WHERE id = ?', [family, id]);
 }
 
+/** Hex color for calendar grid text + borders. Silently rejects
+ *  malformed input (same pattern as updateProjectPageBgColor). */
+export async function updateProjectCalendarColor(id: number, color: string): Promise<void> {
+  const d = await db();
+  if (!/^#[0-9a-fA-F]{6}$/.test(color)) return;
+  await d.execute('UPDATE project SET calendar_color = ? WHERE id = ?', [color, id]);
+}
+
 export async function upsertPhoto(p: PhotoInsert): Promise<void> {
   const d = await db();
   await d.execute(

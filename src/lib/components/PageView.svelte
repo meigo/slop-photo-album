@@ -62,8 +62,10 @@
      *  calendar templates. Ignored for album templates. Caller must
      *  have already triggered loadGoogleFont. */
     calendarFontFamily?: string | null;
+    /** Hex color for calendar grid text + cell borders. */
+    calendarColor?: string;
   }
-  let { templateId, slots, onSlotClick, onSwapPhoto, onAdjustCrop, onRemovePhoto, editingSlotIndex = null, slotGapPx = 2, pagePaddingPx = 0, pageTitle = null, events = [], weekStart = 1, texts = [], editingTextId = null, onEditText, pageBgColor = '#ffffff', pageWidthMm = 297, pageHeightMm = 210, printMode = false, slotCornerRadiusPx = 0, calendarFontFamily = null }: Props = $props();
+  let { templateId, slots, onSlotClick, onSwapPhoto, onAdjustCrop, onRemovePhoto, editingSlotIndex = null, slotGapPx = 2, pagePaddingPx = 0, pageTitle = null, events = [], weekStart = 1, texts = [], editingTextId = null, onEditText, pageBgColor = '#ffffff', pageWidthMm = 297, pageHeightMm = 210, printMode = false, slotCornerRadiusPx = 0, calendarFontFamily = null, calendarColor = '#000000' }: Props = $props();
 
   let tpl = $derived<Template>(getTemplate(templateId));
   let aspectRatio = $derived(`${pageWidthMm} / ${pageHeightMm}`);
@@ -195,13 +197,14 @@
           padding: {slotGapPx / 2}px;
         "
       >
-        <div class="w-full h-full" style="background: white; color: black; padding: 4px; font-size: 1.2em;">
+        <div class="w-full h-full" style="padding: 4px; font-size: 1.2em;">
           <CalendarGrid
             year={ym.year}
             month={ym.month}
             {weekStart}
             {events}
             fontFamily={calendarFontFamily}
+            color={calendarColor}
             showHeading={true}
           />
         </div>

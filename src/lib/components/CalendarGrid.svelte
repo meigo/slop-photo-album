@@ -17,8 +17,10 @@
      *  inherit (app default monospace). Caller is responsible for
      *  loading the font; this component only sets font-family. */
     fontFamily?: string | null;
+    /** Hex color for text + cell borders. Default black. */
+    color?: string;
   }
-  let { year, month, weekStart, events, locale, showHeading = true, fontFamily = null }: Props = $props();
+  let { year, month, weekStart, events, locale, showHeading = true, fontFamily = null, color = '#000000' }: Props = $props();
 
   let grid = $derived<CalendarGrid>(buildCalendarGrid(year, month, weekStart, locale));
   let heading = $derived(monthLabel(year, month, locale));
@@ -47,14 +49,16 @@
   }
 </script>
 
-<div class="w-full h-full flex flex-col" style="font-size: 0.65em;{fontFamily ? ` font-family: '${fontFamily.replace(/'/g, "\\'")}', sans-serif;` : ''}">
+<div class="w-full h-full flex flex-col" style="font-size: 0.65em; color: {color};{fontFamily ? ` font-family: '${fontFamily.replace(/'/g, "\\'")}', sans-serif;` : ''}">
   {#if showHeading}
     <div class="text-center font-medium mb-1" style="font-size: 1.4em;">{heading}</div>
   {/if}
-  <!-- Day headers -->
+  <!-- Day headers. Use the calendar color at 70% opacity so headers
+       sit lighter than date numbers — matches the previous "muted"
+       look without depending on app theme colors. -->
   <div class="grid grid-cols-7 gap-px mb-px">
     {#each grid.dayHeaders as h}
-      <div class="text-center font-medium" style="color: var(--color-muted);">{h}</div>
+      <div class="text-center font-medium" style="opacity: 0.7;">{h}</div>
     {/each}
   </div>
   <!-- Date rows. grid-auto-rows: 1fr forces every row to share the
@@ -68,7 +72,7 @@
         <div
           class="relative"
           style="
-            border: 1px solid {cell.day === null ? 'transparent' : 'var(--color-line)'};
+            border: 1px solid {cell.day === null ? 'transparent' : color};
             background: {cell.isToday ? 'rgba(255,200,0,0.15)' : 'transparent'};
             min-height: 0;
             overflow: hidden;
@@ -85,7 +89,7 @@
               >{ev.label}</div>
             {/each}
             {#if (eventsByDay.get(cell.day)?.length ?? 0) > 2}
-              <div style="font-size: 0.7em; color: var(--color-muted);">
+              <div style="font-size: 0.7em; opacity: 0.7;">
                 +{(eventsByDay.get(cell.day)!.length - 2)} more
               </div>
             {/if}

@@ -16,6 +16,7 @@
     updateProjectSlotCornerRadius,
     updateProjectPageBgColor,
     updateProjectCalendarFontFamily,
+    updateProjectCalendarColor,
   } from '$lib/db';
   import { ALBUM_DEFAULTS } from '$lib/selection/constants';
   import { STYLE_PRESETS } from '$lib/print/style-presets';
@@ -86,6 +87,7 @@
         updateProjectSlotCornerRadius(data.project.id, preset.slot_corner_radius_px),
         updateProjectPageBgColor(data.project.id, preset.page_bg_color),
         updateProjectCalendarFontFamily(data.project.id, preset.calendar_font_family),
+        updateProjectCalendarColor(data.project.id, preset.calendar_color),
       ]);
       await invalidateAll();
     } finally {

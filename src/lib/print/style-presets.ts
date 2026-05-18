@@ -15,6 +15,7 @@ export interface StylePreset {
   page_bg_color: string;
   /** null = inherit app default monospace. */
   calendar_font_family: string | null;
+  calendar_color: string;
 }
 
 export const STYLE_PRESETS: ReadonlyArray<StylePreset> = [
@@ -27,6 +28,7 @@ export const STYLE_PRESETS: ReadonlyArray<StylePreset> = [
     slot_corner_radius_px: 0,
     page_bg_color: '#ffffff',
     calendar_font_family: null,
+    calendar_color: '#000000',
   },
   {
     id: 'classic',
@@ -37,6 +39,7 @@ export const STYLE_PRESETS: ReadonlyArray<StylePreset> = [
     slot_corner_radius_px: 0,
     page_bg_color: '#fbf7ee',
     calendar_font_family: 'Lora',
+    calendar_color: '#2a2a2a',
   },
   {
     id: 'polaroid',
@@ -47,6 +50,7 @@ export const STYLE_PRESETS: ReadonlyArray<StylePreset> = [
     slot_corner_radius_px: 12,
     page_bg_color: '#ffffff',
     calendar_font_family: 'Caveat',
+    calendar_color: '#1a1a1a',
   },
   {
     id: 'modern',
@@ -57,5 +61,6 @@ export const STYLE_PRESETS: ReadonlyArray<StylePreset> = [
     slot_corner_radius_px: 6,
     page_bg_color: '#1a1a1a',
     calendar_font_family: 'Inter',
+    calendar_color: '#f5f5f5',
   },
 ];

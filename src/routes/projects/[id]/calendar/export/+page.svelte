@@ -128,6 +128,7 @@
         pageWidthMm={data.project.page_size_w_mm}
         pageHeightMm={data.project.page_size_h_mm}
         calendarFontFamily={data.project.calendar_font_family}
+        calendarColor={data.project.calendar_color}
         pageTitle={page.title}
         events={data.events}
         weekStart={data.project.week_start === 0 ? 0 : 1}

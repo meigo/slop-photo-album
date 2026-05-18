@@ -19,6 +19,8 @@ export interface ProjectRow {
   /** Google Fonts family name applied to the calendar grid (heading,
    *  day headers, dates). NULL = app default (monospace). */
   calendar_font_family: string | null;
+  /** Hex color (#rrggbb) for calendar grid text + cell borders. */
+  calendar_color: string;
 }
 
 export interface CalendarEventRow {
