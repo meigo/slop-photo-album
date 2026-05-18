@@ -87,11 +87,14 @@
     <div class="grid gap-3 mt-4" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));">
       {#each localOrder as page, idx (page.id)}
         <div>
+          <!-- The thumb is both a drag handle and a click-to-open target.
+               HTML5 DnD fires click only when no drag happened. -->
           <!-- svelte-ignore a11y_no_static_element_interactions -->
+          <!-- svelte-ignore a11y_click_events_have_key_events -->
           <div
             class="relative"
             style="
-              cursor: grab;
+              cursor: pointer;
               opacity: {draggingId === page.id ? 0.4 : 1};
               outline: {overIdx === idx ? '2px dashed var(--color-fg)' : 'none'};
               outline-offset: 4px;
@@ -102,22 +105,17 @@
             ondragover={(e) => onDragOver(e, idx)}
             ondrop={(e) => onDrop(e, idx)}
             ondragend={onDragEnd}
-            title="Page {idx + 1}{page.title ? ` · ${page.title}` : ''} · drag to move"
+            onclick={openInReview}
+            title="Page {idx + 1}{page.title ? ` · ${page.title}` : ''} · click to open · drag to reorder"
           >
             <PageThumb
               templateId={page.template_id}
               slots={data.slotsByPage.get(page.id) ?? []}
             />
           </div>
-          <button
-            type="button"
-            class="btn-ghost text-xs text-center w-full"
-            style="margin-top: 0.25rem; padding: 0.125rem;"
-            onclick={openInReview}
-            title="Open in full review"
-          >
+          <div class="text-xs text-center mt-1" style="color: var(--color-muted);">
             {idx + 1}{page.title ? ` · ${page.title}` : ''}
-          </button>
+          </div>
         </div>
       {/each}
     </div>
