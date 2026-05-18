@@ -7,9 +7,10 @@
   import TextEditor from '$lib/components/TextEditor.svelte';
   import { getTemplate } from '$lib/layout/templates';
   import { invalidateAll } from '$app/navigation';
-  import { updateSlotPhoto, clearSlotPhoto, swapPageSlots, updateProjectSlotGap, updateProjectPagePadding, updateProjectPageBgColor, updateProjectPageSize, updateProjectWeekStart, updateProjectCalendarFontFamily, updateProjectCalendarColor, updateProjectCalendarGridStyle, updateProjectCalendarWeekendColor, type CalendarGridStyle, addPageText } from '$lib/db';
+  import { updateSlotPhoto, clearSlotPhoto, swapPageSlots, updateProjectSlotGap, updateProjectPagePadding, updateProjectPageBgColor, updateProjectCalendarPageSize, updateProjectWeekStart, updateProjectCalendarFontFamily, updateProjectCalendarColor, updateProjectCalendarGridStyle, updateProjectCalendarWeekendColor, updateProjectSlotCornerRadius, updateProjectStylePreset, type CalendarGridStyle, addPageText } from '$lib/db';
   import { DEFAULT_TEXT_STYLE, serializeStyle } from '$lib/text/style';
   import { PAPER_PRESETS } from '$lib/print/presets';
+  import { STYLE_PRESETS } from '$lib/print/style-presets';
   import { FONT_CATALOG } from '$lib/text/catalog';
   import { loadGoogleFont } from '$lib/text/fonts';
   import { onMount } from 'svelte';
@@ -25,9 +26,43 @@
   // svelte-ignore state_referenced_locally
   let pageBgColor = $state(data.project.page_bg_color);
   // svelte-ignore state_referenced_locally
-  let pageWidthMm = $state(data.project.page_size_w_mm);
+  let pageWidthMm = $state(data.project.calendar_page_size_w_mm);
   // svelte-ignore state_referenced_locally
-  let pageHeightMm = $state(data.project.page_size_h_mm);
+  let pageHeightMm = $state(data.project.calendar_page_size_h_mm);
+  // svelte-ignore state_referenced_locally
+  let slotCornerRadiusPx = $state(data.project.slot_corner_radius_px);
+  // svelte-ignore state_referenced_locally
+  let stylePresetId = $state<string>(data.project.style_preset_id ?? '');
+
+  async function onPresetChange(e: Event) {
+    const presetId = (e.currentTarget as HTMLSelectElement).value;
+    if (!presetId) {
+      stylePresetId = '';
+      await updateProjectStylePreset(data.project.id, null);
+      return;
+    }
+    const preset = STYLE_PRESETS.find((p) => p.id === presetId);
+    if (!preset) return;
+    // Update local state immediately so the preview reflects the
+    // preset on the next paint, then fan-out the DB writes.
+    stylePresetId = presetId;
+    slotGapPx = preset.slot_gap_px;
+    pagePaddingPx = preset.page_padding_px;
+    slotCornerRadiusPx = preset.slot_corner_radius_px;
+    pageBgColor = preset.page_bg_color;
+    calendarFontFamily = preset.calendar_font_family;
+    calendarColor = preset.calendar_color;
+    if (preset.calendar_font_family) loadGoogleFont(preset.calendar_font_family);
+    await Promise.all([
+      updateProjectSlotGap(data.project.id, preset.slot_gap_px),
+      updateProjectPagePadding(data.project.id, preset.page_padding_px),
+      updateProjectSlotCornerRadius(data.project.id, preset.slot_corner_radius_px),
+      updateProjectPageBgColor(data.project.id, preset.page_bg_color),
+      updateProjectCalendarFontFamily(data.project.id, preset.calendar_font_family),
+      updateProjectCalendarColor(data.project.id, preset.calendar_color),
+      updateProjectStylePreset(data.project.id, presetId),
+    ]);
+  }
   // svelte-ignore state_referenced_locally
   let calendarFontFamily = $state<string | null>(data.project.calendar_font_family);
   // svelte-ignore state_referenced_locally
@@ -84,7 +119,7 @@
     if (!preset) return;
     pageWidthMm = preset.width_mm;
     pageHeightMm = preset.height_mm;
-    await updateProjectPageSize(data.project.id, preset.width_mm, preset.height_mm);
+    await updateProjectCalendarPageSize(data.project.id, preset.width_mm, preset.height_mm);
   }
 
   async function setWeekStart(v: 0 | 1) {
@@ -203,6 +238,15 @@
     <details open class="mt-3 settings-section">
       <summary>Page</summary>
       <div class="settings-body">
+        <label class="text-sm flex items-center gap-2" style="color: var(--color-muted)">
+          style preset:
+          <select value={stylePresetId} onchange={onPresetChange} class="settings-select" title="Apply a bundle of gap, padding, corner radius, page background, and calendar font/color.">
+            <option value="">— none / custom —</option>
+            {#each STYLE_PRESETS as preset}
+              <option value={preset.id} title={preset.description}>{preset.label}</option>
+            {/each}
+          </select>
+        </label>
         <label class="text-sm flex items-center gap-2" style="color: var(--color-muted)">
           paper size:
           <select onchange={onPageSizeChange} class="settings-select">

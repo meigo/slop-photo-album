@@ -184,5 +184,11 @@ fn migrations() -> Vec<tauri_plugin_sql::Migration> {
       sql: include_str!("../migrations/021_style_preset.sql"),
       kind: tauri_plugin_sql::MigrationKind::Up,
     },
+    tauri_plugin_sql::Migration {
+      version: 22,
+      description: "project_calendar_page_size",
+      sql: include_str!("../migrations/022_calendar_page_size.sql"),
+      kind: tauri_plugin_sql::MigrationKind::Up,
+    },
   ]
 }

@@ -77,6 +77,15 @@ export async function updateProjectPageSize(id: number, width_mm: number, height
   await d.execute('UPDATE project SET page_size_w_mm = ?, page_size_h_mm = ? WHERE id = ?', [w, h, id]);
 }
 
+/** Same as updateProjectPageSize but writes the calendar-side columns
+ *  so the wall calendar can have a different aspect than the album book. */
+export async function updateProjectCalendarPageSize(id: number, width_mm: number, height_mm: number): Promise<void> {
+  const d = await db();
+  const w = Math.max(50, Math.min(1000, Math.round(width_mm)));
+  const h = Math.max(50, Math.min(1000, Math.round(height_mm)));
+  await d.execute('UPDATE project SET calendar_page_size_w_mm = ?, calendar_page_size_h_mm = ? WHERE id = ?', [w, h, id]);
+}
+
 /** null = use ALBUM_DEFAULTS.default_max_pages; otherwise clamped to [4, 80]
  *  so the assembler always has a reasonable budget. */
 export async function updateProjectAlbumMaxPages(

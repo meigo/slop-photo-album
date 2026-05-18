@@ -20,7 +20,7 @@
   let error = $state<string | null>(null);
   let quality = $state<'low' | 'medium' | 'high'>('medium');
   let progress = $state<{ current: number; total: number } | null>(null);
-  let paper = $derived(paperForSize(data.project.page_size_w_mm, data.project.page_size_h_mm));
+  let paper = $derived(paperForSize(data.project.calendar_page_size_w_mm, data.project.calendar_page_size_h_mm));
 
   function qualityToParams(q: 'low' | 'medium' | 'high'): { scale: number; jpegQuality: number } {
     if (q === 'low')  return { scale: 2, jpegQuality: 0.85 };
@@ -34,8 +34,8 @@
     error = null;
     progress = null;
     try {
-      const w = data.project.page_size_w_mm;
-      const h = data.project.page_size_h_mm;
+      const w = data.project.calendar_page_size_w_mm;
+      const h = data.project.calendar_page_size_h_mm;
       const { scale, jpegQuality } = qualityToParams(quality);
       const imagePathMap = new Map<string, string>();
       for (const page of data.pages) {
@@ -78,7 +78,7 @@
   {:else}
     <section class="surface-card mt-4 flex flex-wrap items-center gap-3">
       <span class="text-sm" style="color: var(--color-muted)">
-        Paper: {data.project.page_size_w_mm}×{data.project.page_size_h_mm}mm. Change the paper size on the calendar review page.
+        Paper: {data.project.calendar_page_size_w_mm}×{data.project.calendar_page_size_h_mm}mm. Change the paper size on the calendar review page.
       </span>
       <label class="text-sm flex items-center gap-2">
         Quality:
@@ -125,8 +125,8 @@
         pagePaddingPx={data.project.page_padding_px}
         pageBgColor={data.project.page_bg_color}
         slotCornerRadiusPx={data.project.slot_corner_radius_px}
-        pageWidthMm={data.project.page_size_w_mm}
-        pageHeightMm={data.project.page_size_h_mm}
+        pageWidthMm={data.project.calendar_page_size_w_mm}
+        pageHeightMm={data.project.calendar_page_size_h_mm}
         calendarFontFamily={data.project.calendar_font_family}
         calendarColor={data.project.calendar_color}
         calendarWeekendColor={data.project.calendar_weekend_color}

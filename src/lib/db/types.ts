@@ -30,6 +30,11 @@ export interface ProjectRow {
   /** Last-applied style preset id (Minimal, Classic, Polaroid,
    *  Modern). NULL = user hasn't applied one or tweaked manually. */
   style_preset_id: string | null;
+  /** Paper size for calendar pages (the album uses page_size_w/h_mm).
+   *  Backfilled from the album columns on migration so existing
+   *  projects render unchanged. */
+  calendar_page_size_w_mm: number;
+  calendar_page_size_h_mm: number;
 }
 
 export interface CalendarEventRow {

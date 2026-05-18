@@ -7,19 +7,8 @@
   import { generateAlbumSelection } from '$lib/selection/album';
   import { generateCalendarSelection } from '$lib/selection/calendar';
   import { assembleAlbumPages, assembleCalendarPages } from '$lib/layout/assembly';
-  import {
-    updateProjectAlbumMaxPages,
-    updateProjectSlotGap,
-    updateProjectPagePadding,
-    updateProjectSlotCornerRadius,
-    updateProjectPageBgColor,
-    updateProjectCalendarFontFamily,
-    updateProjectCalendarColor,
-    updateProjectStylePreset,
-  } from '$lib/db';
+  import { updateProjectAlbumMaxPages } from '$lib/db';
   import { ALBUM_DEFAULTS } from '$lib/selection/constants';
-  import { STYLE_PRESETS } from '$lib/print/style-presets';
-  import { loadGoogleFont } from '$lib/text/fonts';
 
   let { data } = $props();
 
@@ -70,41 +59,6 @@
     await invalidateAll();
   }
 
-  let applyingPreset = $state(false);
-  // svelte-ignore state_referenced_locally
-  let stylePresetId = $state<string>(data.project.style_preset_id ?? '');
-
-  async function applyStylePreset(presetId: string) {
-    if (!presetId) {
-      stylePresetId = '';
-      await updateProjectStylePreset(data.project.id, null);
-      await invalidateAll();
-      return;
-    }
-    const preset = STYLE_PRESETS.find((p) => p.id === presetId);
-    if (!preset) return;
-    applyingPreset = true;
-    try {
-      stylePresetId = presetId;
-      if (preset.calendar_font_family) loadGoogleFont(preset.calendar_font_family);
-      await Promise.all([
-        updateProjectSlotGap(data.project.id, preset.slot_gap_px),
-        updateProjectPagePadding(data.project.id, preset.page_padding_px),
-        updateProjectSlotCornerRadius(data.project.id, preset.slot_corner_radius_px),
-        updateProjectPageBgColor(data.project.id, preset.page_bg_color),
-        updateProjectCalendarFontFamily(data.project.id, preset.calendar_font_family),
-        updateProjectCalendarColor(data.project.id, preset.calendar_color),
-        updateProjectStylePreset(data.project.id, presetId),
-      ]);
-      await invalidateAll();
-    } finally {
-      applyingPreset = false;
-    }
-  }
-
-  function onPresetChange(e: Event) {
-    applyStylePreset((e.currentTarget as HTMLSelectElement).value);
-  }
 
   async function runGenerateAlbum() {
     if (data.albumSelection && !confirm('Regenerate the album from scratch? Your manual page edits will be lost.')) return;
@@ -154,21 +108,6 @@
         class="w-20 px-2 py-1 border rounded"
         title="Cap on auto-generated pages. The assembler packs photos to roughly total/max-pages slots per page."
       />
-    </label>
-    <label class="flex items-center gap-2 mt-2 text-sm" style="color: var(--color-muted)">
-      Style preset:
-      <select
-        value={stylePresetId}
-        onchange={onPresetChange}
-        disabled={applyingPreset}
-        style="background: var(--color-surface); border: 1px solid var(--color-line); border-radius: 4px; padding: 2px 6px; font-size: 0.85rem;"
-        title="Overwrites slot gap, page padding, slot corner radius, page background color, and calendar font on this project."
-      >
-        <option value="">— none / custom —</option>
-        {#each STYLE_PRESETS as preset}
-          <option value={preset.id} title={preset.description}>{preset.label}</option>
-        {/each}
-      </select>
     </label>
     <p class="mt-3">
       Indexed: <strong>{data.count}</strong> photos
