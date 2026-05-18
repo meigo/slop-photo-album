@@ -267,6 +267,45 @@ button:not(:disabled) {
   color: var(--color-fg);
 }
 
+/* Per-page template picker: small TemplateIcon as the trigger, a
+   floating popover of larger icons as the menu. Replaces the legacy
+   text-only <select> on PageControls. */
+.template-picker-btn {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+  line-height: 0;
+  cursor: pointer;
+}
+.template-picker-btn:hover { background: var(--color-line); }
+.template-picker-popover {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  z-index: var(--z-modal);
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  padding: var(--space-2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  max-width: 520px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+.template-picker-option {
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  line-height: 0;
+  cursor: pointer;
+}
+.template-picker-option:hover { border-color: var(--color-muted); }
+.template-picker-option.is-current { border-color: var(--color-fg); }
+
 /* Tiny round swap button placed at the midpoint of shared edges between
    adjacent slots in multi-slot album templates. Sits centered over the
    edge — `translate(-50%, -50%)` because the edge midpoint is computed

@@ -3,6 +3,7 @@
   import { reorderPage, updatePageTemplate, deletePage } from '$lib/db';
   import { invalidateAll } from '$app/navigation';
   import { ArrowUp, ArrowDown, Trash2 } from '@lucide/svelte';
+  import TemplateIcon from './TemplateIcon.svelte';
 
   interface Props {
     pageId: number;
@@ -14,14 +15,13 @@
   let { pageId, currentTemplateId, kind, isFirst, isLast }: Props = $props();
 
   let busy = $state(false);
+  let pickerOpen = $state(false);
 
   let templates = $derived<Template[]>(kind === 'album' ? albumTemplates() : calendarTemplates());
 
-  async function changeTemplate(e: Event) {
-    const newId = (e.target as HTMLSelectElement).value;
-    if (newId === currentTemplateId) return;
-    const t = templates.find((x) => x.id === newId);
-    if (!t) return;
+  async function pickTemplate(t: Template) {
+    pickerOpen = false;
+    if (t.id === currentTemplateId) return;
     busy = true;
     try {
       await updatePageTemplate(pageId, t.id, t.slot_count);
@@ -64,18 +64,39 @@
 </script>
 
 <div class="flex flex-wrap items-center gap-2 text-sm">
-  <select
-    class="input-base"
-    style="width: auto; padding: 0.25rem 0.5rem;"
-    value={currentTemplateId}
-    onchange={changeTemplate}
-    disabled={busy}
-    aria-label="Page layout"
-  >
-    {#each templates as t}
-      <option value={t.id}>{t.label}</option>
-    {/each}
-  </select>
+  <div class="relative">
+    <button
+      type="button"
+      class="template-picker-btn"
+      onclick={() => (pickerOpen = !pickerOpen)}
+      disabled={busy}
+      title={templates.find((t) => t.id === currentTemplateId)?.label ?? currentTemplateId}
+      aria-label="Page layout"
+      aria-haspopup="true"
+      aria-expanded={pickerOpen}
+    >
+      <TemplateIcon templateId={currentTemplateId} width={kind === 'album' ? 32 : 44} />
+    </button>
+    {#if pickerOpen}
+      <div
+        class="template-picker-popover"
+        role="dialog"
+        aria-label="Choose page layout"
+      >
+        {#each templates as t}
+          <button
+            type="button"
+            class="template-picker-option"
+            class:is-current={t.id === currentTemplateId}
+            onclick={() => pickTemplate(t)}
+            title={t.label}
+          >
+            <TemplateIcon templateId={t.id} width={kind === 'album' ? 56 : 76} />
+          </button>
+        {/each}
+      </div>
+    {/if}
+  </div>
 
   {#if kind === 'album'}
     <!-- Calendar months are fixed Jan–Dec; reordering pages would
