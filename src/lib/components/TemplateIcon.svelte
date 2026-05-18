@@ -32,6 +32,8 @@
     ></div>
   {/each}
   {#if tpl.calendarGrid}
+    {@const gridIsTall = tpl.calendarGrid.h > tpl.calendarGrid.w}
+    {@const lineCount = gridIsTall ? 6 : 3}
     <div
       class="absolute"
       style="
@@ -43,8 +45,8 @@
         outline-offset: -1px;
       "
     >
-      {#each [25, 50, 75] as pct}
-        <div style="position: absolute; left: 10%; right: 10%; top: {pct}%; height: 1px; background: var(--color-muted); opacity: 0.7;"></div>
+      {#each Array(lineCount) as _, i}
+        <div style="position: absolute; left: 0; right: 0; top: {((i + 1) / (lineCount + 1)) * 100}%; height: 1px; background: var(--color-muted); opacity: 0.7;"></div>
       {/each}
     </div>
   {/if}
