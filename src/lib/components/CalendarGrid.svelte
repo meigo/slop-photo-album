@@ -62,7 +62,7 @@
     {#each grid.rows as row, rowIdx}
       {#each row as cell}
         <div
-          class="relative text-center"
+          class="relative flex items-center justify-center"
           style="
             {cellBorder(cell.day !== null, rowIdx)};
             background: {cell.isToday ? 'rgba(255,200,0,0.15)' : 'transparent'};
