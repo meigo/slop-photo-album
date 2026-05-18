@@ -5,6 +5,7 @@
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
   import type { ProjectRow } from '$lib/db/types';
+  import { Album } from '@lucide/svelte';
 
   let projects = $state<ProjectRow[]>([]);
   let name = $state('');
@@ -27,7 +28,10 @@
 
 <div class="container-page">
   <PageHeader>
-    <h1 class="text-xl font-medium">Family Album & Calendar Builder</h1>
+    <h1 class="text-xl font-medium flex items-center gap-2">
+      <Album size={22} aria-hidden="true" />
+      Family Album & Calendar Builder
+    </h1>
   </PageHeader>
 
   <section class="surface-card mt-4">
