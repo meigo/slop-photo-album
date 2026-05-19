@@ -21,39 +21,18 @@
     thumb_path: string | null;
     taken_at: number | null;
     score: number | null;
-    embedding: string | null;
   };
   let candidates = $state<Candidate[]>([]);
   let loading = $state(true);
-  let sortMode = $state<'score' | 'time' | 'similarity'>('score');
+  let sortMode = $state<'score' | 'time'>('score');
   let scope = $state<PickerScope>('bucket');
   let effectiveBucket = $state<string>('');
-  let currentEmbedding = $state<Float32Array | null>(null);
-
-  function decodeB64(b64: string | null): Float32Array | null {
-    if (!b64) return null;
-    const binary = atob(b64);
-    const bytes = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-    return new Float32Array(bytes.buffer, bytes.byteOffset, bytes.byteLength / 4);
-  }
-
-  function cosine(a: Float32Array, b: Float32Array): number {
-    if (a.length === 0 || b.length === 0 || a.length !== b.length) return 0;
-    let d = 0;
-    for (let i = 0; i < a.length; i++) d += a[i] * b[i];
-    return d;
-  }
 
   async function loadCandidates() {
     loading = true;
     candidates = await listCandidatesForPicker({
       projectId, bucketKey: effectiveBucket, kind, scope, sourceYear,
     });
-    if (currentPhotoId !== null) {
-      const cur = candidates.find((c) => c.id === currentPhotoId);
-      if (cur) currentEmbedding = decodeB64(cur.embedding);
-    }
     loading = false;
   }
 
@@ -90,16 +69,6 @@
   let sorted = $derived.by(() => {
     if (sortMode === 'time') {
       return [...candidates].sort((a, b) => (a.taken_at ?? 0) - (b.taken_at ?? 0) || a.id - b.id);
-    }
-    if (sortMode === 'similarity' && currentEmbedding !== null) {
-      const ce = currentEmbedding;
-      return [...candidates].sort((a, b) => {
-        const va = decodeB64(a.embedding);
-        const vb = decodeB64(b.embedding);
-        const sa = va ? cosine(va, ce) : -2;
-        const sb = vb ? cosine(vb, ce) : -2;
-        return sb - sa;
-      });
     }
     return [...candidates].sort((a, b) => (b.score ?? 0) - (a.score ?? 0) || a.id - b.id);
   });
@@ -161,13 +130,6 @@
         class={sortMode === 'time' ? 'btn-primary' : 'btn-secondary'}
         onclick={() => sortMode = 'time'}
       >Chronological</button>
-      <button
-        type="button"
-        class={sortMode === 'similarity' ? 'btn-primary' : 'btn-secondary'}
-        onclick={() => sortMode = 'similarity'}
-        disabled={currentEmbedding === null}
-        title={currentEmbedding === null ? 'No embedding for the current slot photo' : 'Sort by visual similarity to current slot photo'}
-      >Similarity</button>
     </div>
 
     {#if loading}

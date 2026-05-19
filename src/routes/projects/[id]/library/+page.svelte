@@ -31,7 +31,6 @@
       {@const cv = data.cvById.get(photo.id)}
       {@const dupGroup = data.dupGroupByPhoto.get(photo.id)}
       {@const bb = blurBadge(cv?.blur ?? null)}
-      {@const top = data.topTagByPhoto.get(photo.id)}
       <figure class="surface-card p-1 relative">
         {#if photo.thumb_path}
           <img src={convertFileSrc(photo.thumb_path)} alt="" class="w-full aspect-square object-cover rounded" />
@@ -50,11 +49,6 @@
           {#if dupGroup !== undefined}
             <span class="text-xs px-1 rounded flex items-center gap-0.5" title="Member of duplicate group {dupGroup}" style="background: var(--color-surface); color: var(--color-muted); border: 1px solid var(--color-line)">
               <Copy size={10} />
-            </span>
-          {/if}
-          {#if top && top.score > 0.3}
-            <span class="text-xs px-1 rounded" style="background: var(--color-surface); color: var(--color-muted); border: 1px solid var(--color-line)" title="confidence: {(top.score * 100).toFixed(0)}%">
-              {top.tag}
             </span>
           {/if}
         </div>

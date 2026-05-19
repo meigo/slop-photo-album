@@ -104,19 +104,6 @@ export interface DuplicateGroupRow {
   created_at: number;
 }
 
-export interface ImageEmbeddingRow {
-  photo_id: number;
-  model: string;
-  vector: string;          // base64-encoded float32 little-endian
-  computed_at: number;
-}
-
-export interface PhotoTagRow {
-  photo_id: number;
-  tag: string;
-  score: number;
-}
-
 export interface FaceRow {
   id: number;
   photo_id: number;
@@ -124,9 +111,7 @@ export interface FaceRow {
   bbox_y: number;
   bbox_w: number;
   bbox_h: number;
-  embedding: string;       // base64-encoded float32 little-endian
   quality: number | null;
-  cluster_id: number | null;
   computed_at: number;
 }
 
@@ -136,17 +121,8 @@ export interface FaceInsert {
   bbox_y: number;
   bbox_w: number;
   bbox_h: number;
-  embedding: string;
   quality: number | null;
   computed_at: number;
-}
-
-export interface PersonClusterRow {
-  id: number;
-  project_id: number;
-  name: string | null;
-  is_pinned: number;
-  created_at: number;
 }
 
 export interface SelectionRow {

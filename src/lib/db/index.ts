@@ -2,7 +2,7 @@ import Database from '@tauri-apps/plugin-sql';
 import { HOLIDAY_PRESETS } from '$lib/calendar/holidays';
 import type {
   ProjectRow, PhotoRow, PhotoInsert, CvScoreRow, CvScoreInsert,
-  FaceRow, FaceInsert, PersonClusterRow,
+  FaceRow, FaceInsert,
   SelectionRow, SelectedPhotoRow, SelectedPhotoInsert,
   PageRow, PageInsert, PageSlotRow, PageSlotInsert,
   CalendarEventRow, PageTextRow,
@@ -110,8 +110,8 @@ export async function getProject(id: number): Promise<ProjectRow | null> {
 
 /** Delete a project and everything it owns. Schema has ON DELETE CASCADE
  *  on every table referencing project(id), so this one statement clears
- *  photos, cv_score, selections, pages, slots, person_cluster, embeddings,
- *  tags, faces, duplicate groups, calendar events, page text. */
+ *  photos, cv_score, selections, pages, slots, faces, duplicate groups,
+ *  calendar events, page text. */
 export async function deleteProject(id: number): Promise<void> {
   const d = await db();
   await d.execute('DELETE FROM project WHERE id = ?', [id]);
@@ -358,62 +358,6 @@ export async function listDuplicateMembersByPhoto(projectId: number): Promise<Ma
   return new Map(rows.map((r) => [r.photo_id, r.group_id]));
 }
 
-export async function upsertImageEmbedding(args: {
-  photo_id: number;
-  model: string;
-  vector: string;          // base64-encoded float32 little-endian
-  computed_at: number;
-}): Promise<void> {
-  const d = await db();
-  await d.execute(
-    `INSERT INTO image_embedding (photo_id, model, vector, computed_at)
-     VALUES (?, ?, ?, ?)
-     ON CONFLICT (photo_id) DO UPDATE SET
-       model = excluded.model,
-       vector = excluded.vector,
-       computed_at = excluded.computed_at`,
-    [args.photo_id, args.model, args.vector, args.computed_at]
-  );
-}
-
-export async function listImageEmbeddingsComputedAt(projectId: number): Promise<Map<number, number>> {
-  const d = await db();
-  const rows = await d.select<{ photo_id: number; computed_at: number }[]>(
-    `SELECT image_embedding.photo_id, image_embedding.computed_at
-     FROM image_embedding
-     INNER JOIN photo ON photo.id = image_embedding.photo_id
-     WHERE photo.project_id = ?`,
-    [projectId]
-  );
-  return new Map(rows.map((r) => [r.photo_id, r.computed_at]));
-}
-
-export async function replacePhotoTags(photoId: number, tags: Array<{ tag: string; score: number }>): Promise<void> {
-  const d = await db();
-  await d.execute('DELETE FROM photo_tag WHERE photo_id = ?', [photoId]);
-  for (const t of tags) {
-    await d.execute(
-      'INSERT INTO photo_tag (photo_id, tag, score) VALUES (?, ?, ?)',
-      [photoId, t.tag, t.score]
-    );
-  }
-}
-
-export async function listTopTagByPhoto(projectId: number): Promise<Map<number, { tag: string; score: number }>> {
-  const d = await db();
-  const rows = await d.select<{ photo_id: number; tag: string; score: number }[]>(
-    `SELECT pt.photo_id, pt.tag, pt.score
-     FROM photo_tag pt
-     INNER JOIN photo p ON p.id = pt.photo_id
-     WHERE p.project_id = ?
-       AND pt.score = (
-         SELECT MAX(score) FROM photo_tag WHERE photo_id = pt.photo_id
-       )`,
-    [projectId]
-  );
-  return new Map(rows.map((r) => [r.photo_id, { tag: r.tag, score: r.score }]));
-}
-
 export async function clearFacesForPhoto(photoId: number): Promise<void> {
   const d = await db();
   await d.execute('DELETE FROM face WHERE photo_id = ?', [photoId]);
@@ -422,9 +366,9 @@ export async function clearFacesForPhoto(photoId: number): Promise<void> {
 export async function insertFace(f: FaceInsert): Promise<number> {
   const d = await db();
   const r = await d.execute(
-    `INSERT INTO face (photo_id, bbox_x, bbox_y, bbox_w, bbox_h, embedding, quality, computed_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-    [f.photo_id, f.bbox_x, f.bbox_y, f.bbox_w, f.bbox_h, f.embedding, f.quality, f.computed_at]
+    `INSERT INTO face (photo_id, bbox_x, bbox_y, bbox_w, bbox_h, quality, computed_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    [f.photo_id, f.bbox_x, f.bbox_y, f.bbox_w, f.bbox_h, f.quality, f.computed_at]
   );
   return r.lastInsertId as number;
 }
@@ -441,67 +385,11 @@ export async function listFacesByProject(projectId: number): Promise<FaceRow[]> 
   );
 }
 
-export async function setFaceCluster(faceId: number, clusterId: number | null): Promise<void> {
-  const d = await db();
-  await d.execute('UPDATE face SET cluster_id = ? WHERE id = ?', [clusterId, faceId]);
-}
-
-export async function clearPersonClusters(projectId: number): Promise<void> {
-  const d = await db();
-  // ON DELETE SET NULL on face.cluster_id keeps face rows; clusters disappear.
-  await d.execute('DELETE FROM person_cluster WHERE project_id = ?', [projectId]);
-}
-
-export async function insertPersonCluster(projectId: number): Promise<number> {
-  const d = await db();
-  const r = await d.execute(
-    'INSERT INTO person_cluster (project_id, name, is_pinned, created_at) VALUES (?, NULL, 0, ?)',
-    [projectId, Date.now()]
-  );
-  return r.lastInsertId as number;
-}
-
-export async function listPersonClusters(projectId: number): Promise<PersonClusterRow[]> {
-  const d = await db();
-  return d.select<PersonClusterRow[]>(
-    'SELECT * FROM person_cluster WHERE project_id = ? ORDER BY created_at ASC',
-    [projectId]
-  );
-}
-
-export async function updatePersonCluster(id: number, args: { name?: string | null; is_pinned?: boolean }): Promise<void> {
-  const d = await db();
-  if (args.name !== undefined) {
-    await d.execute('UPDATE person_cluster SET name = ? WHERE id = ?', [args.name, id]);
-  }
-  if (args.is_pinned !== undefined) {
-    await d.execute(
-      'UPDATE person_cluster SET is_pinned = ? WHERE id = ?',
-      [args.is_pinned ? 1 : 0, id]
-    );
-  }
-}
-
 export async function deletePhotoByPath(projectId: number, path: string): Promise<void> {
   const d = await db();
   await d.execute(
     'DELETE FROM photo WHERE project_id = ? AND path = ?',
     [projectId, path]
-  );
-}
-
-export async function deletePersonCluster(id: number): Promise<void> {
-  const d = await db();
-  // ON DELETE SET NULL on face.cluster_id nullifies references.
-  await d.execute('DELETE FROM person_cluster WHERE id = ?', [id]);
-}
-
-export async function resetFaceClustersForProject(projectId: number): Promise<void> {
-  const d = await db();
-  await d.execute(
-    `UPDATE face SET cluster_id = NULL
-     WHERE photo_id IN (SELECT id FROM photo WHERE project_id = ?)`,
-    [projectId]
   );
 }
 
@@ -646,17 +534,16 @@ export async function listPagesForSelection(selectionId: number): Promise<PageRo
   );
 }
 
-// Returns slots for a set of page IDs, joined with photo path + thumb + embedding.
+// Returns slots for a set of page IDs, joined with photo path + thumb.
 // Used by the review route to render all pages in one shot.
-export async function listSlotsForPages(pageIds: number[]): Promise<Array<PageSlotRow & { path: string | null; thumb_path: string | null; embedding: string | null }>> {
+export async function listSlotsForPages(pageIds: number[]): Promise<Array<PageSlotRow & { path: string | null; thumb_path: string | null }>> {
   if (pageIds.length === 0) return [];
   const d = await db();
   const placeholders = pageIds.map(() => '?').join(',');
-  return d.select<Array<PageSlotRow & { path: string | null; thumb_path: string | null; embedding: string | null }>>(
-    `SELECT ps.*, p.path, p.thumb_path, ie.vector as embedding
+  return d.select<Array<PageSlotRow & { path: string | null; thumb_path: string | null }>>(
+    `SELECT ps.*, p.path, p.thumb_path
      FROM page_slot ps
      LEFT JOIN photo p ON p.id = ps.photo_id
-     LEFT JOIN image_embedding ie ON ie.photo_id = ps.photo_id
      WHERE ps.page_id IN (${placeholders})
      ORDER BY ps.page_id ASC, ps.slot_index ASC`,
     pageIds
@@ -669,19 +556,18 @@ export async function clearPagesForSelection(selectionId: number): Promise<void>
 }
 
 /** Shape returned by enrichSlotsWithLayoutContext — used by review-route
- *  loaders. Each enriched slot carries the photo's natural dimensions,
- *  face boxes, and top scene tag so the renderer can compute auto-position. */
+ *  loaders. Each enriched slot carries the photo's natural dimensions
+ *  and face boxes so the renderer can compute auto-position. */
 export interface SlotLayoutContext {
   photo_width: number | null;
   photo_height: number | null;
   faces: Array<{ bbox_x: number; bbox_y: number; bbox_w: number; bbox_h: number }>;
-  top_tag: string | null;
 }
 
 /** Given slot rows from listSlotsForPages, fetch each referenced photo's
- *  natural dimensions, face boxes, and top scene tag in three bulk queries.
- *  Returns the slots with those four fields attached. Slots whose photo_id
- *  is null get null/empty values.
+ *  natural dimensions and face boxes in two bulk queries. Returns the
+ *  slots with those three fields attached. Slots whose photo_id is null
+ *  get null/empty values.
  *
  *  Expected scale: a single selection's slots (typically ≤ 500 photos);
  *  parameter cap on modern SQLite is 32766, so safe well past practical use. */
@@ -691,7 +577,6 @@ export async function enrichSlotsWithLayoutContext<S extends { photo_id: number 
   const photoIds = [...new Set(slots.map((s) => s.photo_id).filter((x): x is number => x !== null))];
   const photoMeta = new Map<number, { width: number | null; height: number | null }>();
   const facesByPhoto = new Map<number, Array<{ bbox_x: number; bbox_y: number; bbox_w: number; bbox_h: number }>>();
-  const topTagByPhoto = new Map<number, string>();
 
   if (photoIds.length > 0) {
     const d = await db();
@@ -712,16 +597,6 @@ export async function enrichSlotsWithLayoutContext<S extends { photo_id: number 
       arr.push({ bbox_x: f.bbox_x, bbox_y: f.bbox_y, bbox_w: f.bbox_w, bbox_h: f.bbox_h });
       facesByPhoto.set(f.photo_id, arr);
     }
-
-    const tagRows = await d.select<{ photo_id: number; tag: string }[]>(
-      `SELECT pt.photo_id, pt.tag FROM photo_tag pt
-       INNER JOIN (
-         SELECT photo_id, MAX(score) as ms FROM photo_tag WHERE photo_id IN (${placeholders}) GROUP BY photo_id
-       ) m ON m.photo_id = pt.photo_id AND m.ms = pt.score
-       WHERE pt.photo_id IN (${placeholders})`,
-      [...photoIds, ...photoIds]
-    );
-    for (const t of tagRows) topTagByPhoto.set(t.photo_id, t.tag);
   }
 
   return slots.map((s) => {
@@ -731,7 +606,6 @@ export async function enrichSlotsWithLayoutContext<S extends { photo_id: number 
       photo_width: meta?.width ?? null,
       photo_height: meta?.height ?? null,
       faces: s.photo_id !== null ? (facesByPhoto.get(s.photo_id) ?? []) : [],
-      top_tag: s.photo_id !== null ? (topTagByPhoto.get(s.photo_id) ?? null) : null,
     };
   });
 }
@@ -746,7 +620,7 @@ export async function listCandidatesForPicker(args: {
   kind: 'album' | 'calendar';
   scope: PickerScope;
   sourceYear?: number;
-}): Promise<Array<{ id: number; path: string; thumb_path: string | null; taken_at: number | null; score: number | null; embedding: string | null }>> {
+}): Promise<Array<{ id: number; path: string; thumb_path: string | null; taken_at: number | null; score: number | null }>> {
   const d = await db();
 
   // Build the time-range filter clause based on scope + kind.
@@ -778,20 +652,18 @@ export async function listCandidatesForPicker(args: {
   }
 
   if (rangeStart === null) {
-    return d.select<Array<{ id: number; path: string; thumb_path: string | null; taken_at: number | null; score: number | null; embedding: string | null }>>(
+    return d.select<Array<{ id: number; path: string; thumb_path: string | null; taken_at: number | null; score: number | null }>>(
       `SELECT p.id, p.path, p.thumb_path, p.taken_at,
-              (SELECT cv.blur FROM cv_score cv WHERE cv.photo_id = p.id) as score,
-              (SELECT ie.vector FROM image_embedding ie WHERE ie.photo_id = p.id) as embedding
+              (SELECT cv.blur FROM cv_score cv WHERE cv.photo_id = p.id) as score
        FROM photo p
        WHERE p.project_id = ?
        ORDER BY p.taken_at ASC, p.id ASC`,
       [args.projectId]
     );
   }
-  return d.select<Array<{ id: number; path: string; thumb_path: string | null; taken_at: number | null; score: number | null; embedding: string | null }>>(
+  return d.select<Array<{ id: number; path: string; thumb_path: string | null; taken_at: number | null; score: number | null }>>(
     `SELECT p.id, p.path, p.thumb_path, p.taken_at,
-            (SELECT cv.blur FROM cv_score cv WHERE cv.photo_id = p.id) as score,
-            (SELECT ie.vector FROM image_embedding ie WHERE ie.photo_id = p.id) as embedding
+            (SELECT cv.blur FROM cv_score cv WHERE cv.photo_id = p.id) as score
      FROM photo p
      WHERE p.project_id = ?
        AND p.taken_at IS NOT NULL
@@ -952,7 +824,7 @@ export async function insertBlankPage(args: {
 /** Photo's natural dimensions + the face boxes for that photo, used by
  *  auto-position. Returns null if the photo isn't found or has no
  *  dimensions. */
-export async function getPhotoLayoutContext(photoId: number): Promise<{ width: number; height: number; faces: Array<{ bbox_x: number; bbox_y: number; bbox_w: number; bbox_h: number }>; topTag: string | null } | null> {
+export async function getPhotoLayoutContext(photoId: number): Promise<{ width: number; height: number; faces: Array<{ bbox_x: number; bbox_y: number; bbox_w: number; bbox_h: number }> } | null> {
   const d = await db();
   const photos = await d.select<{ width: number | null; height: number | null }[]>(
     'SELECT width, height FROM photo WHERE id = ?', [photoId]
@@ -962,10 +834,7 @@ export async function getPhotoLayoutContext(photoId: number): Promise<{ width: n
   const faces = await d.select<{ bbox_x: number; bbox_y: number; bbox_w: number; bbox_h: number }[]>(
     'SELECT bbox_x, bbox_y, bbox_w, bbox_h FROM face WHERE photo_id = ?', [photoId]
   );
-  const tagRows = await d.select<{ tag: string }[]>(
-    'SELECT tag FROM photo_tag WHERE photo_id = ? ORDER BY score DESC LIMIT 1', [photoId]
-  );
-  return { width: p.width, height: p.height, faces, topTag: tagRows[0]?.tag ?? null };
+  return { width: p.width, height: p.height, faces };
 }
 
 export async function listEvents(projectId: number): Promise<CalendarEventRow[]> {

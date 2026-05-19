@@ -18,7 +18,6 @@
     photo_width: number | null;
     photo_height: number | null;
     faces: Array<{ bbox_x: number; bbox_y: number; bbox_w: number; bbox_h: number }>;
-    top_tag: string | null;
   }
 
   interface Props {
@@ -91,7 +90,6 @@
         photoWidth: slot.photo_width,
         photoHeight: slot.photo_height,
         faces: slot.faces,
-        topTag: slot.top_tag,
         slot: slotLayout,
       });
     }

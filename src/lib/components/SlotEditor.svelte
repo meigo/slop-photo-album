@@ -16,15 +16,14 @@
     initialTransformJson: string | null;
     slotLayout: SlotLayout;
     faces: Array<{ bbox_x: number; bbox_y: number; bbox_w: number; bbox_h: number }>;
-    topTag: string | null;
     onClose: () => void;
   }
-  let { pageId, slotIndex, photoPath, photoWidth, photoHeight, initialTransformJson, slotLayout, faces, topTag, onClose }: Props = $props();
+  let { pageId, slotIndex, photoPath, photoWidth, photoHeight, initialTransformJson, slotLayout, faces, onClose }: Props = $props();
 
   function initialTransform(): SlotTransform {
     const parsed = parseTransform(initialTransformJson);
     if (parsed) return parsed;
-    return autoPositionTransform({ photoWidth, photoHeight, faces, topTag, slot: slotLayout });
+    return autoPositionTransform({ photoWidth, photoHeight, faces, slot: slotLayout });
   }
 
   let t = $state<SlotTransform>(initialTransform());

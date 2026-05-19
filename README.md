@@ -2,9 +2,8 @@
 
 Local-first desktop app that turns a folder of a year's photos into a printable
 photo book and a matching wall calendar. Indexes your source folder, scores
-each photo with on-device computer vision (blur, faces, scene tags, exposure),
-auto-assembles pages you can review and tweak, and exports both as PDFs ready
-for a print shop.
+each photo with on-device computer vision (blur, faces, exposure), auto-assembles
+pages you can review and tweak, and exports both as PDFs ready for a print shop.
 
 All photo data and analysis stays on your machine — nothing leaves the computer.
 
@@ -25,8 +24,8 @@ All photo data and analysis stays on your machine — nothing leaves the compute
   thumbnail for each photo into local SQLite.
 - HEIC, JPEG, PNG, WebP. Cross-platform via libheif on macOS / built-in on Win.
 - On-device CV pipeline: Laplacian blur (focused on face regions when present),
-  YuNet face detection + SFace identity embeddings, OpenCLIP scene tagging,
-  exposure scoring, pHash for duplicate detection.
+  YuNet face detection (bbox + confidence-derived quality), exposure scoring,
+  pHash for duplicate detection.
 
 **Album**
 
@@ -73,8 +72,7 @@ All photo data and analysis stays on your machine — nothing leaves the compute
 
 Tauri v2 shell · SvelteKit (Svelte 5) renderer · SQLite via `tauri-plugin-sql`
 · Node sidecar (Sharp + exiftool-vendored) · Python sidecar (FastAPI + OpenCV
-
-- OpenCLIP + imagehash) · jsPDF + modern-screenshot for PDF capture.
++ imagehash) · jsPDF + modern-screenshot for PDF capture.
 
 ## Development
 
@@ -88,11 +86,6 @@ cd sidecar && npm install && cd ..
 cd py-sidecar && uv sync && cd ..
 npm run tauri dev
 ```
-
-**First run note:** the first time the Python sidecar starts after `uv sync`,
-OpenCLIP downloads the ViT-B/32 weights (~150 MB) to
-`~/.cache/torch/hub/checkpoints/`. The first `/embed` or `/tags` call takes a
-couple of minutes; subsequent runs are fast.
 
 ### Tests
 
@@ -115,7 +108,7 @@ See `docs/superpowers/specs/2026-05-14-family-album-builder-design.md` for the
 original design doc. The app has grown beyond that spec — the source is now
 the truth — but the high-level shape is unchanged: Tauri shell, SvelteKit UI,
 SQLite for project + photo state, two sidecars (Node for fast EXIF/Sharp work,
-Python for CV models that need PyTorch/OpenCV).
+Python for CV models that need OpenCV).
 
 All photo data and ML inference is local. The Google Fonts CSS is the only
 outbound request, and only when a non-default font is used.
@@ -128,8 +121,8 @@ benefit from labeling every photo, and the existing text-overlay feature
 already covers the cases where a page genuinely wants text — album titles,
 chapter or month headers, the occasional standout caption. A structured
 caption field invites "fill every box" prose generation that produces
-clichés the photos don't need; the date / GPS / scene tag / face name data
-the LLM would draw from already lives on each photo record.
+clichés the photos don't need; the date / GPS / face count data the LLM would
+draw from already lives on each photo record.
 
 ## Releases
 

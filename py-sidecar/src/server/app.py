@@ -1,16 +1,12 @@
 """FastAPI app builder. Routes registered here so tests can import buildServer-equivalent via app fixture."""
-import base64
-
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from server.blur import laplacian_variance
-from server.embed import embed_image, model_key
 from server.exposure import exposure_score
 from server.faces import detect_faces
 from server.phash import perceptual_hash
-from server.tags import score_tags
 
 
 class FaceBBox(BaseModel):
@@ -33,16 +29,6 @@ class PhashRequest(BaseModel):
 
 class FacesRequest(BaseModel):
     path: str
-    with_embeddings: bool = False
-
-
-class EmbedRequest(BaseModel):
-    path: str
-
-
-class TagsRequest(BaseModel):
-    path: str
-    top_k: int = 5
 
 
 class ExposureRequest(BaseModel):
@@ -86,32 +72,12 @@ def build_app() -> FastAPI:
     @app.post("/faces")
     async def faces(req: FacesRequest) -> dict[str, object]:
         try:
-            entries = detect_faces(req.path, with_embeddings=req.with_embeddings)
+            entries = detect_faces(req.path)
             return {"count": len(entries), "faces": entries}
         except FileNotFoundError as e:
             raise HTTPException(status_code=404, detail=str(e))
         except ValueError as e:
             raise HTTPException(status_code=400, detail=str(e))
-
-    @app.post("/embed")
-    async def embed(req: EmbedRequest) -> dict[str, str]:
-        try:
-            raw, mk = embed_image(req.path)
-            return {
-                "model": mk,
-                "vector_b64": base64.b64encode(raw).decode("ascii"),
-            }
-        except FileNotFoundError as e:
-            raise HTTPException(status_code=404, detail=str(e))
-
-    @app.post("/tags")
-    async def tags(req: TagsRequest) -> dict[str, list[dict[str, object]]]:
-        # Inner dicts are mixed {tag: str, score: float}; declare as object
-        # so Pydantic doesn't try to coerce both fields to float.
-        try:
-            return {"tags": score_tags(req.path, top_k=req.top_k)}
-        except FileNotFoundError as e:
-            raise HTTPException(status_code=404, detail=str(e))
 
     @app.post("/exposure")
     async def exposure(req: ExposureRequest) -> dict[str, float]:

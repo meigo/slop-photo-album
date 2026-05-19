@@ -1,9 +1,9 @@
 import {
-  listPhotos, listCvScoresByProject, listFacesByProject, listPersonClusters,
+  listPhotos, listCvScoresByProject, listFacesByProject,
   listDuplicateMembersByPhoto, getProject,
   startSelection, insertSelectedPhoto, db,
 } from '$lib/db';
-import type { PhotoRow, FaceRow, PhotoTagRow } from '$lib/db/types';
+import type { PhotoRow, FaceRow } from '$lib/db/types';
 import { aggregateScore } from './scoring';
 import { ALBUM_DEFAULTS } from './constants';
 
@@ -45,11 +45,6 @@ export async function generateAlbumSelection(projectId: number): Promise<number>
     arr.push(f);
     facesByPhoto.set(f.photo_id, arr);
   }
-  const clusters = await listPersonClusters(projectId);
-  const pinnedClusterIds = new Set<number>(
-    clusters.filter((c) => c.is_pinned).map((c) => c.id)
-  );
-  const tags = await loadAllTagsAlbum(projectId);
   const dupGroupByPhoto = await listDuplicateMembersByPhoto(projectId);
   const dupReps = await loadDupRepsAlbum(projectId);
   const isNonRep = (photoId: number) => {
@@ -67,8 +62,6 @@ export async function generateAlbumSelection(projectId: number): Promise<number>
     score: aggregateScore({
       cv: cvById.get(p.id),
       facesForPhoto: facesByPhoto.get(p.id) ?? [],
-      pinnedClusterIds,
-      tagsForPhoto: tags.get(p.id) ?? [],
       isDuplicateNonRep: isNonRep(p.id),
     }),
   }));
@@ -143,23 +136,6 @@ function monthKey(epochMs: number): string {
   const y = d.getFullYear().toString().padStart(4, '0');
   const m = (d.getMonth() + 1).toString().padStart(2, '0');
   return `${y}-${m}`;
-}
-
-async function loadAllTagsAlbum(projectId: number): Promise<Map<number, PhotoTagRow[]>> {
-  const d = await db();
-  const rows = await d.select<PhotoTagRow[]>(
-    `SELECT pt.* FROM photo_tag pt
-     INNER JOIN photo p ON p.id = pt.photo_id
-     WHERE p.project_id = ?`,
-    [projectId]
-  );
-  const out = new Map<number, PhotoTagRow[]>();
-  for (const r of rows) {
-    const arr = out.get(r.photo_id) ?? [];
-    arr.push(r);
-    out.set(r.photo_id, arr);
-  }
-  return out;
 }
 
 async function loadDupRepsAlbum(projectId: number): Promise<Map<number, number>> {

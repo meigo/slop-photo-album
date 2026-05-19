@@ -45,11 +45,3 @@ def test_blur_endpoint_accepts_face_bboxes() -> None:
     assert r.json()["blur"] > 0
 
 
-def test_embed_endpoint_returns_b64() -> None:
-    app = build_app()
-    client = TestClient(app)
-    r = client.post("/embed", json={"path": str(FIX / "sharp.jpg")})
-    assert r.status_code == 200
-    body = r.json()
-    assert body["model"] == "ViT-B-32-quickgelu/openai"
-    assert len(body["vector_b64"]) > 1000  # 512 * 4 bytes b64 ≈ 2730 chars

@@ -4,18 +4,13 @@ import {
   upsertPhoto, getProject, listIndexedAtByPath,
   upsertCvScore, listCvComputedAtByPhotoId, listPhotos,
   clearCvScores, clearFacesForPhoto, insertFace,
-  upsertImageEmbedding, listImageEmbeddingsComputedAt, replacePhotoTags,
   deletePhotoByPath,
   db,
 } from '$lib/db';
 import { readExifViaSidecar, makeThumbViaSidecar } from '$lib/sidecar/client';
-import {
-  blurViaPy, phashViaPy, facesViaPy, embedViaPy, tagsViaPy, exposureViaPy,
-  type PyFaceWithEmbed,
-} from '$lib/sidecar/py-client';
+import { blurViaPy, phashViaPy, facesViaPy, exposureViaPy } from '$lib/sidecar/py-client';
 import { indexProgress } from './progress';
 import { detectDuplicates } from './dedup';
-import { clusterFaces } from './face-clustering';
 
 interface ScannedFile { path: string; size: number; modified: number; }
 
@@ -81,52 +76,42 @@ export async function indexProject(
   }
   const photos = await listPhotos(projectId);
   const cvComputed = await listCvComputedAtByPhotoId(projectId);
-  const embComputed = await listImageEmbeddingsComputedAt(projectId);
 
   for (let i = 0; i < photos.length; i++) {
     const ph = photos[i];
     indexProgress.update((p) => ({ ...p, scanned: i, total: photos.length, current: `cv: ${ph.path}` }));
 
     const lastCv = cvComputed.get(ph.id);
-    const lastEmb = embComputed.get(ph.id);
-    const cvFresh = lastCv !== undefined && lastCv >= ph.indexed_at;
-    const embFresh = lastEmb !== undefined && lastEmb >= ph.indexed_at;
-    if (cvFresh && embFresh) continue;
+    if (lastCv !== undefined && lastCv >= ph.indexed_at) continue;
 
     try {
-      // Phase 2a signals + exposure. Faces is computed first so we can pass
-      // its bboxes to blur — whole-image Laplacian variance misranks
-      // shallow-DOF portraits as blurry, so we measure sharpness on the
-      // largest face region when faces are present.
+      // Faces first so we can pass its bboxes to blur — whole-image
+      // Laplacian variance misranks shallow-DOF portraits as blurry, so
+      // we measure sharpness on the largest face region when faces are
+      // present.
       const [facesResult, phash, exposure] = await Promise.all([
-        facesViaPy(ph.path, /*withEmbeddings=*/ true),
+        facesViaPy(ph.path),
         phashViaPy(ph.path),
         exposureViaPy(ph.path),
       ]);
-      const bboxes = (facesResult.faces as PyFaceWithEmbed[]).map(
-        (f) => ({ x: f.x, y: f.y, w: f.w, h: f.h }),
-      );
+      const bboxes = facesResult.faces.map((f) => ({ x: f.x, y: f.y, w: f.w, h: f.h, quality: f.quality }));
       const blur = await blurViaPy(ph.path, bboxes);
 
-      // Re-write face rows: clear existing, insert new
       await clearFacesForPhoto(ph.id);
-      const facesWithEmb = facesResult.faces as PyFaceWithEmbed[];
-      for (const fb of facesWithEmb) {
+      for (const fb of facesResult.faces) {
         await insertFace({
           photo_id: ph.id,
           bbox_x: fb.x, bbox_y: fb.y, bbox_w: fb.w, bbox_h: fb.h,
-          embedding: fb.embedding_b64,
           quality: fb.quality,
           computed_at: Date.now(),
         });
       }
 
-      // cv_score upsert (faces_json stays as a denormalized cache for the UI)
       await upsertCvScore({
         photo_id: ph.id,
         blur,
         faces_count: facesResult.count,
-        faces_json: JSON.stringify(facesWithEmb.map(f => ({ x: f.x, y: f.y, w: f.w, h: f.h }))),
+        faces_json: JSON.stringify(facesResult.faces.map(f => ({ x: f.x, y: f.y, w: f.w, h: f.h }))),
         phash,
         computed_at: Date.now(),
       });
@@ -134,14 +119,6 @@ export async function indexProject(
       // exposure goes on cv_score (added by migration 003)
       const d = await db();
       await d.execute('UPDATE cv_score SET exposure = ? WHERE photo_id = ?', [exposure, ph.id]);
-
-      // Phase 2b signals: image embedding + tags
-      const emb = await embedViaPy(ph.path);
-      await upsertImageEmbedding({
-        photo_id: ph.id, model: emb.model, vector: emb.vector, computed_at: Date.now(),
-      });
-      const tags = await tagsViaPy(ph.path, 5);
-      await replacePhotoTags(ph.id, tags);
     } catch (err) {
       indexProgress.update((p) => ({ ...p, errors: [...p.errors, `cv ${ph.path}: ${err}`] }));
     }
@@ -150,10 +127,6 @@ export async function indexProject(
   // ---- DEDUP PASS ----
   indexProgress.update((p) => ({ ...p, current: 'detecting duplicates…' }));
   await detectDuplicates(projectId);
-
-  // ---- FACE CLUSTERING PASS ----
-  indexProgress.update((p) => ({ ...p, current: 'clustering faces…' }));
-  await clusterFaces(projectId);
 
   indexProgress.update((p) => ({ ...p, phase: 'done', scanned: total }));
 }

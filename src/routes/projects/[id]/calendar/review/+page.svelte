@@ -420,7 +420,6 @@
                     initialTransformJson={editorSlot.transform_json}
                     slotLayout={editorLayout}
                     faces={editorSlot.faces}
-                    topTag={editorSlot.top_tag}
                     onClose={() => editorOpen = null}
                   />
                 </div>

@@ -196,5 +196,17 @@ fn migrations() -> Vec<tauri_plugin_sql::Migration> {
       sql: include_str!("../migrations/023_calendar_slot_corner_radius.sql"),
       kind: tauri_plugin_sql::MigrationKind::Up,
     },
+    tauri_plugin_sql::Migration {
+      version: 24,
+      description: "drop_clip_tables",
+      sql: include_str!("../migrations/024_drop_clip.sql"),
+      kind: tauri_plugin_sql::MigrationKind::Up,
+    },
+    tauri_plugin_sql::Migration {
+      version: 25,
+      description: "drop_face_clustering",
+      sql: include_str!("../migrations/025_drop_face_clustering.sql"),
+      kind: tauri_plugin_sql::MigrationKind::Up,
+    },
   ]
 }

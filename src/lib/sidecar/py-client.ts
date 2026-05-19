@@ -23,12 +23,7 @@ async function pyFetch<T>(path: string, body?: unknown): Promise<T> {
   return res.json();
 }
 
-export interface PyFaceBox { x: number; y: number; w: number; h: number; }
-
-export interface PyFaceWithEmbed extends PyFaceBox {
-  embedding_b64: string;
-  quality: number;
-}
+export interface PyFaceBox { x: number; y: number; w: number; h: number; quality: number; }
 
 export async function blurViaPy(
   path: string,
@@ -45,34 +40,11 @@ export async function phashViaPy(path: string): Promise<string> {
   return r.phash;
 }
 
-export async function facesViaPy(
-  path: string,
-  withEmbeddings = false,
-): Promise<{ count: number; faces: PyFaceBox[] | PyFaceWithEmbed[] }> {
-  return pyFetch<{ count: number; faces: PyFaceBox[] | PyFaceWithEmbed[] }>(
-    '/faces',
-    { path, with_embeddings: withEmbeddings },
-  );
-}
-
-export async function embedViaPy(path: string): Promise<{ model: string; vector: string }> {
-  const r = await pyFetch<{ model: string; vector_b64: string }>('/embed', { path });
-  return { model: r.model, vector: r.vector_b64 };
-}
-
-export async function tagsViaPy(path: string, topK = 5): Promise<Array<{ tag: string; score: number }>> {
-  const r = await pyFetch<{ tags: Array<{ tag: string; score: number }> }>('/tags', { path, top_k: topK });
-  return r.tags;
+export async function facesViaPy(path: string): Promise<{ count: number; faces: PyFaceBox[] }> {
+  return pyFetch<{ count: number; faces: PyFaceBox[] }>('/faces', { path });
 }
 
 export async function exposureViaPy(path: string): Promise<number> {
   const r = await pyFetch<{ exposure: number }>('/exposure', { path });
   return r.exposure;
-}
-
-export function base64ToBytes(b64: string): Uint8Array {
-  const binary = atob(b64);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-  return bytes;
 }

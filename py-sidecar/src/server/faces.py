@@ -1,11 +1,8 @@
-"""Face detection (YuNet) + aligned embedding (SFace)."""
-import base64
+"""Face detection (YuNet) — bbox + confidence-based quality only."""
 import os
 from pathlib import Path
 
 import cv2
-
-from server.face_embed import embed_face_aligned
 
 
 _MODEL_PATH = str(Path(__file__).resolve().parents[2] / "models" / "face_detection_yunet_2023mar.onnx")
@@ -28,7 +25,7 @@ def _get_detector(width: int, height: int) -> "cv2.FaceDetectorYN":
     return det
 
 
-def detect_faces(path: str, with_embeddings: bool = False) -> list[dict[str, object]]:
+def detect_faces(path: str) -> list[dict[str, object]]:
     if not os.path.isfile(path):
         raise FileNotFoundError(path)
     img = cv2.imread(path, cv2.IMREAD_COLOR)
@@ -51,18 +48,7 @@ def detect_faces(path: str, with_embeddings: bool = False) -> list[dict[str, obj
         fh_i = max(0, min(H - y_i, int(fh)))
         if fw_i == 0 or fh_i == 0:
             continue
-        face_dict: dict[str, object] = {"x": x_i, "y": y_i, "w": fw_i, "h": fh_i}
-        if with_embeddings:
-            face_area = (fw_i * fh_i) / max(1.0, W * H)
-            quality = float(min(1.0, confidence * (face_area / 0.05)))
-            try:
-                emb_bytes = embed_face_aligned(img, row)
-                face_dict["embedding_b64"] = base64.b64encode(emb_bytes).decode("ascii")
-                face_dict["quality"] = quality
-            except cv2.error:
-                # alignCrop can fail on edge cases (face partially out of frame,
-                # landmark estimation poor). Fall back to skipping the
-                # embedding so the face still appears as a count/bbox.
-                face_dict["quality"] = quality
-        result.append(face_dict)
+        face_area = (fw_i * fh_i) / max(1.0, W * H)
+        quality = float(min(1.0, confidence * (face_area / 0.05)))
+        result.append({"x": x_i, "y": y_i, "w": fw_i, "h": fh_i, "quality": quality})
     return result

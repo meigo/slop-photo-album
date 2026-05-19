@@ -1,9 +1,9 @@
 import {
-  listPhotos, listCvScoresByProject, listFacesByProject, listPersonClusters,
+  listPhotos, listCvScoresByProject, listFacesByProject,
   listDuplicateMembersByPhoto, getProject,
   startSelection, insertSelectedPhoto, db,
 } from '$lib/db';
-import type { PhotoRow, FaceRow, PhotoTagRow } from '$lib/db/types';
+import type { PhotoRow, FaceRow } from '$lib/db/types';
 import { aggregateScore } from './scoring';
 import { CALENDAR_DEFAULTS } from './constants';
 
@@ -38,11 +38,6 @@ export async function generateCalendarSelection(projectId: number): Promise<numb
     arr.push(f);
     facesByPhoto.set(f.photo_id, arr);
   }
-  const clusters = await listPersonClusters(projectId);
-  const pinnedClusterIds = new Set<number>(
-    clusters.filter((c) => c.is_pinned).map((c) => c.id)
-  );
-  const tags = await loadAllTagsCalendar(projectId);
   const dupGroupByPhoto = await listDuplicateMembersByPhoto(projectId);
   const dupReps = await loadDupRepsCalendar(projectId);
   const isNonRep = (photoId: number) => {
@@ -67,8 +62,6 @@ export async function generateCalendarSelection(projectId: number): Promise<numb
     return aggregateScore({
       cv: cvById.get(p.id),
       facesForPhoto: facesByPhoto.get(p.id) ?? [],
-      pinnedClusterIds,
-      tagsForPhoto: tags.get(p.id) ?? [],
       isDuplicateNonRep: isNonRep(p.id),
     });
   }
@@ -139,23 +132,6 @@ export async function generateCalendarSelection(projectId: number): Promise<numb
   }
 
   return selectionId;
-}
-
-async function loadAllTagsCalendar(projectId: number): Promise<Map<number, PhotoTagRow[]>> {
-  const d = await db();
-  const rows = await d.select<PhotoTagRow[]>(
-    `SELECT pt.* FROM photo_tag pt
-     INNER JOIN photo p ON p.id = pt.photo_id
-     WHERE p.project_id = ?`,
-    [projectId]
-  );
-  const out = new Map<number, PhotoTagRow[]>();
-  for (const r of rows) {
-    const arr = out.get(r.photo_id) ?? [];
-    arr.push(r);
-    out.set(r.photo_id, arr);
-  }
-  return out;
 }
 
 async function loadDupRepsCalendar(projectId: number): Promise<Map<number, number>> {

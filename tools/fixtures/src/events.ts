@@ -35,8 +35,8 @@ const ESTONIA_LOCATIONS = [
 ];
 
 // Family shape: two parents (mother + father) + one or two children.
-// peopleRange caps at 4 — never grandparents/cousins, those would shift the
-// face-clustering test signal.
+// peopleRange caps at 4 — keeps the YuNet face-count signal stable so the
+// selection scoring's face contribution doesn't get drowned out by group shots.
 //
 // Prompts deliberately stay loose on count ("small family", "young parents
 // with a child") because FLUX over-specifies badly when given exact integers.
